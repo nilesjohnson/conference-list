@@ -8,6 +8,17 @@
 * automated testing of helpers
 * automated testing of views
 
+* switch to sensible database names
+* generate useful default database
+* improve db_create.php
+* move app out of cakephp directory
+
+* post public version of repository (github)
+* start issue-tracking on github
+
+* make script for database dumps
 * use built-in Paginator
+* implement view for individual conference 
+* improve automated emails to include conference info
 * implement tags for conference subject
 
