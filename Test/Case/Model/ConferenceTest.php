@@ -1,0 +1,51 @@
+<?php
+App::uses('Conference', 'Model');
+
+/**
+ * Conference Test Case
+ *
+ */
+class ConferenceTest extends CakeTestCase {
+
+/**
+ * Fixtures
+ *
+ * @var array
+ */
+	public $fixtures = array(
+		'app.conference'
+	);
+
+/**
+ * setUp method
+ *
+ * @return void
+ */
+	public function setUp() {
+		parent::setUp();
+		$this->Conference = ClassRegistry::init('Conference');
+	}
+
+
+	public function testMultiEmail() {
+	       $result = $this->Conference->multiEmail('em1@host1.com,em2@host2.com, em3@host3.com , em4@host4.com');
+	       $expected = true;
+	       $this->assertEquals($expected,$result);
+	
+	}	
+
+
+
+
+/**
+ * tearDown method
+ *
+ * @return void
+ */
+	public function tearDown() {
+		unset($this->Conference);
+
+		parent::tearDown();
+	}
+
+}
