@@ -1,0 +1,13 @@
+* merge model
+* merge controller
+* merge helpers
+* merge views
+
+* automated testing of model
+* automated testing of controller
+* automated testing of helpers
+* automated testing of views
+
+* use built-in Paginator
+* implement tags for conference subject
+
