@@ -123,7 +123,7 @@ if ($new_subsort != $curr_subsort) {
 <?php  echo
   $this->Html->link(
   $this->Html->image("ics_button1.png", array('alt'=>'Ical', 'width'=>'30px')),
-  array('action'=>'ical', $conference['Conference']['id']), 
+  array('action'=>'ical', $conference['Conference']['id']),
   array('escape' => false,'id'=>'ics'));
 ?>
 </div>

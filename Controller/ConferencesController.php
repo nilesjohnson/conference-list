@@ -151,9 +151,7 @@ class ConferencesController extends AppController {
       $this->set('conference', $this->Conference->read());
       $this->request->data = $this->Conference->read();
     }
-    App::import('Helper', 'Ical'); 
-    $ical = new IcalHelper();
-    $vcal = $ical->vcal_string($this->data['Conference']['id'], 
+    $vcal = $this->vcal_string($this->data['Conference']['id'], 
 					    $this->data['Conference']['start_date'], 
 					    $this->data['Conference']['end_date'], 
 					    $this->data['Conference']['title'], 
@@ -161,8 +159,30 @@ class ConferencesController extends AppController {
 					    $this->data['Conference']['country'], 
 					    $this->data['Conference']['homepage']
 					    );
-    $this->set('vcal',$vcal);
+    //$this->set('vcal',$vcal);
+    $this->response->body($vcal);
+    $this->response->type('ics');
+    $this->response->download('announcement_'.$id.'.ics');
+    return $this->response;
   }
+
+  public function vcal_string($id, $start_date, $end_date, $title, $city, $country, $url) {
+    $start_string = str_replace('-','',$start_date);
+    $end_string = date('Ymd',strtotime($end_date." +1 day"));
+    $location = $city."; ".$country;
+    $vcal = "BEGIN:VCALENDAR\n".
+      "VERSION:2.0\n".
+      "BEGIN:VEVENT\n".
+      "DTSTART:".$start_string."\n".
+      "DTEND:".$end_string."\n".
+      "LOCATION:".$location."\n".
+      "SUMMARY:".$title."\n".
+      "URL:".$url."\n".
+      "END:VEVENT\n".
+      "END:VCALENDAR";
+    return $vcal;  
+  }
+
 
 
   public function sort_country(){

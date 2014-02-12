@@ -1,6 +1,10 @@
 <?php
 /* /app/views/helpers/ical.php */
 class IcalHelper extends AppHelper {
+  public function __construct(View $view, $settings = array()) {
+    parent::__construct($view, $settings);
+    debug($settings);
+  }
 
   function gcal_url($id, $start_date, $end_date, $title, $city, $country, $url) {
     $start_string = str_replace('-','',$start_date);
@@ -15,22 +19,6 @@ class IcalHelper extends AppHelper {
     return $Gcal_url;
   }
 
-  function vcal_string($id, $start_date, $end_date, $title, $city, $country, $url) {
-    $start_string = str_replace('-','',$start_date);
-    $end_string = date('Ymd',strtotime($end_date." +1 day"));
-    $location = $city."; ".$country;
-    $vcal = "BEGIN:VCALENDAR\n".
-      "VERSION:2.0\n".
-      "BEGIN:VEVENT\n".
-      "DTSTART:".$start_string."\n".
-      "DTEND:".$end_string."\n".
-      "LOCATION:".$location."\n".
-      "SUMMARY:".$title."\n".
-      "URL:".$url."\n".
-      "END:VEVENT\n".
-      "END:VCALENDAR";
-    return $vcal;  
-  }
 
 }
 ?>

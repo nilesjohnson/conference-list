@@ -49,4 +49,4 @@
  * activate rss
  */
 
-	Router::parseExtensions('rss');
+	Router::parseExtensions('rss','ics');
