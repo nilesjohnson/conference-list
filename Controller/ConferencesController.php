@@ -6,12 +6,17 @@ App::uses('AppController', 'Controller');
  * @property Conference $Conference
  * @property PaginatorComponent $Paginator
  */
+
 class ConferencesController extends AppController {
 
 
   var $name = 'Conferences';
   var $hasOne = 'CcData';  // model for cc data
-  var $admin_email = array('admin1@example.com', 'admin2@example.com', 'admin3@example.com');
+  var $admin_email = array(
+    'admin1@example.com', 
+    'admin2@example.com', 
+    'admin3@example.com'
+  );
 
   var $months = array("none", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
 

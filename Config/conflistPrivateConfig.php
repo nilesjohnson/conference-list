@@ -19,9 +19,11 @@ $config = array(
       'database' => 'conflist',
     ),
   ),
-  'core' => array(
-    'salt' => '1234567890abcdefg',
-    'appRoot' => ''
-  )
 );
+
+
+Configure::write('debug', 2);
+Configure::write('Security.salt', 'qwewrtyuiop123');
+Configure::write('Security.cipherSeed', '987654321')
+
 ?>
