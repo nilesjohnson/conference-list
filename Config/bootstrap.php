@@ -105,3 +105,15 @@ CakeLog::config('error', array(
 	'types' => array('warning', 'error', 'critical', 'alert', 'emergency'),
 	'file' => 'error',
 ));
+
+
+
+
+
+/**
+ * Private unified config for conflist app
+ */
+
+App::uses('PhpReader', 'Configure');
+Configure::config('default', new PhpReader());
+Configure::load('conflistPrivateConfig');

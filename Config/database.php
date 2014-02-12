@@ -1,6 +1,10 @@
 <?php
-class DATABASE_CONFIG {
 
+
+class DATABASE_CONFIG {
+        /*
+ 	 * Set some defaults
+	 */
 	public $test = array(
 		'datasource' => 'Database/Mysql',
 		'persistent' => false,
@@ -17,4 +21,14 @@ class DATABASE_CONFIG {
 		'password' => '',
 		'database' => 'conflist',
 	);
+
+	/*
+	 * Read updates from private config file
+	 */
+        public function __construct() {
+	        $this->test = Configure::read('database.test');
+	        $this->default = Configure::read('database.default');
+	}
+
+
 }

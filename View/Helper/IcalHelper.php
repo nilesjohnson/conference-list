@@ -3,7 +3,7 @@
 class IcalHelper extends AppHelper {
   public function __construct(View $view, $settings = array()) {
     parent::__construct($view, $settings);
-    debug($settings);
+    //debug($settings);
   }
 
   function gcal_url($id, $start_date, $end_date, $title, $city, $country, $url) {
