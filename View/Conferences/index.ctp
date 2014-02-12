@@ -160,18 +160,14 @@ if ($new_subsort != $curr_subsort) {
    return false;" href="#" style="display:none;"> - Description</a>
  | 
 <?php echo 
-  $this->Html->link('Report Problem', 
-  array('action'=>'report', $conference['Conference']['id']));?>
-<!--
+  $this->Html->link('View', 
+  array('action'=>'view', $conference['Conference']['id']));?>
+<!-- -->
  | 
-<?php /* echo 
+<?php /**/ echo 
   $this->Html->link('Edit', 
-  array('action'=>'edit', $conference['Conference']['id'], $conference['Conference']['edit_key'])); */?>
- | 
-<?php /* echo 
-  $this->Html->link('Delete', 
-  array('controller' => 'conferences', 'action' => 'view', $conference['Conference']['id'], $conference['Conference']['edit_key']) ); */?>
--->
+  array('action'=>'edit', $conference['Conference']['id'], $conference['Conference']['edit_key'])); /**/?>
+<!-- -->
 
 </div>
 
@@ -180,10 +176,6 @@ if ($new_subsort != $curr_subsort) {
 <p>Subject Area: <?php echo $conference['Conference']['subject_area']?></p>
 <p>Contact: <?php echo 
 !$conference['Conference']['contact_name'] ? 'see conference website' : $conference['Conference']['contact_name']?></p>
-<!--
-<p>Id: <?php /* echo $conference['Conference']['id'] */?></p>
-<p>Edit Key: <?php /* echo $conference['Conference']['edit_key'] */?></p>
--->
 
 
 <h3>Description</h3>

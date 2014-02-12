@@ -16,6 +16,8 @@
 * post public version of repository (github)
 * start issue-tracking on github
 
+* update jquery
+* remove duration field from database table
 * make script for database dumps
 * use built-in Paginator
 * implement view for individual conference 

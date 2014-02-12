@@ -90,22 +90,22 @@ class ConferencesController extends AppController {
 	if (empty($this->data['Conference']['report_comment'])){
 	  $this->set('conference', $this->Conference->read());
 	  $this->data = $this->Conference->read();
-	  $this->Session->setFlash('Please include a comment', 'flash_bad');
+	  $this->Session->setFlash('Please include a comment', 'FlashBad');
 	}
 	else {
 	  $report_comment = $this->data['Conference']['report_comment'];
-	  $this->data = $this->Conference->read();
-	  $this->data['Conference']['report_comment'] = $report_comment;
-	  $this->EmailKey->report_item($id,$this->data,$this->admin_email);
-	  $this->Session->setFlash('Your comment has been reported; please allow a few days for action to be taken.', 'flash_good');
+	  $this->request->data = $this->Conference->read();
+	  $this->request->data['Conference']['report_comment'] = $report_comment;
+	  //$this->EmailKey->report_item($id,$this->data,$this->admin_email);
+	  $this->Session->setFlash('Your comment has been reported; please allow a few days for action to be taken.', 'FlashGood');
 	  $this->redirect(array('action'=>'index'));
 	}
       }
       else {
 	$this->set('conference', $this->Conference->read());	
-	$this->data = $this->Conference->read();
+	$this->request->data = $this->Conference->read();
 	$this->Conference->invalidate('captcha','Please perform the indicated arithmetic.');
-	$this->Session->setFlash('Please perform the indicated arithmetic before submitting the form.', 'flash_bad');
+	$this->Session->setFlash('Please perform the indicated arithmetic before submitting the form.', 'FlashBad');
       }
     }
     $this->set('mathCaptcha', $this->MathCaptcha->generateEquation());
@@ -114,32 +114,32 @@ class ConferencesController extends AppController {
 
 
 
-  public function view($id = null, $key = null) {
+  public function view_unused($id = null, $key = null) {
     $this->Conference->id = $id;
     if (empty($this->data)) {
       $this->set('conference', $this->Conference->read());
-      $this->data = $this->Conference->read();
+      $this->request->data = $this->Conference->read();
     } 
     else {
       if ($this->data['Conference']['edit_key'] != $this->Conference->field('edit_key')) {
-	$this->Session->SetFlash('Invalid edit key.','flash_bad');
+	$this->Session->SetFlash('Invalid edit key.','FlashBad');
 	$this->redirect(array('action' => 'index'));
       }
       if ($this->MathCaptcha->validates($this->data['Conference']['captcha'])) {
 	$this->Conference->delete($id);
-	$this->Session->setFlash('The conference announcement has been deleted.', 'flash_good');
+	$this->Session->setFlash('The conference announcement has been deleted.', 'FlashGood');
 	$this->redirect(array('action'=>'index'));
       }
       else {
 	$this->set('conference', $this->Conference->read());
-	$this->data = $this->Conference->read();
+	$this->request->data = $this->Conference->read();
 	$this->Conference->invalidate('captcha','Please perform the indicated arithmetic.');
-	$this->Session->setFlash('Please perform the indicated arithmetic before submitting the form.', 'flash_bad');
+	$this->Session->setFlash('Please perform the indicated arithmetic before submitting the form.', 'FlashBad');
       }
     }
     $this->set('mathCaptcha', $this->MathCaptcha->generateEquation());
     if ($key != $this->data['Conference']['edit_key']) {
-      $this->Session->SetFlash('Invalid edit key.','flash_bad');
+      $this->Session->SetFlash('Invalid edit key.','FlashBad');
       $this->redirect(array('action' => 'index'));
     }
   }
@@ -149,7 +149,7 @@ class ConferencesController extends AppController {
     $this->Conference->id = $id;
     if (empty($this->data)) {
       $this->set('conference', $this->Conference->read());
-      $this->data = $this->Conference->read();
+      $this->request->data = $this->Conference->read();
     }
     App::import('Helper', 'Ical'); 
     $ical = new IcalHelper();
@@ -180,7 +180,7 @@ class ConferencesController extends AppController {
 
 
 
-  public function view_baked($id = null) {
+  public function view($id = null) {
     if (!$this->Conference->exists($id)) {
       throw new NotFoundException(__('Invalid conference'));
     }
@@ -209,7 +209,7 @@ class ConferencesController extends AppController {
 	foreach ($this->Conference->invalidFields() as $field => $message) {
 	  $this->Conference->invalidate($field,$message);
 	}
-	$this->Session->setFlash('Please check for errors below.', 'flash_bad');
+	$this->Session->setFlash('Please check for errors below.', 'FlashBad');
 	$valid_data = false;
       }      
       // when cc To: field nonempty, check for invalid cc data
@@ -218,7 +218,7 @@ class ConferencesController extends AppController {
 	foreach ($this->CcData->invalidFields() as $field => $message) {
 	  $this->CcData->invalidate($field,$message);
 	}
-	$this->Session->setFlash('Please check for errors below.', 'flash_bad');
+	$this->Session->setFlash('Please check for errors below.', 'FlashBad');
 	$valid_data = false;
       }	
       
@@ -229,25 +229,25 @@ class ConferencesController extends AppController {
 	$D = array('start_date','end_date');
 	foreach ($D as $d) {
 	  if (preg_match('/^\d\d-/',$this->data['Conference'][$d])) {
-	    $this->data['Conference'][$d] = '20'.$this->data['Conference'][$d];
+	    $this->request->data['Conference'][$d] = '20'.$this->data['Conference'][$d];
 	  }
 	}
 	
 	// verify that all data saves, and send email(s)
 	if ($this->Conference->save($this->data)) {
-	  $this->data = $this->Conference->read();
-	  $this->EmailKey->send_key($this->Conference->id, $this->data, $this->admin_email);
-	  $this->Session->setFlash('Your conference information has been saved.  An email with edit/delete links has been sent to the contact address.', 'flash_good');
+	  $this->request->data = $this->Conference->read();
+	  //$this->EmailKey->send_key($this->Conference->id, $this->data, $this->admin_email);
+	  $this->Session->setFlash('Your conference information has been saved.  An email with edit/delete links has been sent to the contact address.', 'FlashGood');
 	  if ($this->ccdata['to'] != '') {
-	    $this->EmailKey->send_cc($this->ccdata, $this->admin_email);
-	    $this->Session->setFlash('Your conference information has been saved.  An email with edit/delete links has been sent to the contact address, and a separate announcement has been sent to the given addresses.', 'flash_good');
+	    //$this->EmailKey->send_cc($this->ccdata, $this->admin_email);
+	    $this->Session->setFlash('Your conference information has been saved.  An email with edit/delete links has been sent to the contact address, and a separate announcement has been sent to the given addresses.', 'FlashGood');
 	  }
 	  $this->redirect(array('action' => 'index'));
 	}
       }
       else {
 	$this->Conference->invalidate('captcha','Please perform the indicated arithmetic.');
-	$this->Session->setFlash('Please check for errors below.', 'flash_bad');
+	$this->Session->setFlash('Please check for errors below.', 'FlashBad');
       }
     }
 
@@ -257,7 +257,7 @@ class ConferencesController extends AppController {
 		      );
     foreach ($defaults as $key => $value) {
       if (empty($this->data['Conference'][$key])) {
-	$this->data['Conference'][$key] = $value;
+	$this->request->data['Conference'][$key] = $value;
       }
     }
     $this->set('mathCaptcha', $this->MathCaptcha->generateEquation());
@@ -281,40 +281,37 @@ class ConferencesController extends AppController {
 
 
   public function edit($id = null, $key = null) {
-    $this->Conference->id = $id;
-    if (!$key) {
-      $key = $this->data['Conference']['passed_key'];
+    if (!$this->Conference->exists($id)) {
+      throw new NotFoundException(__('Invalid conference'));
     }
+    $this->Conference->id = $id;
     $this->set('countries',$this->countries);
     if (empty($this->data)) {
       $this->data = $this->Conference->read();
-      $this->data['Conference']['passed_key'] = $key;
+      $this->request->data['Conference']['passed_key'] = $key;
+      //debug($this->data);
 
       if ($key != $this->data['Conference']['edit_key']) {
-	$this->Session->SetFlash('Invalid edit key. (2)','flash_bad');
+	$this->Session->SetFlash('Invalid edit key. (2)','FlashBad');
 	$this->redirect(array('action' => 'index'));
       }
     } 
     else {
-      if ($this->data['Conference']['passed_key'] != $this->Conference->field('edit_key')) {
-	$this->Session->SetFlash('Invalid edit key. (1)','flash_bad');
+      // check that given key matches key from database
+      $prev = $this->Conference->find('first', array(
+          'conditions' => array('Conference.id' => $id)
+      ));
+      if ($key != $prev['Conference']['edit_key']) {
+        $this->Session->SetFlash('Invalid edit key. (1)','FlashBad');
+        $this->redirect(array('action' => 'index'));
+      }
+      if ($this->Conference->save($this->data)) {
+	$this->request->data = $this->Conference->read();
+	//$this->EmailKey->send_key($this->Conference->id,$this->data,$this->admin_email);
+	$this->Session->setFlash('Your conference announcement has been updated.  An email with the new edit/delete links has been sent to the contact address.','FlashGood');
 	$this->redirect(array('action' => 'index'));
       }
-      if ($this->MathCaptcha->validates($this->data['Conference']['captcha'])) {
-	if ($this->Conference->save($this->data)) {
-	  $this->data = $this->Conference->read();
-	  $this->EmailKey->send_key($this->Conference->id,$this->data,$this->admin_email);
-	  $this->Session->setFlash('Your conference announcement has been updated.  An email with the new edit/delete links has been sent to the contact address.','flash_good');
-	  $this->redirect(array('action' => 'index'));
-	}
-      }
-      else {
-	$this->set('mathCaptcha', $this->MathCaptcha->generateEquation());
-	$this->Conference->invalidate('captcha','Please perform the indicated arithmetic.',array('key'=>$key));
-	$this->Session->setFlash('Please perform the indicated arithmetic before submitting the form.', 'flash_bad');
-      }
     }
-    $this->set('mathCaptcha', $this->MathCaptcha->generateEquation());
   }
   
 
@@ -340,7 +337,7 @@ class ConferencesController extends AppController {
   }
 
 
-  public function delete_baked($id = null) {
+  public function delete($id = null) {
     $this->Conference->id = $id;
     if (!$this->Conference->exists()) {
       throw new NotFoundException(__('Invalid conference'));

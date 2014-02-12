@@ -1,31 +1,68 @@
-<div class="conferences form">
-<?php echo $this->Form->create('Conference'); ?>
-	<fieldset>
-		<legend><?php echo __('Add Conference'); ?></legend>
-	<?php
-		echo $this->Form->input('edit_key');
-		echo $this->Form->input('title');
-		echo $this->Form->input('start_date');
-		echo $this->Form->input('end_date');
-		echo $this->Form->input('duration');
-		echo $this->Form->input('institution');
-		echo $this->Form->input('city');
-		echo $this->Form->input('region');
-		echo $this->Form->input('country');
-		echo $this->Form->input('meeting_type');
-		echo $this->Form->input('subject_area');
-		echo $this->Form->input('homepage');
-		echo $this->Form->input('contact_name');
-		echo $this->Form->input('contact_email');
-		echo $this->Form->input('description');
-	?>
-	</fieldset>
-<?php echo $this->Form->end(__('Submit')); ?>
-</div>
-<div class="actions">
-	<h3><?php echo __('Actions'); ?></h3>
-	<ul>
 
-		<li><?php echo $this->Html->link(__('List Conferences'), array('action' => 'index')); ?></li>
-	</ul>
-</div>
+<!-- calendar date picker -->
+<script type="text/javascript" src="/js/jquery-ui-1.8.10.custom/js/jquery-1.4.4.min.js"></script>
+<script type="text/javascript" src="/js/jquery-ui-1.8.10.custom/js/jquery-ui-1.8.10.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/js/jquery-ui-1.8.10.custom/css/redmond/jquery-ui-1.8.10.custom.css" />
+<script type="text/javascript">
+$(function() { var
+dates = $( "#ConferenceStartDate, #ConferenceEndDate" ).datepicker({
+dateFormat: "yy-mm-dd", defaultDate: "+1w", changeMonth: true,
+numberOfMonths: 1, onSelect: function( selectedDate ) { var option =
+this.id == "ConferenceStartDate" ? "minDate" : "maxDate", instance =
+$( this ).data( "datepicker" ), date = $.datepicker.parseDate(
+instance.settings.dateFormat || $.datepicker._defaults.dateFormat,
+selectedDate, instance.settings ); dates.not( this ).datepicker(
+"option", option, date ); } }); });
+</script>
+
+
+
+<h1>Add Meeting Information</h1>
+
+<?php 
+echo $this->Form->create('Conference');
+echo $this->Form->input('title');
+echo $this->Form->input('edit_key', array('type'=>'hidden'));
+echo $this->Form->input('start_date', array('type'=>'text', 'div'=>'input datefield', 'after'=>'yyyy-mm-dd'));
+echo $this->Form->input('end_date', array('type'=>'text', 'div'=>'input datefield', 'after'=>'yyyy-mm-dd'));
+//echo $this->Form->input('duration');
+echo $this->Form->input('city', array('label'=>'City and State/Province'));
+echo $this->Form->input('country', array( 'type'=>'select', 'options'=>$countries, 'default'=>'country'));
+echo $this->Form->input('homepage', array('label'=>'Conference website'));
+echo $this->Form->input('institution', array('label'=>'Host institution', 'after'=>'University, institute, etc.'));
+echo $this->Form->input('meeting_type', array('after'=>'e.g. conference, summer school, special session, etc.'));
+echo $this->Form->input('subject_area', array('after'=>'comma-separated list'));
+echo $this->Form->input('contact_name');
+echo $this->Form->input('contact_email', array('after'=>'never displayed publicly; confirmation and edit/delete codes will be sent to this address (or list of addresses)'));
+echo $this->Form->input('description', array('label'=>'Description: <br/><span style="font-size:80%;">Enter text, HTML, or <a href="http://daringfireball.net/projects/markdown/">Markdown</a>.</span>', 'rows' => '10'));
+echo '<div class="input"><p>Description Preview:</p><div class="wmd-preview"></div></div>';
+?>
+
+
+
+<?php
+echo $this->Form->input('captcha', array('label' => 'Please Enter the Sum of ' . $mathCaptcha, 'after'=>'anti-spam'));
+echo $this->Form->end('Submit');
+?>
+
+<script type="text/javascript">
+  // to set WMD's options programatically, define a "wmd_options" object with whatever settings
+  // you want to override.  Here are the defaults:
+  wmd_options = {
+    // format sent to the server.  Use "Markdown" to return the markdown source.
+    output: "HTML",
+
+    // line wrapping length for lists, blockquotes, etc.
+    lineLength: 40,
+
+    // toolbar buttons.  Undo and redo get appended automatically.
+    buttons: "bold italic | link blockquote code | ol ul heading hr",
+
+    // option to automatically add WMD to the first textarea found.  See apiExample.html for usage.
+    autostart: true
+  };
+</script>
+
+<script type="text/javascript" src="/js/wmd/wmd.js"></script>
+
+
