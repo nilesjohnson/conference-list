@@ -24,6 +24,7 @@ class DATABASE_CONFIG {
 
 	/*
 	 * Read updates from private config file
+	 * app/Config/conflistPrivateConfig.php
 	 */
         public function __construct() {
 	        $this->test = Configure::read('database.test');
