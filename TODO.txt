@@ -1,6 +1,6 @@
-* merge model
-* merge controller
-* merge helpers
+X merge model
+X merge controller
+X merge helpers
 * merge views
 
 * automated testing of model
@@ -8,7 +8,7 @@
 * automated testing of helpers
 * automated testing of views
 
-* switch to sensible database names
+X switch to sensible database names
 * generate useful default database
 * improve db_create.php
 * move app out of cakephp directory
@@ -20,7 +20,7 @@
 * remove duration field from database table
 * make script for database dumps
 * use built-in Paginator
-* implement view for individual conference 
+X implement view for individual conference 
 * improve automated emails to include conference info
 * implement tags for conference subject
 
