@@ -3,6 +3,14 @@ X merge controller
 X merge helpers
 X merge views
 
+TODO FOR IMMEDIATE UPGRADE:
+
+* migrate current ATC database to new one
+* move conf-list_2 to ATC location
+
+
+OTHER TODO:
+
 * automated testing of model
 * automated testing of controller
 * automated testing of helpers
