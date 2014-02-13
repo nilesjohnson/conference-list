@@ -62,6 +62,7 @@ if (!defined('APP_DIR')) {
  * /lib/Cake/Console/Templates/skel/webroot/index.php
  */
 //define('CAKE_CORE_INCLUDE_PATH', ROOT . DS . 'lib');
+define('CAKE_CORE_INCLUDE_PATH', ROOT . DS . APP_DIR . DS . 'Lib' . DS . 'cakephp-lib');
 
 /**
  * Editing below this line should NOT be necessary.
@@ -98,6 +99,10 @@ if (!defined('CAKE_CORE_INCLUDE_PATH')) {
 if (!empty($failed)) {
 	trigger_error("CakePHP core could not be found. Check the value of CAKE_CORE_INCLUDE_PATH in APP/webroot/index.php. It should point to the directory containing your " . DS . "cake core directory and your " . DS . "vendors root directory.", E_USER_ERROR);
 }
+
+
+
+
 
 App::uses('Dispatcher', 'Routing');
 

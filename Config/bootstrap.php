@@ -86,6 +86,7 @@ Cache::config('default', array('engine' => 'File'));
  *
  * ));
  */
+
 Configure::write('Dispatcher.filters', array(
 	'AssetDispatcher',
 	'CacheDispatcher'
@@ -114,6 +115,14 @@ CakeLog::config('error', array(
  * Private unified config for conflist app
  */
 
+
 App::uses('PhpReader', 'Configure');
-Configure::config('default', new PhpReader());
-Configure::load('conflistPrivateConfig');
+if (file_exists(ROOT . DS . APP_DIR . DS . 'Config' . DS . 'conflistConfigPrivate.php')) {
+  Configure::config('default', new PhpReader());
+  Configure::load('conflistConfigPrivate');
+}
+else {
+  echo 'ROOT: '.ROOT.'<br>';
+  echo 'APP_DIR: '.APP_DIR.'<br>';
+  throw new CakeException('ROOT/APP_DIR/Config/conflistConfigPrivate.php not found.  You must create this file from the template APP_DIR/Config/conflistConfigDefault.php');
+}

@@ -18,7 +18,8 @@
  */
 
 $ds = DIRECTORY_SEPARATOR;
-$dispatcher = 'Cake' . $ds . 'Console' . $ds . 'ShellDispatcher.php';
+//$dispatcher = 'Cake' . $ds . 'Console' . $ds . 'ShellDispatcher.php';
+$dispatcher = dirname(__DIR__) . $ds . 'Lib' . $ds . 'cakephp-lib' . $ds . 'Cake' . $ds . 'Console' . $ds . 'ShellDispatcher.php';
 
 if (function_exists('ini_set')) {
 	$root = dirname(dirname(dirname(__FILE__)));
