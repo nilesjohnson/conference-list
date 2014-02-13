@@ -263,6 +263,8 @@ class ConferencesController extends AppController {
 	if ($this->Conference->save($this->data)) {
 	  $this->request->data = $this->Conference->read();
 	  //$this->EmailKey->send_key($this->Conference->id, $this->data, $this->admin_email);
+	  $Email = $this->prep_email();
+	  $Email->send();
 	  $this->Session->setFlash('Your conference information has been saved.  An email with edit/delete links has been sent to the contact address.', 'FlashGood');
 	  if ($this->ccdata['to'] != '') {
 	    //$this->EmailKey->send_cc($this->ccdata, $this->admin_email);
@@ -305,6 +307,16 @@ class ConferencesController extends AppController {
     }
   }
 
+  function prep_email() {
+    $Email = new CakeEmail();
+    $Email->viewVars(array('conference' => $this->data));
+    $Email->template('default','default')
+      ->emailFormat('text');
+    $Email->from(array('me@example.com' => 'My Site'));
+    $Email->to('nilesj@gmail.com');
+    $Email->subject('test algtop-conf 2');
+    return $Email;
+  }
 
   public function edit($id = null, $key = null) {
     if (!$this->Conference->exists($id)) {

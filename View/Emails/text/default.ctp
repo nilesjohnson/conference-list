@@ -16,4 +16,27 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 ?>
+
+Thanks for adding your announcement to AlgTop-Conf; it is now available in the main list:
+
+http://www.nilesjohnson.net/algtop-conf/
+
+
+If you need to edit or delete your announcement, use the unique edit/delete link:
+
+<?php
+echo "http://www.nilesjohnson.net/algtop-conf/conferences/edit/" . 
+  $conference['Conference']['id'] . '/' . 
+  $conference['Conference']['edit_key'] . "\n\n";
+?>
+
+Note that you will receive a new edit/delete link after each update to your announcement.
+
+If you have any difficulties, questions, or comments, don't hesitate to contact Niles:
+
+algtop-conf@nilesjohnson.net
+
+best,
+AlgTop-Conf
+
 <?php echo $content; ?>
