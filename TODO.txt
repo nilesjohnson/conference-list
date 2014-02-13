@@ -35,3 +35,7 @@ X implement view for individual conference
 * implement tags for conference subject
 * (re-)enable sending announcement to mailing lists
 
+INSTALL INSTRUCTIONS
+
+* create/modify Config/conflistConfigPrivate
+* put (symlink to) cakephp/lib at Lib/cakephp-lib
