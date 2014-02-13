@@ -350,6 +350,9 @@ class ConferencesController extends AppController {
       if ($this->Conference->save($this->data)) {
 	$this->request->data = $this->Conference->read();
 	//$this->EmailKey->send_key($this->Conference->id,$this->data,$this->admin_email);
+	$Email = $this->prep_email();
+	$Email->send();
+
 	$this->Session->setFlash('Your conference announcement has been updated.  An email with the new edit/delete links has been sent to the contact address.','FlashGood');
 	$this->redirect(array('action' => 'index'));
       }

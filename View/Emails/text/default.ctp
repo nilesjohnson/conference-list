@@ -27,7 +27,7 @@ echo Configure::read('site.home');
 If you need to edit or delete your announcement, use the unique edit/delete link:
 
 <?php
-echo Configure::read('site.home') . '/edit/conferences/' .
+echo Configure::read('site.home') . '/conferences/edit/' .
   $conference['Conference']['id'] . '/' . 
   $conference['Conference']['edit_key'] . "\n\n";
 ?>
