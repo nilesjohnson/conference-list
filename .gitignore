@@ -1,4 +1,8 @@
 Lib/cakephp-lib
 Config/conflistConfigPrivate.php
+
 tmp/cache/models/myapp*
 tmp/cache/persistent/myapp*
+
+webroot/error_log
+tmp/logs/error.log

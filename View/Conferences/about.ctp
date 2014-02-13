@@ -38,6 +38,9 @@ If you need to update your announcement, use the links provided to access the ed
 </p>
 </div>
 
+
+<!-- announcement emails disabled
+
 <h2 class="target" id="ccdata_about">Sending an announcement email</h2>
 <div>
 
@@ -131,6 +134,8 @@ particularly welcome!</p>
 
 </div>
 
+-->
+
 <h2 class="target" id="rss_about">RSS Feed</h2>
 <div>
 
@@ -168,10 +173,11 @@ formatted file for importing into other software.</p>
 <p>
 The people listed here have volunteered to help curate the AlgTop-Conf list.  They help keep the list up-to-date by adding new announcements, if the organizers haven't done so themselves.  They receive a copy of the edit/delete keys for each announcement, and can help if you have any trouble posting or updating your announcements.
 </p>
+
 <ul>
-<li><a href="http://math.northwestern.edu/~bohmann/">Anna Marie Bohmann</a>, Northwestern University</li>
-<li>Sean Tilson, Wayne State University</li>
-<li>Ben Walter, Middle East Technical University</li>
+<li><a href="http://www.pitt.edu/~krk56/">Chris Kapulkin</a>, University of Pittsburgh</li>
+<li>Majid Rasouli</li>
+<li><a href="http://dwhite03.web.wesleyan.edu/">David White</a>, Wesleyan University</li>
 </ul>
 </div>
 
