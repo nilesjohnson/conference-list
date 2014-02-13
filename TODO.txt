@@ -7,6 +7,7 @@ TODO FOR IMMEDIATE UPGRADE:
 
 X migrate current ATC database to new one
 * move conf-list_2 to ATC location
+* cleanup branding (conf-list, algtop-conf 2, etc)
 * check file permissions and security
 
 OTHER TODO:
