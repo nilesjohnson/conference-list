@@ -27,11 +27,6 @@ echo $this->Html->link($conference['Conference']['title'], $conference['Conferen
     <?php echo h($conference['Conference']['city']); ?>
      &nbsp;
   </dd>
-  <dt><?php echo __('Region'); ?></dt>
-  <dd>
-    <?php echo h($conference['Conference']['region']); ?>
-     &nbsp;
-  </dd>
   <dt><?php echo __('Country'); ?></dt>
   <dd>
     <?php echo h($conference['Conference']['country']); ?>
