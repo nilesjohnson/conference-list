@@ -62,3 +62,12 @@ echo $this->Html->link($conference['Conference']['title'], $conference['Conferen
 ?>
 </div>
 
+<h2>Problems?</h2>
+<p>
+If you notice a problem with this entry, please contact 
+<?php
+echo "<a href=\"" . Configure::read('site.home') . "/conferences/about#curators\">the curators</a> ";
+?>
+by email.
+</p>
+

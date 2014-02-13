@@ -63,7 +63,6 @@ function gcal_link($start,$end,$title,$location) {
 
 <hr/>
 <h1><?php echo $view_title; ?></h1>
-<h2><?php echo __('Conferences'); ?></h2>
 
 <div class="search_links">
   <?php echo $sort_text ?>
@@ -167,11 +166,11 @@ if ($new_subsort != $curr_subsort) {
    return false;" href="#" style="display:none;"> - Description</a>
  | 
 <?php echo 
-  $this->Html->link('View', 
+  $this->Html->link('View entry', 
   array('action'=>'view', $conference['Conference']['id']));?>
-<!-- -->
+<!--
  | 
-<?php /**/ echo 
+<?php /* echo 
   $this->Html->link('Edit', 
   array('action'=>'edit', $conference['Conference']['id'], $conference['Conference']['edit_key'])); /**/?>
 <!-- -->
