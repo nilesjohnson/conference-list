@@ -37,6 +37,7 @@
   </div>
 
   <div id="flashdiv">
+    <div class="flash flash_good">Note: this is the NEW app for cake 2 and php 5.4.  It is still in the final stages of development.</div>
     <?php echo $this->Session->flash(); ?>
   </div>
 
