@@ -5,9 +5,9 @@ X merge views
 
 TODO FOR IMMEDIATE UPGRADE:
 
-* migrate current ATC database to new one
+X migrate current ATC database to new one
 * move conf-list_2 to ATC location
-
+* check file permissions and security
 
 OTHER TODO:
 
@@ -25,8 +25,8 @@ X move app out of cakephp directory
 * start issue-tracking on github
 
 * update jquery
-* remove duration field from database table
-* remove region field from database table
+X remove duration field from database table
+X remove region field from database table
 * make script for database dumps
 * use built-in Paginator
 X implement view for individual conference 
