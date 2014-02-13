@@ -222,8 +222,8 @@ class ConferencesController extends AppController {
       // set model data
       //debug($this->data);  //displays array info
       $this->Conference->set($this->data);
-      $this->ccdata = $this->data['CcData'];
-      $this->CcData->set($this->ccdata);
+      //$this->ccdata = $this->data['CcData'];
+      //$this->CcData->set($this->ccdata);
 
 
       // test whether conference and cc data validates
@@ -238,6 +238,7 @@ class ConferencesController extends AppController {
 	$valid_data = false;
       }      
       // when cc To: field nonempty, check for invalid cc data
+      /*
       if ($this->ccdata['to'] != '' && !($this->CcData->validates($this->ccdata))) {
 	//debug($this->CcData->invalidFields());  //displays array info
 	foreach ($this->CcData->invalidFields() as $field => $message) {
@@ -246,7 +247,7 @@ class ConferencesController extends AppController {
 	$this->Session->setFlash('Please check for errors below.', 'FlashBad');
 	$valid_data = false;
       }	
-      
+      */
       // if conference and cc data validates, check for valid captcha
       if ($valid_data && $this->MathCaptcha->validates($this->data['Conference']['captcha'])) {
 

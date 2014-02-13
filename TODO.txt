@@ -18,9 +18,11 @@ X switch to sensible database names
 
 * update jquery
 * remove duration field from database table
+* remove region field from database table
 * make script for database dumps
 * use built-in Paginator
 X implement view for individual conference 
 * improve automated emails to include conference info
 * implement tags for conference subject
+* (re-)enable sending announcement to mailing lists
 

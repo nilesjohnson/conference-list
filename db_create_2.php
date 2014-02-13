@@ -1,5 +1,10 @@
 <?php
 
+  /*
+   * To do this manually, open mysql and choose database with
+   * USE <databasename>;
+   * then copy/paste from $table_create below
+   */
 print "<h1>hello world</h1>";
 
 $user_name = "root";
