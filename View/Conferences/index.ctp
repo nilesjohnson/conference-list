@@ -1,11 +1,17 @@
 <!-- social networking buttons -->
+<script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+
 <?php
+
+/*
 echo $this->Js->link(array(
 'https://apis.google.com/js/plusone.js', 
 'http://platform.twitter.com/widgets.js', 
 ), false);
+*/
 
-
+/*
 function gcal_link($start,$end,$title,$location) {
   $start_string = str_replace('-','',$start);
   $end_string = date('Ymd',strtotime($end." +1 day"));
@@ -17,6 +23,7 @@ function gcal_link($start,$end,$title,$location) {
     "&trp=false&sprop=http%3A%2F%2Fwww.nilesjohnson.net%2Falgtop-conf&sprop=name:AlgTop-Conf";
   return $url;
 }
+*/
 ?>
 
 
