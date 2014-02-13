@@ -1,7 +1,7 @@
 X merge model
 X merge controller
 X merge helpers
-* merge views
+X merge views
 
 * automated testing of model
 * automated testing of controller
@@ -11,7 +11,7 @@ X merge helpers
 X switch to sensible database names
 * generate useful default database
 * improve db_create.php
-* move app out of cakephp directory
+X move app out of cakephp directory
 
 * post public version of repository (github)
 * start issue-tracking on github

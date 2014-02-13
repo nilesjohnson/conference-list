@@ -12,11 +12,13 @@ class ConferencesController extends AppController {
 
   var $name = 'Conferences';
   var $hasOne = 'CcData';  // model for cc data
+
   var $admin_email = array(
-    'admin1@example.com', 
-    'admin2@example.com', 
-    'admin3@example.com'
+    'nilesj+admin1@gmail.com', 
+    'nilesj+admin2@gmail.com'
   );
+  var $host_email = "algtop-conf@nilesjohnson.net";
+  var $host_email_name = "AlgTop-Conf 2";
 
   var $months = array("none", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
 
@@ -309,12 +311,14 @@ class ConferencesController extends AppController {
 
   function prep_email() {
     $Email = new CakeEmail();
-    $Email->viewVars(array('conference' => $this->data));
+    $Email->viewVars(array('conference' => $this->data,
+			   'url_base' => $this->url_base));
     $Email->template('default','default')
       ->emailFormat('text');
-    $Email->from(array('me@example.com' => 'My Site'));
-    $Email->to('nilesj@gmail.com');
-    $Email->subject('test algtop-conf 2');
+    $Email->from(array($this->host_email => $this->host_email_name));
+    $Email->to($this->data['Conference']['contact_email']);
+    $Email->cc($this->admin_email);
+    $Email->subject("AlgTop-Conf: " . $this->data['Conference']['title']);
     return $Email;
   }
 

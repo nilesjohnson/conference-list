@@ -19,13 +19,15 @@
 
 Thanks for adding your announcement to AlgTop-Conf; it is now available in the main list:
 
-http://www.nilesjohnson.net/algtop-conf/
+<?php
+echo Configure::read('site.home');
+?>
 
 
 If you need to edit or delete your announcement, use the unique edit/delete link:
 
 <?php
-echo "http://www.nilesjohnson.net/algtop-conf/conferences/edit/" . 
+echo Configure::read('site.home') . '/edit/' .
   $conference['Conference']['id'] . '/' . 
   $conference['Conference']['edit_key'] . "\n\n";
 ?>

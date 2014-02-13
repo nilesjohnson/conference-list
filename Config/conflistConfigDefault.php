@@ -19,6 +19,12 @@ $config = array(
       'database' => 'conflist',
     ),
   ),
+  'site' => array(
+    'host' => 'http://www.example.com',
+    'host_email' => 'host@example.com',
+    'home' => 'http://www.example.com/conf-list',
+    'admin_email' => 'conflist-admin@example.com',
+  ),
 );
 
 
