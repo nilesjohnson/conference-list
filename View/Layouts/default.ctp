@@ -3,7 +3,7 @@
 <head>
 	<?php echo $this->Html->charset(); ?>
 	<title>
-		<title>AlgTop-Conf</title>
+		<?php echo Configure::read('site.name');?>
 	</title>
 	<?php
 		echo $this->Html->meta('icon');
@@ -17,21 +17,22 @@
 <body>
 <div id="container">
   <div id="header">
-    <h1><a href="http://mathmeetings.net">AlgTop-Conf 2</a>: Conf-List</h1>
+    <h1><?php echo $this->Html->link(Configure::read('site.name'),Configure::read('site.home'));?></h1>
   </div>
   <div id="sub_header">
     <div id="menu">
       <?php echo $this->Html->link('Main List',array('controller' =>
       'conferences', 'action' => 'index'))?>
       |
-      <?php echo $this->Html->link('Add Announcement',array('controller' =>
+      <?php echo $this->Html->link('New Announcement',array('controller' =>
      'conferences', 'action' => 'add'))?>
       | 
       <?php echo $this->Html->link('About',array('controller' =>
      'conferences', 'action' => 'about'))?>
 
       <div id="admin_contact">
-	Trouble? Comments? <a href="http://www.nilesjohnson.net/contact.html">Contact Niles</a>
+	Trouble? Comments? 
+	<?php echo $this->Html->link('Contact ' . Configure::read('site.host_name'),Configure::read('site.host_contact_url'));?>
       </div>
     </div>
   </div>
@@ -48,7 +49,9 @@
   <!-- footer -->
   <div id="footer">
     <!-- footer content -->
-    <div style="text-align: center"><a href="http://www.nilesjohnson.net">nilesjohnson.net</a></div>
+    <div style="text-align: center">
+      <?php echo $this->Html->link(str_replace('http://www.','',Configure::read('site.host')),Configure::read('site.host'));?>
+    </div>
   </div>
 </div>
 

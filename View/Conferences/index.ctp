@@ -37,13 +37,23 @@ function gcal_link($start,$end,$title,$location) {
   aims to be more complete by allowing <em>anyone at all</em> to add
   announcements.  Rather than use a wiki, announcement information is
   stored in database format so that useful search functions can be
-  added as the list grows.  Enjoy!</p>
+  added as the list grows.</p>
 
-  <p class="new">
-    <span style="color:red;">Know of a meeting not listed here?</span><br />
-    Go ahead and 
-    <?php echo $this->Html->link('add the information', array('action' => 'add'));?>!
-  </p>
+  <h4>Updates 2014-02-16</h4>
+
+  <p>We've upgraded the AlgTop-Conf software to <a
+  href="http://cakephp.org/" target="cake-blank">CakePHP 2.4.5</a> and
+  <a href="http://www.php.net" target="php-blank">PHP 5.4</a>.  This involves
+  substantial changes behind the scenes, but (hopefully!) minimal
+  changes to the user interface.  If you notice something not working
+  properly, please let Niles know.</p>
+
+  <div class="new">
+    <h2>Know of a meeting not listed here?  Add it now!</h2>
+    <p>
+    <?php echo $this->Html->link('New Announcement', array('action' => 'add'), array('class' => 'button', 'id' => 'add-button'));?>
+    </p>
+  </div>
 </div>
 
 
@@ -114,8 +124,7 @@ if ($new_subsort != $curr_subsort) {
 
 <div class="calendars">
 <?php  echo
-  $this->Html->link(
-  $this->Html->image("gc_button6.gif",array('alt'=>'GCal', 'width'=>'90px')), 
+  $this->Html->link('Google calendar',
   $this->Ical->gcal_url($conference['Conference']['id'], 
                                $conference['Conference']['start_date'], 
                                $conference['Conference']['end_date'],
@@ -124,13 +133,12 @@ if ($new_subsort != $curr_subsort) {
                                $conference['Conference']['country'],
                                $conference['Conference']['homepage']
                                ),
-  array('escape' => false,'id'=>'ics'));
-?>
-<?php  echo
-  $this->Html->link(
-  $this->Html->image("ics_button1.png", array('alt'=>'Ical', 'width'=>'30px')),
+  array('escape' => false,'class'=>'ics button'));
+
+echo
+  $this->Html->link('iCal .ics',
   array('action'=>'ical', $conference['Conference']['id']),
-  array('escape' => false,'id'=>'ics'));
+  array('escape' => false,'class'=>'ics button'));
 ?>
 </div>
 

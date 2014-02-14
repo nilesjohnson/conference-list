@@ -80,7 +80,7 @@ ul, li {
 }
 
 #header{
-	//padding: 10px 20px;
+	padding: 0;
 	background: #003D4C;
 	//position: fixed;
 	width: 100%;
@@ -91,6 +91,7 @@ ul, li {
         background: #003d4c /*url('../img/cake.icon.png') no-repeat left*/;
 	color: #fff;
 	padding: 0px 30px;
+	margin-top: .5em;
 }
 #header a {
 	color: #fff;
@@ -327,12 +328,14 @@ input[type=radio] {
 div.radio label {
 	margin: 0 0 6px 20px;
 }
-input[type=submit] {
+input[type=submit],
+a.button {
 	display: inline;
 	font-size: 100%;
 	width: auto;
 }
-form .submit input[type=submit] {
+form .submit input[type=submit],
+#add-button {
 	background:#62af56;
 	background: -webkit-gradient(linear, left top, left bottom, from(#a8ea9c), to(#62af56));
 	background-image: -moz-linear-gradient(top, #a8ea9c, #62af56);
@@ -340,7 +343,8 @@ form .submit input[type=submit] {
 	color: #000;
 	text-shadow: #8cee7c 0px 1px 0px;
 }
-form .submit input[type=submit]:hover {
+form .submit input[type=submit]:hover,
+#add-button:hover {
 	background:#4ca83d;
 	background: -webkit-gradient(linear, left top, left bottom, from(#85e573), to(#4ca83d));
 	background-image: -moz-linear-gradient(top, #85e573, #4ca83d);
@@ -413,6 +417,7 @@ div.actions ul li a:hover {
 }
 
 input[type=submit],
+a.button,
 div.actions ul li a,
 td.actions a {
 	font-weight:normal;
@@ -430,6 +435,7 @@ td.actions a {
 	min-width: 0;
 }
 input[type=submit]:hover,
+a.button:hover,
 div.actions ul li a:hover,
 td.actions a:hover {
 	background: #f0f09a;
@@ -564,6 +570,10 @@ p {
     //z-index: 1;
 }
 
+#add-button {
+    font-size: 115%;
+}
+
 /* fixed-position headers cause problems with # anchors */
 /* http://stackoverflow.com/questions/3972082/problem-with-html-anchor-in-absolute-div-300px-from-the-top */
 h2.target {
@@ -601,7 +611,9 @@ div.subsort0 h2, div.subsort1 h2 {
     background-color: #EFEFF7;
     border-top: 1.5px solid #88a;
 }
-
+h3.title {
+    margin-bottom: 1ex;
+}
 div.calendars {
     display: inline-block;
     float: right;
@@ -693,6 +705,7 @@ div.conference {
     padding-bottom: .5pc;
     margin-bottom: 1pc;
 }
+
 
 #footer a {
     color: #fff;
