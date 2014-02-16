@@ -18,7 +18,6 @@
 ?>
 
 Thanks for adding your announcement to AlgTop-Conf; it is now available in the main list:
-
 <?php
 echo Configure::read('site.home');
 ?>
@@ -33,10 +32,11 @@ echo Configure::read('site.home') . '/conferences/edit/' .
 ?>
 
 Note that you will receive a new edit/delete link after each update to your announcement.
+If you have any difficulties, questions, or comments, don't hesitate to contact the curators:
+<?php
+echo Configure::read('site.home') . '/conferences/about#curators';
+?>
 
-If you have any difficulties, questions, or comments, don't hesitate to contact Niles:
-
-algtop-conf@nilesjohnson.net
 
 best,
 AlgTop-Conf

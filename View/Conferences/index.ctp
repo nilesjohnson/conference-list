@@ -1,6 +1,8 @@
 <!-- social networking buttons -->
+<!-- disabled
 <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
 <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+-->
 
 <?php
 
@@ -57,6 +59,7 @@ function gcal_link($start,$end,$title,$location) {
 </div>
 
 
+<!-- disabled
 <div id="sharingButtons">
   <div class="sharingButton">
     <g:plusone size="medium"></g:plusone>
@@ -69,7 +72,7 @@ function gcal_link($start,$end,$title,$location) {
   </div>
   <div style="clear:both"></div>
 </div>
-
+-->
 
 <hr/>
 <h1><?php echo $view_title; ?></h1>

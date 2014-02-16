@@ -15,16 +15,14 @@ Thanks for adding your announcement to AlgTop-Conf; it is now available in the m
 http://www.nilesjohnson.net/algtop-conf/
 </p>
 <p>
-If you need to edit your announcement, use the unique edit link:<br/>
-http://www.nilesjohnson.net/algtop-conf/conferences/edit/25/sguoULJI
+If you need to edit or delete your announcement, use the unique edit/delete link:<br/>
+http://www.nilesjohnson.net/algtop-conf/conferences/edit/25/sguoULJI<br/>
 </p>
+
 <p>
-If you need to delete your announcement, use the unique delete link:<br/>
-http://www.nilesjohnson.net/algtop-conf/conferences/view/25/sguoULJI
-</p>
-<p>
-Note that you will receive new edit/delete links after each update to your announcement. If you have any difficulties, questions, or comments, don't hesitate to contact Niles:<br/>
-<span id="niles-email">(email address here)</span>
+Note that you will receive new edit/delete links after each update to your announcement.<br/>
+If you have any difficulties, questions, or comments, don't hesitate to contact the curators:
+http://www.nilesjohnson.net/conf-list_2/conferences/about#curators
 </p>
 
 <p>
@@ -150,8 +148,7 @@ feed for this site</a> gives a list of conference titles, sorted by
 date, and direct links to their homepages.  You can read more about
 RSS feeds at the <a href="http://en.wikipedia.org/wiki/RSS"
 target="blank">Wikipedia page</a>.  One example of a feed reader is <a
-href="http://www.google.com/reader/view/" target="blank">Google
-Reader</a>.  There are <a href="http://www.google.com/search?q=rss+aggregator" target="blank">many
+href="http://www.feedly.com" target="blank">Feedly</a>.  There are <a href="http://www.google.com/search?q=rss+aggregator" target="blank">many
 others</a>. </p>
 
 </div>
@@ -181,12 +178,14 @@ The people listed here have volunteered to help curate the AlgTop-Conf list.  Th
 </ul>
 </div>
 
+<!-- reporting disabled
 <h2>Reporting Problems</h2>
 <div>
 <p>
 If there are problems with a particular announcement, you can report them using the link provided with each announcement.  This will send an e-mail, together with a brief comment, to the AlgTop-Conf curators.  They will then edit or delete the announcement as necessary.
 </p>
 </div>
+-->
 
 <h2>Searching</h2>
 <div>

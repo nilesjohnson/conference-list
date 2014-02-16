@@ -18,7 +18,7 @@ class ConferencesController extends AppController {
     'nilesj+admin2@gmail.com'
   );
   var $host_email = "algtop-conf@nilesjohnson.net";
-  var $host_email_name = "AlgTop-Conf 2";
+  var $host_email_name = "AlgTop-Conf";
 
   var $months = array("none", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
 
@@ -389,7 +389,7 @@ class ConferencesController extends AppController {
     }
     $this->request->onlyAllow('post', 'delete');
     if ($this->Conference->delete()) {
-      $this->Session->setFlash(__('The conference has been deleted.'));
+      $this->Session->setFlash('The conference announcement has been deleted.', 'FlashGood');
     }
     else {
       $this->Session->setFlash(__('The conference could not be deleted. Please, try again.'));
