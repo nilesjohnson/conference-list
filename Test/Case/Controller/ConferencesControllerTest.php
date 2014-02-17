@@ -22,7 +22,7 @@ class ConferencesControllerTest extends ControllerTestCase {
  * @return void
  */
 	public function testIndex() {
-	$result -> testAction('/conferences/index');
+	$result =$this->testAction('/');
 	debug($result);
 	}
 
@@ -32,6 +32,8 @@ class ConferencesControllerTest extends ControllerTestCase {
  * @return void
  */
 	public function testView() {
+	$result =$this->testAction('/conferences/view/4');
+	debug($result);
 	}
 
 /**
