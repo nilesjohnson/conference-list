@@ -11,10 +11,10 @@ class IcalHelper extends AppHelper {
     $end_string = date('Ymd',strtotime($end_date." +1 day"));
     $location = $city."; ".$country;
     $Gcal_url = "http://www.google.com/calendar/event?action=TEMPLATE&".
-      "text=".$title."&".
+      "text=".urlencode($title)."&".
       "dates=".$start_string."/".$end_string.
       "&details=".$url.
-      "&location=".$location.
+      "&location=".urlencode($location).
       "&trp=false&sprop=".urlencode($conflist_url).
       "&sprop=name:".urlencode($conflist_name);
     return $Gcal_url;

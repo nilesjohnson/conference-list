@@ -74,9 +74,15 @@ class Conference extends AppModel {
 					'message' => 'Please supply a city (or closest city).'
 					),
 			'country' => array(
-					  'rule' => array('notEqualTo','country'),
-					  'message' => 'Please select a country.'
-					  ),
+					   'rule-1' => array(
+							     'rule' => array('notEqualTo','country'),
+							     'message' => 'Please select a country. (1)'
+							     ),
+					   'rule-2' => array(
+							     'rule' => 'notEmpty',
+							     'message' => 'Please select a country. (2)'
+							     )
+					   ),
 			//'meeting_type' => array(
 			//'rule' => 'notEmpty'
 			//),

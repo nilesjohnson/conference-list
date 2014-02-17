@@ -484,7 +484,7 @@ class ConferencesController extends AppController {
 
 
   public $countries = array(
-			 "country" => 'Country...',
+			 "" => 'Country...', // value attribte of first element must be empty
 			 "Afganistan" => 'Afghanistan',
 			 "Albania" => 'Albania',
 			 "Algeria" => 'Algeria',

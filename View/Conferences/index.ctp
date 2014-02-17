@@ -188,7 +188,7 @@ echo
 <?php /* echo 
   $this->Html->link('Edit', 
   array('action'=>'edit', $conference['Conference']['id'], $conference['Conference']['edit_key'])); /**/?>
-<!-- -->
+-->
 
 </div>
 

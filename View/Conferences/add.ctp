@@ -1,20 +1,13 @@
 
-<!-- calendar date picker -->
-<script type="text/javascript" src="/js/jquery-ui-1.8.10.custom/js/jquery-1.4.4.min.js"></script>
-<script type="text/javascript" src="/js/jquery-ui-1.8.10.custom/js/jquery-ui-1.8.10.custom.min.js"></script>
-<link rel="stylesheet" type="text/css" href="/js/jquery-ui-1.8.10.custom/css/redmond/jquery-ui-1.8.10.custom.css" />
-<script type="text/javascript">
-$(function() { var
-dates = $( "#ConferenceStartDate, #ConferenceEndDate" ).datepicker({
-dateFormat: "yy-mm-dd", defaultDate: "+1w", changeMonth: true,
-numberOfMonths: 1, onSelect: function( selectedDate ) { var option =
-this.id == "ConferenceStartDate" ? "minDate" : "maxDate", instance =
-$( this ).data( "datepicker" ), date = $.datepicker.parseDate(
-instance.settings.dateFormat || $.datepicker._defaults.dateFormat,
-selectedDate, instance.settings ); dates.not( this ).datepicker(
-"option", option, date ); } }); });
-</script>
+<?php
+// calendar date picker
 
+$this->Html->script('jquery-ui-1.8.10.custom/js/jquery-1.4.4.min',array('inline'=>false));
+$this->Html->script('jquery-ui-1.8.10.custom/js/jquery-ui-1.8.10.custom.min',array('inline'=>false));
+$this->Html->css('jquery-ui-1.8.10.custom',array('inline'=>false));
+$this->Html->script('datepicker',array('inline'=>false));
+
+?>
 
 
 <h1>Add Meeting Information</h1>
