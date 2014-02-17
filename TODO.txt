@@ -36,8 +36,8 @@ X implement view for individual conference
 * improve automated emails to include conference info
 * implement tags for conference subject
 * (re-)enable sending announcement to mailing lists
+* upgrade wmd https://github.com/openlibrary/wmd
 * wmd on edit page
-
 
 INSTALL INSTRUCTIONS
 
