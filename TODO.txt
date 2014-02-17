@@ -30,13 +30,15 @@ X move app out of cakephp directory
 * update jquery
 X remove duration field from database table
 X remove region field from database table
-* make script for database dumps
+X make script for database dumps
 * use built-in Paginator
 X implement view for individual conference 
 * improve automated emails to include conference info
 * implement tags for conference subject
 * (re-)enable sending announcement to mailing lists
 * wmd on edit page
+
+
 INSTALL INSTRUCTIONS
 
 * create/modify Config/conflistConfigPrivate
