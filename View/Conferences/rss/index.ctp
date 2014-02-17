@@ -1,6 +1,6 @@
 <?php
 $this->set('channelData', array(
-    'title' => __("AlgTop-Conf Announcements"),
+    'title' => __(Configure::read('site.name')." Announcements"),
     'link' => $this->Html->url('/', true),
     'description' => __("Upcoming meetings."),
     'language' => 'en-us'

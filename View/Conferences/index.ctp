@@ -95,8 +95,10 @@ function gcal_link($start,$end,$title,$location) {
 
 
 <?php $curr_subsort = Null; $new_subsort = Null; $subsort_counter = 0; echo '<div id="subsort_start">'; ?>
-<?php foreach ($conferences as $conference): ?>
 <?php 
+$site_url = Configure::read('site.home');
+$site_name = Configure::read('site.name');
+foreach ($conferences as $conference):
 if ($sort_condition == Null || $sort_condition == 'all') {
   $datearray = explode("-",$conference['Conference']['start_date']); 
   $new_subsort =  $months[(int)$datearray[1]]." ".$datearray[0]; 
@@ -134,12 +136,14 @@ if ($new_subsort != $curr_subsort) {
                                $conference['Conference']['title'],
                                $conference['Conference']['city'],
                                $conference['Conference']['country'],
-                               $conference['Conference']['homepage']
+                               $conference['Conference']['homepage'],
+			       $site_url,
+			       $site_name
                                ),
   array('escape' => false,'class'=>'ics button'));
 
 echo
-  $this->Html->link('iCal .ics',
+  $this->Html->link('iCalendar .ics',
   array('action'=>'ical', $conference['Conference']['id']),
   array('escape' => false,'class'=>'ics button'));
 ?>
