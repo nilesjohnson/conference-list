@@ -13,19 +13,12 @@ class ConferencesController extends AppController {
   var $name = 'Conferences';
   var $hasOne = 'CcData';  // model for cc data
 
-  var $admin_email = array(
-    'nilesj+admin1@gmail.com', 
-    'nilesj+admin2@gmail.com'
-  );
-  var $host_email = "algtop-conf@nilesjohnson.net";
-  var $host_email_name = "AlgTop-Conf";
-
   var $months = array("none", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
 
 
   public $helpers = array('Js', 'Html', 'Ical', 'Text');
 
-  public $components = array('Email', 'RequestHandler', 'Session', 'MathCaptcha', 'EmailKey');
+  public $components = array('Email', 'RequestHandler', 'Session', 'MathCaptcha', 'EmailKey', 'Security');
 
 
 
@@ -207,11 +200,12 @@ class ConferencesController extends AppController {
 
 
 
-  public function view($id = null) {
+  public function view($id = null,$key = null) {
     if (!$this->Conference->exists($id)) {
       throw new NotFoundException(__('Invalid conference'));
     }
     $options = array('conditions' => array('Conference.' . $this->Conference->primaryKey => $id));
+    $this->set('key', $key);
     $this->set('conference', $this->Conference->find('first', $options));
   }
 
@@ -315,9 +309,9 @@ class ConferencesController extends AppController {
 			   'url_base' => $this->url_base));
     $Email->template('default','default')
       ->emailFormat('text');
-    $Email->from(array($this->host_email => $this->host_email_name));
+    $Email->from(array(Configure::read('site.host_email') => Configure::read('site.host_email_name')));
     $Email->to($this->data['Conference']['contact_email']);
-    $Email->cc($this->admin_email);
+    $Email->cc(Configure::read('site.admin_email'));
     $Email->subject("AlgTop-Conf: " . $this->data['Conference']['title']);
     return $Email;
   }
@@ -430,9 +424,12 @@ class ConferencesController extends AppController {
     $this->set('conferences', $this->Paginator->paginate());
   }
 
-  public function admin_view($id = null) {
+  public function admin_view($id,$key) {
     if (!$this->Conference->exists($id)) {
       throw new NotFoundException(__('Invalid conference'));
+    }
+    if ($key != Configure::read('site.admin_key')) {
+      throw new NotFoundException(__('Invalid admin key'));
     }
     $options = array('conditions' => array('Conference.' . $this->Conference->primaryKey => $id));
     $this->set('conference', $this->Conference->find('first', $options));

@@ -7,6 +7,13 @@ echo $this->Html->link($conference['Conference']['title'], $conference['Conferen
 
 
 <dl>
+  <?php if (md5($key.md5($key)) == Configure::read('site.admin_key_hash')) {
+            echo '  <dt>Edit Key</dt>';
+            echo '  <dd>';
+            echo '  '.$this->Html->link($conference['Conference']['edit_key'],'edit/'.$conference['Conference']['id'].'/'.$conference['Conference']['edit_key']);
+            echo '  </dd>';
+           }
+  ?>
   <dt><?php echo __('Start Date'); ?></dt>
   <dd>
     <?php echo h($conference['Conference']['start_date']); ?>
