@@ -106,7 +106,7 @@ First announcement:
 
 &lt;Title of your announcement&gt;
 &lt;City, State&gt;, &lt;Country&gt;
-&lt;Start date&gt; -- &lt;End date&gt;
+&lt;Start date&gt; &ndash; &lt;End date&gt;
 &lt;Conference website&gt;
 
 &lt;Text from the description&gt;
