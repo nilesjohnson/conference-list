@@ -4,7 +4,7 @@
 
 $this->Html->script('jquery-ui-1.8.10.custom/js/jquery-1.4.4.min',array('inline'=>false));
 $this->Html->script('jquery-ui-1.8.10.custom/js/jquery-ui-1.8.10.custom.min',array('inline'=>false));
-$this->Html->css('jquery-ui-1.8.10.custom',array('inline'=>false));
+$this->Html->css('jquery-ui-1.8.10.custom-css/jquery-ui-1.8.10.custom',array('inline'=>false));
 $this->Html->script('datepicker',array('inline'=>false));
 
 ?>

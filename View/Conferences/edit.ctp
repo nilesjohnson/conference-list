@@ -11,7 +11,7 @@
 		//echo $this->Form->input('duration');
 		echo $this->Form->input('institution');
 		echo $this->Form->input('city');
-		echo $this->Form->input('region');
+		//echo $this->Form->input('region');
 		echo $this->Form->input('country');
 		echo $this->Form->input('meeting_type');
 		echo $this->Form->input('subject_area');

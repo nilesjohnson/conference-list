@@ -309,9 +309,9 @@ class ConferencesController extends AppController {
 			   'url_base' => $this->url_base));
     $Email->template('default','default')
       ->emailFormat('text');
-    $Email->from(array(Configure::read('site.host_email') => Configure::read('site.host_email_name')));
+    $Email->from(array(Configure::read('site.host_email') => Configure::read('site.name')));
     $Email->to($this->data['Conference']['contact_email']);
-    $Email->cc(Configure::read('site.admin_email'));
+    $Email->bcc(Configure::read('site.admin_email'));
     $Email->subject("AlgTop-Conf: " . $this->data['Conference']['title']);
     return $Email;
   }

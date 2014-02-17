@@ -7,3 +7,4 @@ tmp/cache/persistent/myapp*
 
 webroot/error_log
 tmp/logs/error.log
+tmp/logs/debug.log

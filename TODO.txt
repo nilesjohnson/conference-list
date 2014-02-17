@@ -6,10 +6,11 @@ X merge views
 TODO FOR IMMEDIATE UPGRADE:
 
 X migrate current ATC database to new one
-* move conf-list_2 to ATC location
+X move conf-list_2 to ATC location
 X cleanup branding (conf-list, algtop-conf 2, etc)
 * check file permissions and security
-* update with curator email addresses
+X update with curator email addresses
+X check/fix css for datepicker
 
 OTHER TODO:
 
@@ -35,7 +36,7 @@ X implement view for individual conference
 * improve automated emails to include conference info
 * implement tags for conference subject
 * (re-)enable sending announcement to mailing lists
-
+* wmd on edit page
 INSTALL INSTRUCTIONS
 
 * create/modify Config/conflistConfigPrivate

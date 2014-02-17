@@ -1,6 +1,6 @@
 <IfModule mod_rewrite.c>
     RewriteEngine on
-    RewriteBase /conf-list_2/
+    #RewriteBase /algtop-conf/
     RewriteRule    ^$    webroot/    [L]
     RewriteRule    (.*) webroot/$1    [L]
 </IfModule>
