@@ -1,6 +1,7 @@
 Lib/cakephp-lib
 Config/conflistConfigPrivate.php
 db_migrate.php
+webroot/algtop-conf-dump*
 
 tmp/cache/models/myapp*
 tmp/cache/persistent/myapp*
