@@ -116,7 +116,7 @@ class Conference extends AppModel {
     return ((bool) strcmp($input_values[0],$value));
   }
 
-  public function beforeSave() {
+  public function beforeSave($options = array()) {
     $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";	
     $this->data['Conference']['edit_key'] = substr( str_shuffle( $chars ), 0, 8);
     // zero pad day and month

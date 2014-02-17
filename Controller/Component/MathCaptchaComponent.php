@@ -64,7 +64,7 @@ class MathCaptchaComponent extends Component {
      * @param object $model
      * @param array $settings
      */
-    public function initialize(&$controller, $settings = array()) {
+    public function initialize(Controller $controller, $settings = array()) {
         $this->settings = array_merge($this->__defaults, $settings);
     }
 
