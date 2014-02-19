@@ -130,7 +130,7 @@ if ($new_subsort != $curr_subsort) {
 <div class="calendars">
 <?php  echo
   $this->Html->link('Google calendar',
-  $this->Ical->gcal_url($conference['Conference']['id'], 
+  $this->Gcal->gcal_url($conference['Conference']['id'], 
                                $conference['Conference']['start_date'], 
                                $conference['Conference']['end_date'],
                                $conference['Conference']['title'],

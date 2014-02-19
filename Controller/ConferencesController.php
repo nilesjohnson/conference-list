@@ -16,7 +16,7 @@ class ConferencesController extends AppController {
   var $months = array("none", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
 
 
-  public $helpers = array('Js', 'Html', 'Ical', 'Text');
+  public $helpers = array('Js', 'Html', 'Gcal', 'Text');
 
   public $components = array('Email', 'RequestHandler', 'Session', 'MathCaptcha', 'EmailKey', 'Security');
 
