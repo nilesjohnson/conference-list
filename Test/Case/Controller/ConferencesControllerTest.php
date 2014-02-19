@@ -27,13 +27,24 @@ class ConferencesControllerTest extends ControllerTestCase {
 	}
 
 /**
+ * testAbout method
+ *
+ * @return void
+ */
+	public function testAbout() {
+	$result =$this->testAction('/conferences/about');
+	debug($result);
+	}
+
+
+/**
  * testView method
  *
  * @return void
  */
 	public function testView() {
-	$result = $this->testAction('/conferences/view/4');
-	debug($result);
+	  $result = $this->testAction('/conferences/view/4');
+	  debug($result);
 	}
 
 /**
@@ -42,28 +53,31 @@ class ConferencesControllerTest extends ControllerTestCase {
  * @return void
  */
 
-  public function testEdit() {
-    $Conferences = $this->generate('Conferences', array(
-      'components' => array(
-      'Session',
-      'Email' => array('send')
-      )
-      ));
-    $Conferences->Session
-      ->expects($this->once())
-      ->method('setFlash');
-    $Conferences->Email
-      ->expects($this->once())
-      ->method('send')
-      ->will($this->returnValue(true));
-
-    $this->testAction('/conferences/edit/4', array(
-      'data' => array(
-          'Conference' => array('title' => 'New Announcement')
-      )
-    ));
-    $this->assertContains('/', $this->headers['Location']);
-  }
+	public function testAdd() {
+	  $Conferences = $this->generate('Conferences', 
+					 array(
+					       'components' => array(
+								     'Session',
+								     'Email' => array('send')
+								     )
+					       ));
+	  $Conferences->Session
+	    ->expects($this->once())
+	    ->method('setFlash');
+	  /*
+	    $Conferences->Email
+	    ->expects($this->once())
+	    ->method('send')
+	    ->will($this->returnValue(true));
+	  */
+	  $this->testAction('/conferences/edit/4', 
+			    array(
+				  'data' => array(
+						  'Conference' => array('title' => 'New Announcement')
+						  )
+				  ));
+	  $this->assertContains('/', $this->headers['Location']);
+	}
 
 
 
@@ -72,8 +86,10 @@ class ConferencesControllerTest extends ControllerTestCase {
  *
  * @return void
  */
-//	public function testEdit() {
-//	}
+	public function testEdit() {
+	  $result = $this->testAction('/conferences/edit/4');
+	  debug($result);
+	}
 
 /**
  * testDelete method
@@ -81,53 +97,56 @@ class ConferencesControllerTest extends ControllerTestCase {
  * @return void
  */
 	public function testDelete() {
+	  $result = $this->testAction('/conferences/delete/4');
+	  debug($result);
 	}
 
 
+	/*
 	public function testPrepEmail() {
 	  $result = $this->prepEmail();
 	  debug($result);
 	}
-
+	*/
 
 /**
  * testAdminIndex method
  *
  * @return void
  */
-	public function testAdminIndex() {
-	}
+//	public function testAdminIndex() {
+//	}
 
 /**
  * testAdminView method
  *
  * @return void
  */
-	public function testAdminView() {
-	}
+//	public function testAdminView() {
+//	}
 
 /**
  * testAdminAdd method
  *
  * @return void
  */
-	public function testAdminAdd() {
-	}
+//	public function testAdminAdd() {
+//	}
 
 /**
  * testAdminEdit method
  *
  * @return void
  */
-	public function testAdminEdit() {
-	}
+//	public function testAdminEdit() {
+//	}
 
 /**
  * testAdminDelete method
  *
  * @return void
  */
-	public function testAdminDelete() {
-	}
+//	public function testAdminDelete() {
+//	}
 
 }
