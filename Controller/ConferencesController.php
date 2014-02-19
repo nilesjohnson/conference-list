@@ -18,7 +18,7 @@ class ConferencesController extends AppController {
 
   public $helpers = array('Js', 'Html', 'Gcal', 'Text');
 
-  public $components = array('Email', 'RequestHandler', 'Session', 'MathCaptcha', 'EmailKey', 'Security');
+  public $components = array('Email', 'RequestHandler', 'Session', 'MathCaptcha', 'Security');
 
 
 
@@ -257,12 +257,10 @@ class ConferencesController extends AppController {
 	// verify that all data saves, and send email(s)
 	if ($this->Conference->save($this->data)) {
 	  $this->request->data = $this->Conference->read();
-	  //$this->EmailKey->send_key($this->Conference->id, $this->data, $this->admin_email);
 	  $Email = $this->prepEmail();
 	  $Email->send();
 	  $this->Session->setFlash('Your conference information has been saved.  An email with edit/delete links has been sent to the contact address.', 'FlashGood');
 	  if ($this->ccdata['to'] != '') {
-	    //$this->EmailKey->send_cc($this->ccdata, $this->admin_email);
 	    $this->Session->setFlash('Your conference information has been saved.  An email with edit/delete links has been sent to the contact address, and a separate announcement has been sent to the given addresses.', 'FlashGood');
 	  }
 	  $this->redirect(array('action' => 'index'));
@@ -354,7 +352,6 @@ class ConferencesController extends AppController {
       }
       if ($this->Conference->save($this->data)) {
 	$this->request->data = $this->Conference->read();
-	//$this->EmailKey->send_key($this->Conference->id,$this->data,$this->admin_email);
 	$Email = $this->prepEmail();
 	$Email->send();
 
