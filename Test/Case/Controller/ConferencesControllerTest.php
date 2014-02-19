@@ -32,7 +32,7 @@ class ConferencesControllerTest extends ControllerTestCase {
  * @return void
  */
 	public function testView() {
-	$result =$this->testAction('/conferences/view/4');
+	$result = $this->testAction('/conferences/view/4');
 	debug($result);
 	}
 
@@ -41,16 +41,39 @@ class ConferencesControllerTest extends ControllerTestCase {
  *
  * @return void
  */
-	public function testAdd() {
-	}
+
+  public function testEdit() {
+    $Conferences = $this->generate('Conferences', array(
+      'components' => array(
+      'Session',
+      'Email' => array('send')
+      )
+      ));
+    $Conferences->Session
+      ->expects($this->once())
+      ->method('setFlash');
+    $Conferences->Email
+      ->expects($this->once())
+      ->method('send')
+      ->will($this->returnValue(true));
+
+    $this->testAction('/conferences/edit/4', array(
+      'data' => array(
+          'Conference' => array('title' => 'New Announcement')
+      )
+    ));
+    $this->assertContains('/', $this->headers['Location']);
+  }
+
+
 
 /**
  * testEdit method
  *
  * @return void
  */
-	public function testEdit() {
-	}
+//	public function testEdit() {
+//	}
 
 /**
  * testDelete method
@@ -59,6 +82,13 @@ class ConferencesControllerTest extends ControllerTestCase {
  */
 	public function testDelete() {
 	}
+
+
+	public function testPrepEmail() {
+	  $result = $this->prepEmail();
+	  debug($result);
+	}
+
 
 /**
  * testAdminIndex method
