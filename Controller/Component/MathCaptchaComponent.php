@@ -2,13 +2,14 @@
 /**
  * Math Captcha Component class.
  *
- * Generates a simple, plain text math equation as an alternative to image-based CAPTCHAs.
+ * Generates a simple, plain text math equation as an 
+ * alternative to image-based CAPTCHAs.
  *
  * @filesource
- * @author			Jamie Nay
- * @copyright       Jamie Nay
- * @license			http://www.opensource.org/licenses/mit-license.php The MIT License
- * @link            http://jamienay.com/code/math-captcha-component
+ * @author	Jamie Nay
+ * @copyright   Jamie Nay
+ * @license	http://www.opensource.org/licenses/mit-license.php The MIT License
+ * @link        http://jamienay.com/code/math-captcha-component
  */
 class MathCaptchaComponent extends Component {
 
@@ -21,19 +22,19 @@ class MathCaptchaComponent extends Component {
     public $components = array('Session');
     
     /**
-	 * component settings
-	 * 
-	 * @access public
-	 * @var array
-	 */
-	public $settings = array();
+     * component settings
+     * 
+     * @access public
+     * @var array
+     */
+    public $settings = array();
 	
     /**
-	 * Default values for settings.
-	 *
-	 * @access private
-	 * @var array
-	 */
+     * Default values for settings.
+     *
+     * @access private
+     * @var array
+     */
     private $__defaults = array(
         'operand' => '+',
         'minNumber' => 1,
@@ -69,9 +70,10 @@ class MathCaptchaComponent extends Component {
     }
 
     /*
-     * Method that generates a math equation based on the component settings. It also calls
-     * a secondary function, registerAnswer(), which determines the answer to the equation
-     * and sets it as a session variable.
+     * Method that generates a math equation based on the component
+     * settings. It also calls a secondary function, registerAnswer(),
+     * which determines the answer to the equation and sets it as a
+     * session variable.
      *
      * @access public
      * @return string
@@ -83,7 +85,7 @@ class MathCaptchaComponent extends Component {
             $this->variables[] = rand($this->settings['minNumber'], $this->settings['maxNumber']);
         }
         
-       // debug($this->settings); debug($this->variables);
+        // debug($this->settings); debug($this->variables);
         $this->equation = implode(' ' . $this->settings['operand'] . ' ', $this->variables);
         //debug($this->equation); 
         // This function determines the answer to the equation and stores it as a session variable.
@@ -93,8 +95,9 @@ class MathCaptchaComponent extends Component {
     }
     
     /*
-     * Determines the answer to the math question from the variables set in generateEquation()
-     * and registers it as a session variable.
+     * Determines the answer to the math question from the variables
+     * set in generateEquation() and registers it as a session
+     * variable.
      *
      * @access public
      * @return integer
