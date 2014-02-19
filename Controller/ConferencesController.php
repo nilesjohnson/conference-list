@@ -303,16 +303,27 @@ class ConferencesController extends AppController {
     }
   }
 
-  public function prepEmail() {
+  public function prepEmail($id = null) {
     $Email = new CakeEmail();
-    $Email->viewVars(array('conference' => $this->data,
-			   'url_base' => $this->url_base));
+    if (!is_null($id)) {
+      $this->Conference->id = $id;
+      if (!$this->Conference->exists($id)) {
+	throw new NotFoundException(__('Invalid conference (3)'));
+      }
+      $this->data = $this->Conference->read();
+    }
+    $Email->viewVars(array('conference' => $this->data));
     $Email->template('default','default')
       ->emailFormat('text');
     $Email->from(array(Configure::read('site.host_email') => Configure::read('site.name')));
     $Email->to($this->data['Conference']['contact_email']);
     $Email->bcc(Configure::read('site.admin_email'));
     $Email->subject("AlgTop-Conf: " . $this->data['Conference']['title']);
+    if (!is_null($id)) {
+      $this->set('conference',$this->data);
+      $this->render('../Emails/text/default','Emails/text/default');
+      return null;
+    }
     return $Email;
   }
 

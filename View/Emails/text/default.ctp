@@ -41,4 +41,3 @@ echo Configure::read('site.home') . '/conferences/about#curators';
 best,
 AlgTop-Conf
 
-<?php echo $content; ?>
