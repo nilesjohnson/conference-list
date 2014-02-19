@@ -225,8 +225,8 @@ class ConferencesController extends AppController {
       $valid_data = true;
       // check for invalid conference data
       if (!($this->Conference->validates($this->data['Conference']))) {
-	//debug($this->Conference->invalidFields()); //displays array info
-	foreach ($this->Conference->invalidFields() as $field => $message) {
+	debug($this->Conference->validationErrors); //displays array info
+	foreach (Set::flatten($this->Conference->validationErrors) as $field => $message) {
 	  $this->Conference->invalidate($field,$message);
 	}
 	$this->Session->setFlash('Please check for errors below.', 'FlashBad');
