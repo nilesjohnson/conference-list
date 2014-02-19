@@ -259,7 +259,7 @@ class ConferencesController extends AppController {
 	if ($this->Conference->save($this->data)) {
 	  $this->request->data = $this->Conference->read();
 	  //$this->EmailKey->send_key($this->Conference->id, $this->data, $this->admin_email);
-	  $Email = $this->prep_email();
+	  $Email = $this->prepEmail();
 	  $Email->send();
 	  $this->Session->setFlash('Your conference information has been saved.  An email with edit/delete links has been sent to the contact address.', 'FlashGood');
 	  if ($this->ccdata['to'] != '') {
@@ -303,7 +303,7 @@ class ConferencesController extends AppController {
     }
   }
 
-  function prep_email() {
+  public function prepEmail() {
     $Email = new CakeEmail();
     $Email->viewVars(array('conference' => $this->data,
 			   'url_base' => $this->url_base));
@@ -344,7 +344,7 @@ class ConferencesController extends AppController {
       if ($this->Conference->save($this->data)) {
 	$this->request->data = $this->Conference->read();
 	//$this->EmailKey->send_key($this->Conference->id,$this->data,$this->admin_email);
-	$Email = $this->prep_email();
+	$Email = $this->prepEmail();
 	$Email->send();
 
 	$this->Session->setFlash('Your conference announcement has been updated.  An email with the new edit/delete links has been sent to the contact address.','FlashGood');
