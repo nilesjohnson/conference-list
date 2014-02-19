@@ -37,12 +37,13 @@ class ConferenceTest extends CakeTestCase {
 	*/
 
 
+	/*
 	public function testBeforeSave() {
 	  $result = $this->Conference->beforeSave();
 	  debug($result);
 	  //$this->assertEquals(true,$result);
 	}
-
+	*/
 
 
 /**
