@@ -184,7 +184,7 @@ class ConferencesController extends AppController {
   }
 
 
-
+  /*
   public function sort_country_unused(){
     $this->set('conferences', $this->Conference->find('all',
 						      array('order' => array(
@@ -197,16 +197,15 @@ class ConferencesController extends AppController {
 
 
 
+  */
 
 
-
-  public function view($id = null,$key = null) {
+  public function view($id = null) {
     if (!$this->Conference->exists($id)) {
       throw new NotFoundException(__('Invalid conference'));
     }
-    $options = array('conditions' => array('Conference.' . $this->Conference->primaryKey => $id));
-    $this->set('key', $key);
-    $this->set('conference', $this->Conference->find('first', $options));
+    $this->Conference->id = $id;
+    $this->set('conference', $this->Conference->read());
   }
 
 
@@ -289,7 +288,7 @@ class ConferencesController extends AppController {
 
 
 
-
+  /*
   public function add_baked() {
     if ($this->request->is('post')) {
       $this->Conference->create();
@@ -302,6 +301,7 @@ class ConferencesController extends AppController {
       }
     }
   }
+  */
 
   public function prepEmail($id = null) {
     $Email = new CakeEmail();
@@ -366,7 +366,7 @@ class ConferencesController extends AppController {
   
 
 
-
+  /*
   public function edit_baked($id = null) {
     if (!$this->Conference->exists($id)) {
       throw new NotFoundException(__('Invalid conference'));
@@ -385,7 +385,7 @@ class ConferencesController extends AppController {
       $this->request->data = $this->Conference->find('first', $options);
     }
   }
-
+  */
 
   public function delete($id = null) {
     $this->Conference->id = $id;
@@ -409,9 +409,19 @@ class ConferencesController extends AppController {
 
 
   public function admin($id) {
-    $this->set('key_code',"**********");
+    $this->set('valid_admin',false);
+    if (!$this->Conference->exists($id)) {
+      throw new NotFoundException(__('Invalid conference'));
+    }
     $this->Conference->id = $id;
     $this->set('conference', $this->Conference->read());
+    if (!empty($this->data)) {
+      // set model data
+      //debug($this->data);  //displays array info
+      if ($this->data['Admin']['admin_key'] == Configure::read('site.admin_key') || $this->data['Admin']['admin_key'] == $this->Conference->field('edit_key')) {
+	  $this->set('valid_admin',true);
+	}
+    }
     /*
     $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.";
     $key_array = str_split($this->Conference->field('edit_key'));
@@ -425,8 +435,6 @@ class ConferencesController extends AppController {
     //$this->set('key_code', $this->Conference->field('edit_key'));
     */
   }
-
-
 
 
 

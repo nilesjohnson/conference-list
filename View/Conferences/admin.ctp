@@ -1,4 +1,29 @@
 
+
+<?php
+echo $this->Form->create('Admin');
+echo $this->Form->input('admin_key', array('label' => 'Edit Key'));
+echo $this->Form->end('Submit');
+
+
+if ($valid_admin) {
+   echo '<h2>Edit/Delete Info</h2>';
+   echo '<dl>'; 
+   echo ' <dt>Edit Key</dt>';
+   echo '  <dd>';
+   echo '    '.$conference['Conference']['edit_key'];
+   echo '  </dd>';
+   echo ' <dt>URL</dt>';
+   echo '  <dd>';
+   $url = Configure::read('site.host').$this->Html->url('edit/'.$conference['Conference']['id'].'/'.$conference['Conference']['edit_key']);
+   echo '  <a href="'.$url.'">'.$url.'</a>';
+   echo '  </dd>';
+   echo '</dl>';   
+}
+
+?>
+
+
 <h2 class="title">
 <?php 
 echo $this->Html->link($conference['Conference']['title'], $conference['Conference']['homepage']);
@@ -7,6 +32,7 @@ echo $this->Html->link($conference['Conference']['title'], $conference['Conferen
 
 
 <dl>
+
   <dt><?php echo __('Start Date'); ?></dt>
   <dd>
     <?php echo h($conference['Conference']['start_date']); ?>
