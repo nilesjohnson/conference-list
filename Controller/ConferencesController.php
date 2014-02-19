@@ -11,7 +11,7 @@ class ConferencesController extends AppController {
 
 
   var $name = 'Conferences';
-  var $hasOne = 'CcData';  // model for cc data
+  //var $hasOne = 'CcData';  // model for cc data
 
   var $months = array("none", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
 
@@ -66,8 +66,8 @@ class ConferencesController extends AppController {
   }
 
 
-
-  public function past() {
+  /*
+  public function past_unused() {
     $order_array =  array('Conference.start_date',
 			    'Conference.end_date',
 			    'Conference.title',
@@ -76,9 +76,9 @@ class ConferencesController extends AppController {
     $this->set('conferences', $this->Conference->find('all', $find_array));
 
   }
+  */
 
-
-
+  /*
   function report($id = null) {
     $this->Conference->id = $id;
     if (empty($this->data)) {
@@ -110,10 +110,10 @@ class ConferencesController extends AppController {
     }
     $this->set('mathCaptcha', $this->MathCaptcha->generateEquation());
   }
+  */
 
 
-
-
+  /*
   public function view_unused($id = null, $key = null) {
     $this->Conference->id = $id;
     if (empty($this->data)) {
@@ -143,7 +143,7 @@ class ConferencesController extends AppController {
       $this->redirect(array('action' => 'index'));
     }
   }
-
+  */
   
   public function ical($id=null) {
     $this->Conference->id = $id;
@@ -185,7 +185,7 @@ class ConferencesController extends AppController {
 
 
 
-  public function sort_country(){
+  public function sort_country_unused(){
     $this->set('conferences', $this->Conference->find('all',
 						      array('order' => array(
 									     'Conference.country',

@@ -22,9 +22,25 @@ class ConferencesControllerTest extends ControllerTestCase {
  * @return void
  */
 	public function testIndex() {
-	$result =$this->testAction('/');
-	debug($result);
+	  $result =$this->testAction('/');
+	  debug($result);
 	}
+
+	public function testIndexPast() {
+	  $result =$this->testAction('/conferences/index/all');
+	  debug($result);
+	}
+
+	public function testIndexByCountry() {
+	  $result =$this->testAction('/conferences/index/country');
+	  debug($result);
+	}
+
+	public function testIndexRSS() {
+	  $result =$this->testAction('/conferences/index.rss');
+	  debug($result);
+	}
+
 
 /**
  * testAbout method
@@ -46,6 +62,12 @@ class ConferencesControllerTest extends ControllerTestCase {
 	  $result = $this->testAction('/conferences/view/4');
 	  debug($result);
 	}
+
+	public function testIcal() {
+	  $result = $this->testAction('/conferences/ical/4');
+	  debug($result);
+	}
+
 
 /**
  * testAdd method
