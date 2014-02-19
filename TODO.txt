@@ -11,6 +11,7 @@ X cleanup branding (conf-list, algtop-conf 2, etc)
 X check file permissions and security
 X update with curator email addresses
 X check/fix css for datepicker
+* copy php.ini from conflist-test
 
 OTHER TODO:
 
@@ -45,7 +46,9 @@ INSTALL INSTRUCTIONS
 
 * create/modify Config/conflistConfigPrivate
 * put (symlink to) cakephp/lib at Lib/cakephp-lib
+* (on bluehost) php.ini include ~/php
 
 ADMIN INSTRUCTIONS
 
 To get edit/delete url for conference number N, navigate to conferennces/admin/N and use admin key from private config file.  You can also use conference-specific edit key there.
+
