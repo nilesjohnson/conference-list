@@ -434,7 +434,7 @@ class ConferencesController extends AppController {
   }
 
 
-
+  /*
   public function admin_index() {
     $this->Conference->recursive = 0;
     $this->set('conferences', $this->Paginator->paginate());
@@ -497,7 +497,7 @@ class ConferencesController extends AppController {
     }
     return $this->redirect(array('action' => 'index'));
   }
-
+  */
 
   public $countries = array(
 			 "" => 'Country...', // value attribte of first element must be empty
