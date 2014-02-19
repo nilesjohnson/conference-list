@@ -8,20 +8,21 @@ TODO FOR IMMEDIATE UPGRADE:
 X migrate current ATC database to new one
 X move conf-list_2 to ATC location
 X cleanup branding (conf-list, algtop-conf 2, etc)
-* check file permissions and security
+X check file permissions and security
 X update with curator email addresses
 X check/fix css for datepicker
 
 OTHER TODO:
 
+X basic automated testing
 * automated testing of model
 * automated testing of controller
 * automated testing of helpers
-* automated testing of views
+* automated testing of components
 
 X switch to sensible database names
-* generate useful default database
-* improve db_create.php
+X generate useful default database
+X improve db_create.php
 X move app out of cakephp directory
 
 * post public version of repository (github)
@@ -44,3 +45,7 @@ INSTALL INSTRUCTIONS
 
 * create/modify Config/conflistConfigPrivate
 * put (symlink to) cakephp/lib at Lib/cakephp-lib
+
+ADMIN INSTRUCTIONS
+
+To get edit/delete url for conference number N, navigate to conferennces/admin/N and use admin key from private config file.  You can also use conference-specific edit key there.
