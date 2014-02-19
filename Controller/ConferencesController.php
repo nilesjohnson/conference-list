@@ -16,9 +16,9 @@ class ConferencesController extends AppController {
   var $months = array("none", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
 
 
-  public $helpers = array('Js', 'Html', 'Ical', 'Text');
+  public $helpers = array('Js', 'Html', 'Gcal', 'Text');
 
-  public $components = array('Email', 'RequestHandler', 'Session', 'MathCaptcha', 'EmailKey', 'Security');
+  public $components = array('Email', 'RequestHandler', 'Session', 'MathCaptcha', 'Security');
 
 
 
@@ -184,7 +184,7 @@ class ConferencesController extends AppController {
   }
 
 
-
+  /*
   public function sort_country_unused(){
     $this->set('conferences', $this->Conference->find('all',
 						      array('order' => array(
@@ -197,16 +197,15 @@ class ConferencesController extends AppController {
 
 
 
+  */
 
 
-
-  public function view($id = null,$key = null) {
+  public function view($id = null) {
     if (!$this->Conference->exists($id)) {
       throw new NotFoundException(__('Invalid conference'));
     }
-    $options = array('conditions' => array('Conference.' . $this->Conference->primaryKey => $id));
-    $this->set('key', $key);
-    $this->set('conference', $this->Conference->find('first', $options));
+    $this->Conference->id = $id;
+    $this->set('conference', $this->Conference->read());
   }
 
 
@@ -258,12 +257,10 @@ class ConferencesController extends AppController {
 	// verify that all data saves, and send email(s)
 	if ($this->Conference->save($this->data)) {
 	  $this->request->data = $this->Conference->read();
-	  //$this->EmailKey->send_key($this->Conference->id, $this->data, $this->admin_email);
 	  $Email = $this->prepEmail();
 	  $Email->send();
 	  $this->Session->setFlash('Your conference information has been saved.  An email with edit/delete links has been sent to the contact address.', 'FlashGood');
 	  if ($this->ccdata['to'] != '') {
-	    //$this->EmailKey->send_cc($this->ccdata, $this->admin_email);
 	    $this->Session->setFlash('Your conference information has been saved.  An email with edit/delete links has been sent to the contact address, and a separate announcement has been sent to the given addresses.', 'FlashGood');
 	  }
 	  $this->redirect(array('action' => 'index'));
@@ -289,7 +286,7 @@ class ConferencesController extends AppController {
 
 
 
-
+  /*
   public function add_baked() {
     if ($this->request->is('post')) {
       $this->Conference->create();
@@ -302,6 +299,7 @@ class ConferencesController extends AppController {
       }
     }
   }
+  */
 
   public function prepEmail($id = null) {
     $Email = new CakeEmail();
@@ -354,7 +352,6 @@ class ConferencesController extends AppController {
       }
       if ($this->Conference->save($this->data)) {
 	$this->request->data = $this->Conference->read();
-	//$this->EmailKey->send_key($this->Conference->id,$this->data,$this->admin_email);
 	$Email = $this->prepEmail();
 	$Email->send();
 
@@ -366,7 +363,7 @@ class ConferencesController extends AppController {
   
 
 
-
+  /*
   public function edit_baked($id = null) {
     if (!$this->Conference->exists($id)) {
       throw new NotFoundException(__('Invalid conference'));
@@ -385,7 +382,7 @@ class ConferencesController extends AppController {
       $this->request->data = $this->Conference->find('first', $options);
     }
   }
-
+  */
 
   public function delete($id = null) {
     $this->Conference->id = $id;
@@ -409,9 +406,19 @@ class ConferencesController extends AppController {
 
 
   public function admin($id) {
-    $this->set('key_code',"**********");
+    $this->set('valid_admin',false);
+    if (!$this->Conference->exists($id)) {
+      throw new NotFoundException(__('Invalid conference'));
+    }
     $this->Conference->id = $id;
     $this->set('conference', $this->Conference->read());
+    if (!empty($this->data)) {
+      // set model data
+      //debug($this->data);  //displays array info
+      if ($this->data['Admin']['admin_key'] == Configure::read('site.admin_key') || $this->data['Admin']['admin_key'] == $this->Conference->field('edit_key')) {
+	  $this->set('valid_admin',true);
+	}
+    }
     /*
     $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.";
     $key_array = str_split($this->Conference->field('edit_key'));
@@ -425,8 +432,6 @@ class ConferencesController extends AppController {
     //$this->set('key_code', $this->Conference->field('edit_key'));
     */
   }
-
-
 
 
 
