@@ -1,4 +1,5 @@
 Conference List Web App
+-----------------------
 
 https://github.com/nilesjohnson/conference-list
 
@@ -7,6 +8,7 @@ version 2.0
 March 2014
 
 Copyright (C) 2009--2014 Niles Johnson <http://www.nilesjohnson.net>
+
 Licensed under GNU GPL v.3 or later.  See LICENSE.txt for a copy of
 the license.
 
