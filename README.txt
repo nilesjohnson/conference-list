@@ -45,7 +45,7 @@ If you don't yet have cake available, clone that too:
 
     git clone https://github.com/cakephp/cakephp.git cakephp
 
-Then there are four basic configuration steps necessary to get the app running:
+Then there are five basic configuration steps necessary to get the app running:
 
 1. Point to a copy of cakephp library:  Put a copy (or symbolic link) of 
 'cakephp/lib' at 'conference-list/Lib/cakephp-lib'
@@ -62,3 +62,32 @@ Then there are four basic configuration steps necessary to get the app running:
 
 4. Update the rest of the settings in the private configuration file 
 from step 2.
+
+5. Create the necessary database table and (optionally) initial data 
+for testing.  This can be done with the following MySQL commands:
+
+
+CREATE TABLE conferences (
+id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+edit_key VARCHAR(10),
+title VARCHAR(200),
+start_date DATE,
+end_date DATE,
+institution VARCHAR(100),
+city VARCHAR(100),
+country VARCHAR(100),
+meeting_type VARCHAR(100),
+subject_area VARCHAR(100),
+homepage VARCHAR(400),
+contact_name VARCHAR(100),
+contact_email VARCHAR(100),
+description TEXT
+);
+
+
+INSERT INTO conferences (title, edit_key, start_date, end_date, institution, city, country, meeting_type, subject_area, homepage, contact_name, contact_email, description) 
+VALUES 
+  ('Test Conference 1', 'edit key', '2100-06-01', '2100-06-02', 'University', 'City', 'Country', 'conference', 'math', 'http://example.com', 'Name', 'test@example.com', 'This is an example entry.'),
+  ('Test Conference 2', 'edit key', '2200-06-05', '2200-06-06', 'University', 'City', 'Country', 'conference', 'math', 'http://example.com', 'Name', 'test@example.com', 'This is an example entry.'),
+  ('Test Conference 3', 'edit key', '2300-11-03', '2300-11-04', 'University', 'City', 'Country', 'conference', 'math', 'http://example.com', 'Name', 'test@example.com', 'This is an example entry.'),
+  ('Test Conference 4', 'edit key', '2400-02-20', '2400-02-21', 'University', 'City', 'Country', 'conference', 'math', 'http://example.com', 'Name', 'test@example.com', 'This is an example entry.');
