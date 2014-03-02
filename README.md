@@ -1,7 +1,9 @@
 Conference List Web App
+
 https://github.com/nilesjohnson/conference-list
 
 version 2.0
+
 March 2014
 
 Copyright (C) 2009--2014 Niles Johnson <http://www.nilesjohnson.net>
@@ -32,7 +34,7 @@ public lists (e.g. math conferences).  Its basic functions are:
 * An interface for viewing announcements, sorted by date or location.
 * Interfaces to update and delete announcements.
 
-The application is based on the Cake PHP framework (version 2.4.5).
+The application is based on the Cake PHP framework (version 2.4.5):  http://cakephp.org/
 
 
 CONFIGURATION
@@ -53,42 +55,42 @@ Then there are five basic configuration steps necessary to get the app running:
 
     ln -s /path/to/cakephp/lib /path/to/conference-list/Lib/cakephp-lib
 
-2. Create a private configuration file by copying the default one:
+1. Create a private configuration file by copying the default one:
 
     cd conference-list/Config/
     cp conflistConfigDefault.php conflistConfigPrivate.php
 
-3. Set up a database and put the connection information 
+1. Set up a database and put the connection information 
 (user, password, etc.) in the private configuration file from step 2.
 
-4. Update the rest of the settings in the private configuration file 
+1. Update the rest of the settings in the private configuration file 
 from step 2.
 
-5. Create the necessary database table and (optionally) initial data 
+1. Create the necessary database table and (optionally) initial data 
 for testing.  This can be done with the following MySQL commands:
 
 
-CREATE TABLE conferences (
-id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-edit_key VARCHAR(10),
-title VARCHAR(200),
-start_date DATE,
-end_date DATE,
-institution VARCHAR(100),
-city VARCHAR(100),
-country VARCHAR(100),
-meeting_type VARCHAR(100),
-subject_area VARCHAR(100),
-homepage VARCHAR(400),
-contact_name VARCHAR(100),
-contact_email VARCHAR(100),
-description TEXT
-);
+        CREATE TABLE conferences (
+        id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+        edit_key VARCHAR(10),
+        title VARCHAR(200),
+        start_date DATE,
+        end_date DATE,
+        institution VARCHAR(100),
+        city VARCHAR(100),
+        country VARCHAR(100),
+        meeting_type VARCHAR(100),
+        subject_area VARCHAR(100),
+        homepage VARCHAR(400),
+        contact_name VARCHAR(100),
+        contact_email VARCHAR(100),
+        description TEXT
+        );
 
 
-INSERT INTO conferences (title, edit_key, start_date, end_date, institution, city, country, meeting_type, subject_area, homepage, contact_name, contact_email, description) 
-VALUES 
-  ('Test Conference 1', 'edit key', '2100-06-01', '2100-06-02', 'University', 'City', 'Country', 'conference', 'math', 'http://example.com', 'Name', 'test@example.com', 'This is an example entry.'),
-  ('Test Conference 2', 'edit key', '2200-06-05', '2200-06-06', 'University', 'City', 'Country', 'conference', 'math', 'http://example.com', 'Name', 'test@example.com', 'This is an example entry.'),
-  ('Test Conference 3', 'edit key', '2300-11-03', '2300-11-04', 'University', 'City', 'Country', 'conference', 'math', 'http://example.com', 'Name', 'test@example.com', 'This is an example entry.'),
-  ('Test Conference 4', 'edit key', '2400-02-20', '2400-02-21', 'University', 'City', 'Country', 'conference', 'math', 'http://example.com', 'Name', 'test@example.com', 'This is an example entry.');
+        INSERT INTO conferences (title, edit_key, start_date, end_date, institution, city, country, meeting_type, subject_area, homepage, contact_name, contact_email, description) 
+        VALUES 
+          ('Test Conference 1', 'edit key', '2100-06-01', '2100-06-02', 'University', 'City', 'Country', 'conference', 'math', 'http://example.com', 'Name', 'test@example.com', 'This is an example entry.'),
+          ('Test Conference 2', 'edit key', '2200-06-05', '2200-06-06', 'University', 'City', 'Country', 'conference', 'math', 'http://example.com', 'Name', 'test@example.com', 'This is an example entry.'),
+          ('Test Conference 3', 'edit key', '2300-11-03', '2300-11-04', 'University', 'City', 'Country', 'conference', 'math', 'http://example.com', 'Name', 'test@example.com', 'This is an example entry.'),
+          ('Test Conference 4', 'edit key', '2400-02-20', '2400-02-21', 'University', 'City', 'Country', 'conference', 'math', 'http://example.com', 'Name', 'test@example.com', 'This is an example entry.');
