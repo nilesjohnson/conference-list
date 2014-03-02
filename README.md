@@ -1,4 +1,5 @@
 Conference List Web App
+https://github.com/nilesjohnson/conference-list
 
 version 2.0
 March 2014
@@ -39,7 +40,7 @@ CONFIGURATION
 
 Begin by cloning the git repository, e.g:
 
-    git clone <URL.git> conference-list
+    git clone https://github.com/nilesjohnson/conference-list.git conference-list
 
 If you don't yet have cake available, clone that too:
 
