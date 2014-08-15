@@ -17,7 +17,11 @@
  */
 ?>
 
-Thanks for adding your announcement to AlgTop-Conf; it is now available in the main list:
+Thanks for adding your announcement to 
+<?php 
+echo Configure::read('site.name');
+?>
+; it is now available in the main list:
 <?php
 echo Configure::read('site.home');
 ?>

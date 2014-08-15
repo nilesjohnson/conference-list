@@ -316,7 +316,7 @@ class ConferencesController extends AppController {
     $Email->from(array(Configure::read('site.host_email') => Configure::read('site.name')));
     $Email->to($this->data['Conference']['contact_email']);
     $Email->bcc(Configure::read('site.admin_email'));
-    $Email->subject("AlgTop-Conf: " . $this->data['Conference']['title']);
+    $Email->subject(Configure::read('site.name') . ": " . $this->data['Conference']['title']);
     if (!is_null($id)) {
       $this->set('conference',$this->data);
       $this->render('../Emails/text/default','Emails/text/default');
