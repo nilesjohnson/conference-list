@@ -44,6 +44,9 @@ description TEXT
 ";
 
 
+// commands to create table are here
+// uncomment to activate
+
 /*
 // create table
 if (mysqli_query($conn,$table_create)) {
@@ -61,10 +64,13 @@ VALUES
   ('Test Conference 1', 'edit key', '2100-06-01', '2100-06-02', 'University', 'City', 'Country', 'conference', 'math', 'http://example.com', 'Name', 'test@example.com', 'This is an example entry.'),
   ('Test Conference 2', 'edit key', '2110-06-01', '2110-06-02', 'University', 'City', 'Country', 'conference', 'math', 'http://example.com', 'Name', 'test@example.com', 'This is an example entry.'),
   ('Test Conference 3', 'edit key', '2120-06-01', '2120-06-02', 'University', 'City', 'Country', 'conference', 'math', 'http://example.com', 'Name', 'test@example.com', 'This is an example entry.'),
-  ('Test Conference 4', 'edit key', '2130-06-01', '2130-06-02', 'University', 'City', 'Country', 'conference', 'math', 'http://example.com', 'Name', 'test@example.com', 'This is an example entry.'),
+  ('Test Conference 4', 'edit key', '2130-06-01', '2130-06-02', 'University', 'City', 'Country', 'conference', 'math', 'http://example.com', 'Name', 'test@example.com', 'This is an example entry.');"
 
 
 
+
+// commands to add data are here
+// uncomment to activate
 
 /*
 // add entries to table

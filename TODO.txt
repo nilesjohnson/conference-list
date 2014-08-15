@@ -26,8 +26,8 @@ X generate useful default database
 X improve db_create.php
 X move app out of cakephp directory
 
-* post public version of repository (github)
-* start issue-tracking on github
+X post public version of repository (github)
+X start issue-tracking on github
 
 * update jquery
 X remove duration field from database table
@@ -42,13 +42,4 @@ X implement view for individual conference
   (https://code.google.com/p/pagedown/)
 * wmd/pagedown on edit page
 
-INSTALL INSTRUCTIONS
-
-* create/modify Config/conflistConfigPrivate
-* put (symlink to) cakephp/lib at Lib/cakephp-lib
-* (on bluehost) php.ini include ~/php
-
-ADMIN INSTRUCTIONS
-
-To get edit/delete url for conference number N, navigate to conferennces/admin/N and use admin key from private config file.  You can also use conference-specific edit key there.
 
