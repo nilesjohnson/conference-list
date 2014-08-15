@@ -15,7 +15,7 @@ $this->Html->script('datepicker',array('inline'=>false));
 <?php 
 echo $this->Form->create('Conference');
 echo $this->Form->input('title');
-echo $this->Form->input('edit_key', array('type'=>'hidden'));
+//echo $this->Form->input('edit_key', array('type'=>'hidden'));
 echo $this->Form->input('start_date', array('type'=>'text', 'div'=>'input datefield', 'after'=>'yyyy-mm-dd'));
 echo $this->Form->input('end_date', array('type'=>'text', 'div'=>'input datefield', 'after'=>'yyyy-mm-dd'));
 //echo $this->Form->input('duration');
