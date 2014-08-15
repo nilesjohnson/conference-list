@@ -212,7 +212,7 @@ class ConferencesController extends AppController {
   public function add() {
     $this->set('countries',$this->countries);
     $this->set('view_title', 'Add');
-    $this->loadModel('CcData');
+    //$this->loadModel('CcData');
     if (!empty($this->data)) {
       // set model data
       //debug($this->data);  //displays array info
