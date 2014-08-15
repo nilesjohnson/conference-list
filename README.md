@@ -69,7 +69,7 @@ Then there are five basic configuration steps necessary to get the app running:
 from step 2.
 
 1. Create the necessary database table and (optionally) initial data 
-for testing.  This can be done with the following MySQL commands:
+for testing.  This can be done with the following MySQL commands (see `db_create_2.php`):
 
 
         CREATE TABLE conferences (
@@ -96,3 +96,10 @@ for testing.  This can be done with the following MySQL commands:
           ('Test Conference 2', 'edit key', '2200-06-05', '2200-06-06', 'University', 'City', 'Country', 'conference', 'math', 'http://example.com', 'Name', 'test@example.com', 'This is an example entry.'),
           ('Test Conference 3', 'edit key', '2300-11-03', '2300-11-04', 'University', 'City', 'Country', 'conference', 'math', 'http://example.com', 'Name', 'test@example.com', 'This is an example entry.'),
           ('Test Conference 4', 'edit key', '2400-02-20', '2400-02-21', 'University', 'City', 'Country', 'conference', 'math', 'http://example.com', 'Name', 'test@example.com', 'This is an example entry.');
+
+
+ADMINISTRATION
+--------------
+
+Site administrators receive a copy of every confirmation email.  If this is lost or the edit keys there are invalid for some reason, you can get the edit/delete url for conference number `N` as follows:  Navigate to `conferences/admin/N` and use the admin key from your private config file.  You can also use conference-specific edit key there.
+
