@@ -12,6 +12,8 @@ tmp/tests*
 
 *~
 
+Console/error_log
+
 webroot/php.ini
 webroot/error_log
 tmp/logs/error.log
