@@ -21,7 +21,18 @@ class ConferencesController extends AppController {
   public $components = array('Email', 'RequestHandler', 'Session', 'MathCaptcha', 'Security');
 
 
+  public function beforeFilter() {
+    $this->Security->blackHoleCallback = 'blackhole';
+  }
 
+  public function blackhole($type) {
+    if ($type == 'csrf') {
+      throw new BadRequestException('CSRF token is either expired or corrupted.');
+    }
+    else {
+      throw new BadRequestException('Unknown security error: request has been black-holed');
+    }
+  }
 
   public function index($sort_condition=Null) {
     $this->set('sort_text','Sort by: ');
