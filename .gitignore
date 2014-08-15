@@ -1,9 +1,18 @@
 Lib/cakephp-lib
 Config/conflistConfigPrivate.php
+db_migrate.php
+webroot/algtop-conf-dump*
+
+View/Conferences/unused
 
 tmp/cache/models/myapp*
 tmp/cache/persistent/myapp*
+tmp/cache/group_b/*
+tmp/tests*
 
+*~
+
+webroot/php.ini
 webroot/error_log
 tmp/logs/error.log
 tmp/logs/debug.log
