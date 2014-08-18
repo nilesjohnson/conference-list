@@ -108,7 +108,7 @@ class ConferenceFixture extends CakeTestFixture {
 			'subject_area' => 'topology',
 			'homepage' => 'http://www.example4.net',
 			'contact_name' => 'Contact info',
-			'contact_email' => 'none@example4.net',
+			'contact_email' => 'none@example4.net,also-this@example4.net, and-this@example4.net',
 			'description' => 'Lorem ipsum dolor sit amet, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.'
 		),
 	);

@@ -28,7 +28,7 @@ class CcData extends AppModel {
 					   'rule'=>array('minLength', 1), 
 					   'message'=>'Email body is required.  If you do not want to forward this announcement, leave the To: field blank.' )
 			);
-
+  // duplicates multiEmail function below
   function multiEmail($check) {
     $email_list = split(',',$check['to']);
     $V = new Validation();
