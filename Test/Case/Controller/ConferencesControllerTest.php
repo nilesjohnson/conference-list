@@ -58,6 +58,7 @@ class ConferencesControllerTest extends ControllerTestCase {
 	  debug(array('number of conferences' => count($this->vars['conferences']),
 		      'view title' => $this->vars['view_title']
 		      ));
+	  $this->assertEqual(count$this->vars['conferences'],4);
 	  //debug($this->headers);
 	  //debug($this->vars);
 	}
@@ -88,8 +89,27 @@ class ConferencesControllerTest extends ControllerTestCase {
 
 	public function testIcal() {
 	  $result = $this->testAction('/conferences/ical/4');
+	  $expected = 'BEGIN:VCALENDAR
+VERSION:2.0
+BEGIN:VEVENT
+DTSTART:20501223
+DTEND:20501226
+LOCATION:City 4; Country 4
+SUMMARY:Phasellus feugiat conference
+URL:http://www.example4.net
+END:VEVENT
+END:VCALENDAR';
 	  echo "<h3>Testing ical</h3>";
 	  debug($result);
+	  $this->assertEqual($result,$expected);
+	}
+
+	public function testGcal() {
+	  $result = $this->testAction('/conferences/gcal/4');
+	  $expected = 'http://www.google.com/calendar/event?action=TEMPLATE&text=Phasellus+feugiat+conference&dates=20501223/20501226&details=http://www.example4.net&location=City+4%3B+Country+4&trp=false&sprop=http%3A%2F%2Fwww.nilesjohnson.net%2Fconflist-test&sprop=name:ConfList-Test';
+	  echo "<h3>Testing gcal</h3>";
+	  debug($result);
+	  $this->assertEqual($result,$expected);
 	}
 
 
