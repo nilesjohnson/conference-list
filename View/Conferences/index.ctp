@@ -50,6 +50,8 @@ function gcal_link($start,$end,$title,$location) {
   changes to the user interface.  If you notice something not working
   properly, please let Niles know.</p>
 
+  <p>Additional update notes are available in the <a href="https://github.com/nilesjohnson/conference-list/commits/master" target="github">commit history</a> (GitHub).</p>
+
   <div class="new">
     <h2>Know of a meeting not listed here?  Add it now!</h2>
     <p>
