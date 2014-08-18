@@ -325,7 +325,8 @@ class ConferencesController extends AppController {
     $Email->template('default','default')
       ->emailFormat('text');
     $Email->from(array(Configure::read('site.host_email') => Configure::read('site.name')));
-    $Email->to($this->data['Conference']['contact_email']);
+    $to_array = preg_split("/[\s,]+/",$this->data['Conference']['contact_email']);
+    $Email->to($to_array);
     $Email->bcc(Configure::read('site.admin_email'));
     $Email->subject(Configure::read('site.name') . ": " . $this->data['Conference']['title']);
     if (!is_null($id)) {

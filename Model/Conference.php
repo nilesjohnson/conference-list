@@ -144,7 +144,7 @@ class Conference extends AppModel {
   }
 
   public function multiEmail($check) {
-    $email_list = split(',',$check['contact_email']);
+    $email_list = preg_split("/[\s,]+/",$check['contact_email']);
     $V = new Validation();
     foreach ($email_list as $email) {
       if (!$V->email(trim($email))) {
