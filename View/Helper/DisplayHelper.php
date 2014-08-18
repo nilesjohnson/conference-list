@@ -1,4 +1,5 @@
 <?php
+  //App::uses('Utility/Inflector', 'View');
 
 class DisplayHelper extends AppHelper {
   /*
@@ -24,12 +25,18 @@ class DisplayHelper extends AppHelper {
   }
   */
   public function announcementArray($conference_data) {
-    return array(array(__('Start Date'), $conference_data['start_date']));
+    $out_array = array();
+    foreach ($conference_data as $key => $value) {
+      if ($key != 'id' && $key != 'edit_key') {
+	$out_array[] = [str_pad(__(Inflector::humanize($key)),17),$value];
+      }
+    }
+    return $out_array;
   }
 
   public function announcementText($conference_data) {
     $output = '';
-    foreach (announcementArray($conference_data) as $entry) {
+    foreach ($this->announcementArray($conference_data) as $entry) {
       $output .= $entry[0] . ': ' . $entry[1] . "\n";
     }
     return $output;
@@ -37,7 +44,7 @@ class DisplayHelper extends AppHelper {
 
   public function announcementHtml($conference_data) {
     $output = '';
-    foreach (announcementArray($conference_data) as $entry) {
+    foreach ($this->announcementArray($conference_data) as $entry) {
       $output .= '<dt>' . $entry[0] . "</dt>\n";
       $output .= '<dd>' . $entry[1] . "&nbsp;</dd>\n";
     }

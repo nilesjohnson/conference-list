@@ -58,7 +58,7 @@ class ConferencesControllerTest extends ControllerTestCase {
 	  debug(array('number of conferences' => count($this->vars['conferences']),
 		      'view title' => $this->vars['view_title']
 		      ));
-	  $this->assertEqual(count$this->vars['conferences'],4);
+	  $this->assertEqual(count($this->vars['conferences']),4);
 	  //debug($this->headers);
 	  //debug($this->vars);
 	}
