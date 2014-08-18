@@ -16,7 +16,7 @@ class ConferencesController extends AppController {
   var $months = array("none", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
 
 
-  public $helpers = array('Js', 'Html', 'Gcal', 'Text');
+  public $helpers = array('Js', 'Html', 'Text', 'Gcal', 'Display');
 
   public $components = array('Email', 'RequestHandler', 'Session', 'MathCaptcha', 'Security');
 
@@ -192,6 +192,36 @@ class ConferencesController extends AppController {
       "END:VEVENT\n".
       "END:VCALENDAR";
     return $vcal;  
+  }
+
+
+  public function gcal($id) {
+    $this->Conference->id = $id;
+    if (empty($this->data)) {
+      $this->set('conference', $this->Conference->read());
+      $this->request->data = $this->Conference->read();
+    }
+
+    $start_date = $this->data['Conference']['start_date'];
+    $end_date = $this->data['Conference']['end_date'];
+    $title = $this->data['Conference']['title'];
+    $city = $this->data['Conference']['city'];
+    $country = $this->data['Conference']['country'];
+    $url = $this->data['Conference']['homepage'];
+    $conflist_url = Configure::read('site.home');
+    $conflist_name = Configure::read('site.name');
+
+    $start_string = str_replace('-','',$start_date);
+    $end_string = date('Ymd',strtotime($end_date." +1 day"));
+    $location = $city."; ".$country;
+    $Gcal_url = "http://www.google.com/calendar/event?action=TEMPLATE&".
+      "text=".urlencode($title)."&".
+      "dates=".$start_string."/".$end_string.
+      "&details=".$url.
+      "&location=".urlencode($location).
+      "&trp=false&sprop=".urlencode($conflist_url).
+      "&sprop=name:".urlencode($conflist_name);
+    return $Gcal_url;
   }
 
 
