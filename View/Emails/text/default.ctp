@@ -48,5 +48,5 @@ AlgTop-Conf
 Announcement Data:
 
 <?php
-echo $this->Display->announcementText($conference['Conference']);
+echo $this->Display->asText($conference['Conference']);
 ?>

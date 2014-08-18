@@ -24,29 +24,20 @@ class DisplayHelper extends AppHelper {
     return $Gcal_url;
   }
   */
-  public function announcementArray($conference_data) {
+  public function asArray($conference_data) {
     $out_array = array();
     foreach ($conference_data as $key => $value) {
-      if ($key != 'id' && $key != 'edit_key') {
-	$out_array[] = [str_pad(__(Inflector::humanize($key)),17),$value];
+      if ($key != 'id' && $key != 'edit_key' && $key != 'contact_email') {
+	$out_array[] = [$key,str_pad(__(Inflector::humanize($key)),17),$value];
       }
     }
     return $out_array;
   }
 
-  public function announcementText($conference_data) {
+  public function asText($conference_data) {
     $output = '';
-    foreach ($this->announcementArray($conference_data) as $entry) {
-      $output .= $entry[0] . ': ' . $entry[1] . "\n";
-    }
-    return $output;
-  }
-
-  public function announcementHtml($conference_data) {
-    $output = '';
-    foreach ($this->announcementArray($conference_data) as $entry) {
-      $output .= '<dt>' . $entry[0] . "</dt>\n";
-      $output .= '<dd>' . $entry[1] . "&nbsp;</dd>\n";
+    foreach ($this->asArray($conference_data) as $entry) {
+      $output .= $entry[1] . ': ' . $entry[2] . "\n";
     }
     return $output;
   }
