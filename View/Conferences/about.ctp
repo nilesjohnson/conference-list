@@ -199,14 +199,15 @@ The data for each announcement is stored in a database, so search functionality 
 <p>
 This list application was built with the <a 
 href="http://cakephp.org/">CakePHP</a> framework.  The source code is licensed 
-under GPL v3, and is hosted in a git repository on Bitbucket: <a 
-href="https://bitbucket.org/nilesjohnson/cakephp-conference-list">CakePHP 
-Conference List</a>.</p>
+under GPL v3, and is hosted in a git repository on GitHub: <a 
+href="https://github.com/nilesjohnson/conference-list" target="github">conference-list</a>.</p>
 
-<p>Want to contribute!?  Browse the source, have a look at the open issues, 
-and check out a working copy of the code.  Note that the documentation is 
-somewhat sparse, so please contact Niles if you have further questions!</p>
-</div>
+<p>Want to contribute!?  <a
+href="https://github.com/nilesjohnson/conference-list"
+target="github">Browse the source</a>, have a look at the <a
+href="https://github.com/nilesjohnson/conference-list/issues"
+target="github">open issues</a>, and clone a working copy of the code.
+Contact Niles if you have further questions!</p> </div>
 
 
 
