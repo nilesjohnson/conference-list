@@ -27,12 +27,14 @@ class ConferencesController extends AppController {
 
   public function blackhole($type) {
     CakeLog::write('debug','Blackholed request.  Session and conference data follow.');
+    CakeLog::write('debug','Blackhole type: '.$type);
     CakeLog::write('debug','User Agent: '.print_r($this->Session->userAgent(),$return=true));
-    Debugger::log($this->Session->settings);
 
     if (!(empty($this->data))) {
       if (array_key_exists('Conference',$this->data)) {
-	CakeLog::write('debug',print_r($this->data['Conference'],$return=true));
+	CakeLog::write('debug',"title: ".$this->data['Conference']['title']);
+	CakeLog::write('debug',"contact_email: ".$this->data['Conference']['contact_email']);
+	CakeLog::write('debug',"captcha: ".$this->data['Conference']['captcha']);
       }
       else {
 	CakeLog::write('debug','No conference data.');
