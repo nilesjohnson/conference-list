@@ -92,7 +92,7 @@ class ConferencesController extends AppController {
 	  $i++;
 	  if ($i>100) break;
 	} while (isset($this->request->query['t'.$i]));
-	debug($tagids);
+	//debug($tagids);
       }
       else {
 	$tagids=$cookie;
