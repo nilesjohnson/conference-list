@@ -18,23 +18,27 @@ class ConferencesController extends AppController {
 
   public $helpers = array('Js', 'Html', 'Gcal', 'Text');
 
-  public $components = array('Email', 'RequestHandler', 'Session', 'MathCaptcha', 'Security');
+  public $components = array('Email', 'RequestHandler', 'Session', 'MathCaptcha','Paginator');
+  
+  //Regular ol' $this->paginate() ceases to function when this is declared, but this allows for pagination of different Models within same Controller
+	public $paginate = array(
+		'Conference' => array (),
+		'ConferencesTag'=>array()
+	   );
 
 
   public function beforeFilter() {
-    $this->Security->blackHoleCallback = 'blackhole';
+    //$this->Security->blackHoleCallback = 'blackhole';
   }
 
   public function blackhole($type) {
     CakeLog::write('debug','Blackholed request.  Session and conference data follow.');
-    CakeLog::write('debug','Blackhole type: '.$type);
     CakeLog::write('debug','User Agent: '.print_r($this->Session->userAgent(),$return=true));
+    Debugger::log($this->Session->settings);
 
     if (!(empty($this->data))) {
       if (array_key_exists('Conference',$this->data)) {
-	CakeLog::write('debug',"title: ".$this->data['Conference']['title']);
-	CakeLog::write('debug',"contact_email: ".$this->data['Conference']['contact_email']);
-	CakeLog::write('debug',"captcha: ".$this->data['Conference']['captcha']);
+	CakeLog::write('debug',print_r($this->data['Conference'],$return=true));
       }
       else {
 	CakeLog::write('debug','No conference data.');
@@ -82,8 +86,52 @@ class ConferencesController extends AppController {
       $this->set('search_links', array('Main List' => array('controller' => 'conferences', 'action' => 'index')));
     }
     $find_array = array('conditions' => $conditions, 'order' => $order_array);    
-    $this->set('conferences', $this->Conference->find('all', $find_array));
+   // $this->set('conferences', $this->Conference->find('all', $find_array));
+   
+   //first check and see if we need to filter by Tags, then extract the tags and put into array
+   if (isset($this->request->query['t0'])){
+		$i=0;
+		do {
+			$tagids[$i]=$this->request->query['t'.$i];
+			$i++;
+		} while (isset($this->request->query['t'.$i]));
+		
+		// I opted NOT to use a manual JOIN here because of the dickery with Pagination
+		//but rest-assured, this is Dickery nonetheless!
+		$tagquery=array();
+		$temp_array = &$tagquery;
+		foreach ($tagids as $item){
+			$temp_array = &$temp_array['OR'];
+			$temp_array['ConferencesTag.tag_id'] =$item;
+		}
+		$this->Paginator->settings = array('conditions' => $tagquery);
+		$conferences=$this->paginate('ConferencesTag');
+	//	debug($conf);
 
+   }
+   else {
+   //otherwise do normal call
+	//using the paginator instead, it takes the same conditions
+	$this->Paginator->settings = array('conditions' => $conditions);
+	//$this->paginate = array('conditions' => array('Maker.name LIKE'=>'%moran%'),'order'=>$sortord,'limit'=>$limit,'contain'=>$contain);
+	$conferences=$this->paginate('Conference');
+	
+	}
+	$tags=$this->Conference->ConferencesTag->Tag->find('list');
+	
+	$this->set(compact('conferences', 'tags'));
+	
+	//there are a few ways to do this. We choose to enumerate querystrings so you have bookmarkable tag URLs
+	if ($this->request->is('post')) {
+		if (isset($this->request->data['Tag']['Tag'])){
+			$querystring='';
+			foreach ($this->request->data['Tag']['Tag'] as $key=>$val){
+				$querystring['t'.$key]=$val;
+			}
+			//debug($querystring);
+			return $this->redirect(array('action' => 'index','?'=>$querystring));	
+		}
+	}
     // process RSS feed      
     if( $this->RequestHandler->isRss() ){
       $this->set(compact('conferences'));
@@ -282,8 +330,8 @@ class ConferencesController extends AppController {
 	// verify that all data saves, and send email(s)
 	if ($this->Conference->save($this->data)) {
 	  $this->request->data = $this->Conference->read();
-	  $Email = $this->prepEmail();
-	  $Email->send();
+	  //$Email = $this->prepEmail();
+	  //$Email->send();
 	  $this->Session->setFlash('Your conference information has been saved.  An email with edit/delete links has been sent to the contact address.', 'FlashGood');
 	  if ($this->ccdata['to'] != '') {
 	    $this->Session->setFlash('Your conference information has been saved.  An email with edit/delete links has been sent to the contact address, and a separate announcement has been sent to the given addresses.', 'FlashGood');
@@ -307,6 +355,8 @@ class ConferencesController extends AppController {
       }
     }
     $this->set('mathCaptcha', $this->MathCaptcha->generateEquation());
+	$tags=$this->Conference->ConferencesTag->Tag->find('list');
+	$this->set(compact('tags'));
   }
 
 

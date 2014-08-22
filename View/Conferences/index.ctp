@@ -80,6 +80,41 @@ function gcal_link($start,$end,$title,$location) {
 <h1><?php echo $view_title; ?></h1>
 
 <div class="search_links">
+
+<?php 
+
+//just added this to show basic Paginator function
+echo '<div>';
+
+//notice clicking this will change from ASC to DESC it also changes the class name so you can draw a little arrow. Check out the default CakePHP CSS you'll see it
+echo $this->Paginator->sort('country').'<br/>';
+
+
+	echo $this->Paginator->counter(array(
+	'format' => __('Page {:page} of {:pages}, showing {:current} records out of {:count} total, starting on record {:start}, ending on {:end}')
+	)).'<br />';
+
+		echo $this->Paginator->prev('< ' . __('previous'), array(), null, array('class' => 'prev disabled'));
+		echo $this->Paginator->numbers(array('separator' => ''));
+		echo $this->Paginator->next(__('next') . ' >', array(), null, array('class' => 'next disabled'));
+
+
+echo '</div>';
+
+
+//
+
+		echo $this->Form->create('Conference');
+		//the multi-select happens magically because of the HABTM and the variable $tags
+        echo $this->Form->input('Tag');
+		//disables the SecurityComponent
+		$this->Form->unlockField('Tag');
+        echo $this->Form->submit(__('Search', true), array('div' => false));
+        echo $this->Form->end();
+
+
+?>
+
   <?php echo $sort_text ?>
   <?php foreach ($search_links as $name => $array): ?>
   <?php echo $this->Html->link($name, $array)." "; ?>
@@ -116,6 +151,9 @@ if ($new_subsort != $curr_subsort) {
   $subsort_counter += 1; 
   $subsort_counter = $subsort_counter % 2;
  }
+ 
+ 
+
 
 ?>
 
