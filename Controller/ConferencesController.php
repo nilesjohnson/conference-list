@@ -127,14 +127,17 @@ class ConferencesController extends AppController {
 	
 	//there are a few ways to do this. We choose to enumerate querystrings so you have bookmarkable tag URLs
 	if ($this->request->is('post')) {
-		if (isset($this->request->data['Tag']['Tag'])){
-			$querystring='';
-			foreach ($this->request->data['Tag']['Tag'] as $key=>$val){
-				$querystring['t'.$key]=$val;
-			}
-			//debug($querystring);
-			return $this->redirect(array('action' => 'index','?'=>$querystring));	
-		}
+	  if (isset($this->request->data['Tag']['Tag']) && !empty($this->request->data['Tag']['Tag'])){
+	    $querystring='';
+	    foreach ($this->request->data['Tag']['Tag'] as $key=>$val){
+	      $querystring['t'.$key]=$val;
+	    }
+	    //debug($querystring);
+	    return $this->redirect(array('action' => 'index','?'=>$querystring));
+	  }
+	  else {
+	    return $this->redirect(array('action' => 'index'));
+	  }
 	}
     // process RSS feed      
     if( $this->RequestHandler->isRss() ){
