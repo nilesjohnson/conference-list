@@ -84,6 +84,7 @@ function gcal_link($start,$end,$title,$location) {
 <?php 
 
 //just added this to show basic Paginator function
+/*
 echo '<div>';
 
 //notice clicking this will change from ASC to DESC it also changes the class name so you can draw a little arrow. Check out the default CakePHP CSS you'll see it
@@ -100,7 +101,7 @@ echo $this->Paginator->sort('country').'<br/>';
 
 
 echo '</div>';
-
+*/
 
 //
 

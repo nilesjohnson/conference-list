@@ -18,14 +18,15 @@ class ConferencesController extends AppController {
 
   public $helpers = array('Js', 'Html', 'Gcal', 'Text');
 
-  public $components = array('Email', 'RequestHandler', 'Session', 'MathCaptcha', 'Security', 'Paginator');
+  public $components = array('Email', 'RequestHandler', 'Session', 'MathCaptcha', 'Security');
   
   //Regular ol' $this->paginate() ceases to function when this is declared, but this allows for pagination of different Models within same Controller
+  /*
 	public $paginate = array(
 		'Conference' => array (),
 		'ConferencesTag'=>array()
 	   );
-
+  */
 
   public function beforeFilter() {
     $this->Security->blackHoleCallback = 'blackhole';
@@ -59,86 +60,87 @@ class ConferencesController extends AppController {
     $this->set('view_title','Upcoming Meetings');
     $this->set('months', $this->months);
     $this->set('sort_condition',$sort_condition);
+
+    // collect tags from post data
+    // there are a few ways to do this. We choose to enumerate querystrings so you have bookmarkable tag URLs
+    if ($this->request->is('post')) {
+      if (isset($this->request->data['Tag']['Tag']) && !empty($this->request->data['Tag']['Tag'])){
+	$querystring='';
+	foreach ($this->request->data['Tag']['Tag'] as $key=>$val){
+	  $querystring['t'.$key]=$val;
+	}
+	debug($querystring);
+	return $this->redirect(array('action' => 'index','?'=>$querystring, $sort_condition));
+      }
+      else {
+	return $this->redirect(array('action' => 'index'));
+      }
+    }
+
+    // default sort conditions
+    $order_array =  array('Conference.start_date',
+			  'Conference.end_date',
+			  'Conference.title',
+			  );
     $conditions = array (
 			 "Conference.end_date >" => date('Y-m-d', strtotime("-1 week"))
 			 );
+    $display_options = array('conditions' => $conditions, 'order' => $order_array);    
+
+    // set inputs for find/paginate based on $sort_condition
+    // and update search links
     if ($sort_condition == 'country') {
       // determine order_array and subsort function for this sort_condition
-      $order_array =  array('Conference.country',
-			    'Conference.start_date',
-			    'Conference.end_date',
-			    'Conference.title',
-			    );
-      $this->set('search_links', array('Date' => array('controller' => 'conferences', 'action' => 'index')));								   
+      array_unshift($display_options['order'],'Conference.country');
+      $this->set('search_links', array('Date' => array('controller' => 'conferences', 'action' => 'index', '?'=>$querystring)));
+    }
+    elseif ($sort_condition == 'all') {
+      $this->set('sort_text','');
+      $this->set('view_title','All Meetings');
+      $display_options['conditions'] = array();
+      $this->set('search_links', array('Main List' => array('controller' => 'conferences', 'action' => 'index', '?'=>$querystring)));
     }
     else {
       // determine order_array and subsort function for default sort_condition
-      $order_array =  array('Conference.start_date',
-			    'Conference.end_date',
-			    'Conference.title',
-			    );
-      $this->set('search_links', array('Country' => array('controller' => 'conferences', 'action' => 'index', 'country')));						       	
+      $this->set('search_links', array('Country' => array('controller' => 'conferences', 'action' => 'index', 'country', '?'=>$querystring)));	       	
     }
 
-    // find announcement items
-    if ($sort_condition == 'all') {
-      $this->set('sort_text','');
-      $this->set('view_title','All Meetings');
-      $conditions = array();
-      $this->set('search_links', array('Main List' => array('controller' => 'conferences', 'action' => 'index')));
+    //now check and see if we need to filter by Tags, then extract the tags and put into array
+    $tagids=null;
+    if (isset($this->request->query['t0'])) {
+      $i=0;
+      do {
+	$tagids[$i]=$this->request->query['t'.$i];
+	$i++;
+	if ($i>100) break;
+      } while (isset($this->request->query['t'.$i]));
+      
+      // I opted NOT to use a manual JOIN here because of the dickery with Pagination
+      //but rest-assured, this is Dickery nonetheless!
+      $tagquery=array();
+      $temp_array = &$tagquery;
+      foreach ($tagids as $item) {
+	$temp_array = &$temp_array['OR'];
+	$temp_array['ConferencesTag.tag_id'] =$item;
+      }
+      $find_array['conditions'] = $tagquery;
+      //$this->Paginator->settings = array('conditions' => $tagquery);
+      //$conferences=$this->paginate('ConferencesTag');
+      $this->set('conferences', $this->Conference->ConferencesTag->find('all', $display_options));
     }
-    $find_array = array('conditions' => $conditions, 'order' => $order_array);    
-   // $this->set('conferences', $this->Conference->find('all', $find_array));
-   
-   //first check and see if we need to filter by Tags, then extract the tags and put into array
-   $tagids=null;
-   if (isset($this->request->query['t0'])){
-		$i=0;
-		do {
-			$tagids[$i]=$this->request->query['t'.$i];
-			$i++;
-			if ($i>100) break;
-		} while (isset($this->request->query['t'.$i]));
-		
-		// I opted NOT to use a manual JOIN here because of the dickery with Pagination
-		//but rest-assured, this is Dickery nonetheless!
-		$tagquery=array();
-		$temp_array = &$tagquery;
-		foreach ($tagids as $item){
-			$temp_array = &$temp_array['OR'];
-			$temp_array['ConferencesTag.tag_id'] =$item;
-		}
-		$this->Paginator->settings = array('conditions' => $tagquery);
-		$conferences=$this->paginate('ConferencesTag');
-	//	debug($conf);
+    else {
+      //otherwise do normal call
+      $this->set('conferences', $this->Conference->find('all', $display_options));
+    }
 
-   }
-   else {
-   //otherwise do normal call
-	//using the paginator instead, it takes the same conditions
-	$this->Paginator->settings = array('conditions' => $conditions);
-	//$this->paginate = array('conditions' => array('Maker.name LIKE'=>'%moran%'),'order'=>$sortord,'limit'=>$limit,'contain'=>$contain);
-	$conferences=$this->paginate('Conference');
+    //using the paginator instead, it takes the same conditions
+    //$this->Paginator->settings = array('conditions' => $conditions);
+    //$conferences=$this->paginate('Conference');
 	
-	}
-	$tags=$this->Conference->Tag->find('list');
+    $tags=$this->Conference->Tag->find('list');
 	
-	$this->set(compact('conferences', 'tags', 'tagids'));
-	
-	//there are a few ways to do this. We choose to enumerate querystrings so you have bookmarkable tag URLs
-	if ($this->request->is('post')) {
-	  if (isset($this->request->data['Tag']['Tag']) && !empty($this->request->data['Tag']['Tag'])){
-	    $querystring='';
-	    foreach ($this->request->data['Tag']['Tag'] as $key=>$val){
-	      $querystring['t'.$key]=$val;
-	    }
-	    //debug($querystring);
-	    return $this->redirect(array('action' => 'index','?'=>$querystring));
-	  }
-	  else {
-	    return $this->redirect(array('action' => 'index'));
-	  }
-	}
+    $this->set(compact('conferences', 'tags', 'tagids'));
+
     // process RSS feed      
     if( $this->RequestHandler->isRss() ){
       $this->set(compact('conferences'));
