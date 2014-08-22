@@ -61,22 +61,6 @@ class ConferencesController extends AppController {
     $this->set('months', $this->months);
     $this->set('sort_condition',$sort_condition);
 
-    // collect tags from post data
-    // there are a few ways to do this. We choose to enumerate querystrings so you have bookmarkable tag URLs
-    if ($this->request->is('post')) {
-      if (isset($this->request->data['Tag']['Tag']) && !empty($this->request->data['Tag']['Tag'])){
-	$querystring='';
-	foreach ($this->request->data['Tag']['Tag'] as $key=>$val){
-	  $querystring['t'.$key]=$val;
-	}
-	debug($querystring);
-	return $this->redirect(array('action' => 'index','?'=>$querystring, $sort_condition));
-      }
-      else {
-	return $this->redirect(array('action' => 'index'));
-      }
-    }
-
     // default sort conditions
     $order_array =  array('Conference.start_date',
 			  'Conference.end_date',
@@ -87,26 +71,11 @@ class ConferencesController extends AppController {
 			 );
     $display_options = array('conditions' => $conditions, 'order' => $order_array);    
 
-    // set inputs for find/paginate based on $sort_condition
-    // and update search links
-    if ($sort_condition == 'country') {
-      // determine order_array and subsort function for this sort_condition
-      array_unshift($display_options['order'],'Conference.country');
-      $this->set('search_links', array('Date' => array('controller' => 'conferences', 'action' => 'index', '?'=>$querystring)));
-    }
-    elseif ($sort_condition == 'all') {
-      $this->set('sort_text','');
-      $this->set('view_title','All Meetings');
-      $display_options['conditions'] = array();
-      $this->set('search_links', array('Main List' => array('controller' => 'conferences', 'action' => 'index', '?'=>$querystring)));
-    }
-    else {
-      // determine order_array and subsort function for default sort_condition
-      $this->set('search_links', array('Country' => array('controller' => 'conferences', 'action' => 'index', 'country', '?'=>$querystring)));	       	
-    }
-
-    //now check and see if we need to filter by Tags, then extract the tags and put into array
+    // collect tags from post data
+    // then extract the tags and put into array
     $tagids=null;
+    $request_query = '';
+    $index_link_array = array('controller' => 'conferences', 'action' => 'index');
     if (isset($this->request->query['t0'])) {
       $i=0;
       do {
@@ -118,20 +87,60 @@ class ConferencesController extends AppController {
       // I opted NOT to use a manual JOIN here because of the dickery with Pagination
       //but rest-assured, this is Dickery nonetheless!
       $tagquery=array();
+      $index_link_array['?'] = array();
       $temp_array = &$tagquery;
-      foreach ($tagids as $item) {
+      foreach ($tagids as $i => $item) {
 	$temp_array = &$temp_array['OR'];
 	$temp_array['ConferencesTag.tag_id'] =$item;
+	$index_link_array['?']['t'.$i] = $item;
       }
-      $find_array['conditions'] = $tagquery;
+      array_push($display_options['conditions'],$tagquery);
       //$this->Paginator->settings = array('conditions' => $tagquery);
       //$conferences=$this->paginate('ConferencesTag');
-      $this->set('conferences', $this->Conference->ConferencesTag->find('all', $display_options));
+      $active_model = $this->Conference->ConferencesTag;
     }
     else {
       //otherwise do normal call
-      $this->set('conferences', $this->Conference->find('all', $display_options));
+      $active_model = $this->Conference->ConferencesTag;
     }
+
+    // there are a few ways to do this. We choose to enumerate querystrings so you have bookmarkable tag URLs
+    if ($this->request->is('post')) {
+      if (isset($this->request->data['Tag']['Tag']) && !empty($this->request->data['Tag']['Tag'])){
+	$querystring='';
+	foreach ($this->request->data['Tag']['Tag'] as $key=>$val){
+	  $querystring['t'.$key]=$val;
+	}
+	return $this->redirect(array('action' => 'index','?'=>$querystring, $sort_condition));
+      }
+      else {
+	return $this->redirect(array('action' => 'index'));
+      }
+    }
+
+
+    // set inputs for find/paginate based on $sort_condition
+    // and update search links
+    if ($sort_condition == 'country') {
+      // determine order_array and subsort function for this sort_condition
+      array_unshift($display_options['order'],'Conference.country');
+      //array_push($index_link_array,'');
+      $this->set('search_links', array('Date' => $index_link_array));
+    }
+    elseif ($sort_condition == 'all') {
+      $this->set('sort_text','');
+      $this->set('view_title','All Meetings');
+      $display_options['conditions'] = array();
+      //array_push($index_link_array,'country');
+      $this->set('search_links', array('Main List' => $index_link_array));
+    }
+    else {
+      // determine order_array and subsort function for default sort_condition
+      $this->set('search_links', array('Country' => array_merge($index_link_array,array('country'))));
+    }
+
+    $this->set('past_link', array_merge($index_link_array,array('all')));
+    $this->set('conferences', $active_model->find('all', $display_options));
 
     //using the paginator instead, it takes the same conditions
     //$this->Paginator->settings = array('conditions' => $conditions);

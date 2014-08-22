@@ -122,8 +122,7 @@ echo '</div>';
   <?php endforeach; ?>
 
   <div style="float:right;">
-    <?php echo $this->Html->link('Include Past',array('controller' =>
-    'conferences', 'action' => 'index', 'all'))?>
+    <?php echo $this->Html->link('Include Past',$past_link)?>
     |
     <?php echo $this->Html->link('RSS','/conferences/index.rss');?>
   </div>
