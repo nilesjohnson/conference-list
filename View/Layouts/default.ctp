@@ -14,7 +14,6 @@ echo $this->Html->meta(
 echo $this->Html->css('conf-list') ."\n";
 
 // jquery core
-//echo $this->Html->script('http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js') ."\n";
 echo $this->Html->script('//code.jquery.com/jquery-1.10.2.min.js') ."\n";
 
 // datepicker
@@ -27,7 +26,7 @@ echo $this->Html->script('datepicker') ."\n";  //configuration for conflist app
 //echo $this->Html->css('select2') ."\n";
 echo $this->Html->css('http://cdn.jsdelivr.net/select2/3.4.8/select2.css') ."\n";
 //echo $this->Html->script('select2');
-echo $this->Html->script('http://cdn.jsdelivr.net/select2/3.4.8/select2.js') ."\n"; 
+//echo $this->Html->script('http://cdn.jsdelivr.net/select2/3.4.8/select2.js') ."\n"; 
 echo $this->Html->script('http://cdn.jsdelivr.net/select2/3.4.8/select2.min.js') ."\n"; 
 echo $this->Html->script('select2_fields') ."\n";
 
