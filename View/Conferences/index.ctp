@@ -1,7 +1,12 @@
 <!-- social networking buttons -->
-<!-- disabled
-<script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
-<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+<!-- currently disabled
+<div class="share-links">
+  <div class="g-plusone" data-href="<? echo Configure::read('site.home'); ?>"></div>
+  <div style="display: inline-block;"><a href="https://twitter.com/share" class="twitter-share-button" 
+    data-text="check out <? echo Configure::read('site.name'); ?>"
+    data-hashtags="MathConferences" 
+    data-url="<? echo Configure::read('site.home');?>">Tweet</a></div>
+</div>
 -->
 
 <?php
@@ -61,23 +66,9 @@ function gcal_link($start,$end,$title,$location) {
 </div>
 
 
-<!-- disabled
-<div id="sharingButtons">
-  <div class="sharingButton">
-    <g:plusone size="medium"></g:plusone>
-  </div>
-  <div class="sharingButton">
-    <iframe src="http://www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.nilesjohnson.net%2Falgtop-conf%2F&amp;send=false&amp;layout=button_count&amp;width=92&amp;show_faces=true&amp;action=like&amp;colorscheme=light&amp;font&amp;height=2em" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:92px;height:2em" allowTransparency="true"></iframe>
-  </div>
-  <div class="sharingButton">
-    <a href="http://twitter.com/share" class="twitter-share-button" data-count="horizontal">Tweet</a>
-  </div>
-  <div style="clear:both"></div>
-</div>
--->
-
 <hr/>
 <h1><?php echo $view_title; ?></h1>
+
 
 <div class="search_links">
 
@@ -109,7 +100,7 @@ echo '</div>';
 		//the multi-select happens magically because of the HABTM and the variable $tags
         echo $this->Form->input('Tag',array('value'=>$tagids));
 		//disables the SecurityComponent
-		$this->Form->unlockField('Tag');
+		//$this->Form->unlockField('Tag');
         echo $this->Form->submit(__('Search', true), array('div' => false));
         echo $this->Form->end();
 
