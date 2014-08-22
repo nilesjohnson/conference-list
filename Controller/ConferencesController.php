@@ -18,7 +18,7 @@ class ConferencesController extends AppController {
 
   public $helpers = array('Js', 'Html', 'Gcal', 'Text');
 
-  public $components = array('Email', 'RequestHandler', 'Session', 'MathCaptcha', 'Security');
+  public $components = array('Email', 'RequestHandler', 'Session', 'MathCaptcha', 'Security', 'Cookie');
   
   //Regular ol' $this->paginate() ceases to function when this is declared, but this allows for pagination of different Models within same Controller
   /*
@@ -29,6 +29,9 @@ class ConferencesController extends AppController {
   */
 
   public function beforeFilter() {
+    parent::beforeFilter(); //you're supposed to always have this, don't ask me why
+    $this->Cookie->name = 'confList';
+    $this->Cookie->time = '1 year';
     $this->Security->blackHoleCallback = 'blackhole';
   }
 
@@ -73,17 +76,27 @@ class ConferencesController extends AppController {
 
     // collect tags from post data
     // then extract the tags and put into array
+    // either by Cookie or querystring
     $tagids=null;
-    $request_query = '';
+    $cookie=$this->Cookie->read('tags');
     $index_link_array = array('controller' => 'conferences', 'action' => 'index');
-    if (isset($this->request->query['t0'])) {
-      $i=0;
-      do {
-	$tagids[$i]=$this->request->query['t'.$i];
-	$i++;
-	if ($i>100) break;
-      } while (isset($this->request->query['t'.$i]));
-      
+    if (isset($this->request->query['t0']) || isset($cookie)) {
+      if (isset($this->request->query['t0'])){
+	if ($this->request->query['t0'] == '') {
+	  $this->Cookie->delete('tags');
+	  return $this->redirect(array('action' => 'index'));
+	}
+	$i=0;
+	do {
+	  $tagids[$i]=$this->request->query['t'.$i];
+	  $i++;
+	  if ($i>100) break;
+	} while (isset($this->request->query['t'.$i]));
+	debug($tagids);
+      }
+      else {
+	$tagids=$cookie;
+      }
       // I opted NOT to use a manual JOIN here because of the dickery with Pagination
       //but rest-assured, this is Dickery nonetheless!
       $tagquery=array();
@@ -111,9 +124,11 @@ class ConferencesController extends AppController {
 	foreach ($this->request->data['Tag']['Tag'] as $key=>$val){
 	  $querystring['t'.$key]=$val;
 	}
+	$this->Cookie->write('tags',$this->request->data['Tag']['Tag']);
 	return $this->redirect(array('action' => 'index','?'=>$querystring, $sort_condition));
       }
       else {
+	$this->Cookie->delete('tags');
 	return $this->redirect(array('action' => 'index'));
       }
     }

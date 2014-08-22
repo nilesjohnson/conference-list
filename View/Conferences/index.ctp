@@ -116,6 +116,11 @@ echo '</div>';
 
 ?>
 
+<div><p>
+Last tag search is saved in a cookie.
+<?php echo $this->Html->link('Delete saved tags', array('controller' => 'conferences', 'action'=>'index', '?'=>array('t0' => '')));?>
+</p></div>
+
   <?php echo $sort_text ?>
   <?php foreach ($search_links as $name => $array): ?>
   <?php echo $this->Html->link($name, $array)." "; ?>
