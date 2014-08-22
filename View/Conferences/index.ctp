@@ -106,7 +106,7 @@ echo '</div>';
 
 		echo $this->Form->create('Conference');
 		//the multi-select happens magically because of the HABTM and the variable $tags
-        echo $this->Form->input('Tag');
+        echo $this->Form->input('Tag',array('value'=>$tagids));
 		//disables the SecurityComponent
 		$this->Form->unlockField('Tag');
         echo $this->Form->submit(__('Search', true), array('div' => false));
