@@ -91,11 +91,13 @@ class ConferencesController extends AppController {
    // $this->set('conferences', $this->Conference->find('all', $find_array));
    
    //first check and see if we need to filter by Tags, then extract the tags and put into array
+   $tagids=null;
    if (isset($this->request->query['t0'])){
 		$i=0;
 		do {
 			$tagids[$i]=$this->request->query['t'.$i];
 			$i++;
+			if ($i>100) break;
 		} while (isset($this->request->query['t'.$i]));
 		
 		// I opted NOT to use a manual JOIN here because of the dickery with Pagination
@@ -119,9 +121,9 @@ class ConferencesController extends AppController {
 	$conferences=$this->paginate('Conference');
 	
 	}
-	$tags=$this->Conference->ConferencesTag->Tag->find('list');
+	$tags=$this->Conference->Tag->find('list');
 	
-	$this->set(compact('conferences', 'tags'));
+	$this->set(compact('conferences', 'tags', 'tagids'));
 	
 	//there are a few ways to do this. We choose to enumerate querystrings so you have bookmarkable tag URLs
 	if ($this->request->is('post')) {
