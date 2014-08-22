@@ -1,17 +1,3 @@
-
-<?php
-// calendar date picker
-
-//IMPORTANT to leave this disabled, as I just called it in default layout
-//$this->Html->script('jquery-ui-1.8.10.custom/js/jquery-1.4.4.min',array('inline'=>false));
-
-//$this->Html->script('jquery-ui-1.8.10.custom/js/jquery-ui-1.8.10.custom.min',array('inline'=>false));
-$this->Html->css('jquery-ui-1.8.10.custom-css/jquery-ui-1.8.10.custom',array('inline'=>false));
-//$this->Html->script('datepicker',array('inline'=>false));
-
-?>
-
-
 <h1>Add Meeting Information</h1>
 
 <?php 
