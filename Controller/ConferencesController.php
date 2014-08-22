@@ -18,7 +18,7 @@ class ConferencesController extends AppController {
 
   public $helpers = array('Js', 'Html', 'Gcal', 'Text');
 
-  public $components = array('Email', 'RequestHandler', 'Session', 'MathCaptcha','Paginator');
+  public $components = array('Email', 'RequestHandler', 'Session', 'MathCaptcha', 'Security', 'Paginator');
   
   //Regular ol' $this->paginate() ceases to function when this is declared, but this allows for pagination of different Models within same Controller
 	public $paginate = array(
@@ -28,17 +28,19 @@ class ConferencesController extends AppController {
 
 
   public function beforeFilter() {
-    //$this->Security->blackHoleCallback = 'blackhole';
+    $this->Security->blackHoleCallback = 'blackhole';
   }
 
   public function blackhole($type) {
     CakeLog::write('debug','Blackholed request.  Session and conference data follow.');
+    CakeLog::write('debug','Blackhole type: '.$type);
     CakeLog::write('debug','User Agent: '.print_r($this->Session->userAgent(),$return=true));
-    Debugger::log($this->Session->settings);
 
     if (!(empty($this->data))) {
       if (array_key_exists('Conference',$this->data)) {
-	CakeLog::write('debug',print_r($this->data['Conference'],$return=true));
+	CakeLog::write('debug',"title: ".$this->data['Conference']['title']);
+	CakeLog::write('debug',"contact_email: ".$this->data['Conference']['contact_email']);
+	CakeLog::write('debug',"captcha: ".$this->data['Conference']['captcha']);
       }
       else {
 	CakeLog::write('debug','No conference data.');
@@ -330,8 +332,8 @@ class ConferencesController extends AppController {
 	// verify that all data saves, and send email(s)
 	if ($this->Conference->save($this->data)) {
 	  $this->request->data = $this->Conference->read();
-	  //$Email = $this->prepEmail();
-	  //$Email->send();
+	  $Email = $this->prepEmail();
+	  $Email->send();
 	  $this->Session->setFlash('Your conference information has been saved.  An email with edit/delete links has been sent to the contact address.', 'FlashGood');
 	  if ($this->ccdata['to'] != '') {
 	    $this->Session->setFlash('Your conference information has been saved.  An email with edit/delete links has been sent to the contact address, and a separate announcement has been sent to the given addresses.', 'FlashGood');
