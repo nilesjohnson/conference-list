@@ -146,7 +146,7 @@ class ConferencesController extends AppController {
     elseif ($sort_condition == 'all') {
       $this->set('sort_text','');
       $this->set('view_title','All Meetings');
-      $display_options['conditions'] = array();
+      unset($display_options['conditions']['Conference.end_date >']);
       //array_push($index_link_array,'country');
       $this->set('search_links', array('Main List' => $index_link_array));
     }
@@ -155,6 +155,7 @@ class ConferencesController extends AppController {
       $this->set('search_links', array('Country' => array_merge($index_link_array,array('country'))));
     }
 
+    //debug($display_options);
     $this->set('past_link', array_merge($index_link_array,array('all')));
     $this->set('conferences', $active_model->find('all', $display_options));
 
