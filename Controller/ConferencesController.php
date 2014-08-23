@@ -108,13 +108,14 @@ class ConferencesController extends AppController {
 	$index_link_array['?']['t'.$i] = $item;
       }
       array_push($display_options['conditions'],$tagquery);
+      $display_options['group'] = 'Conference.id';
       //$this->Paginator->settings = array('conditions' => $tagquery);
       //$conferences=$this->paginate('ConferencesTag');
       $active_model = $this->Conference->ConferencesTag;
     }
     else {
       //otherwise do normal call
-      $active_model = $this->Conference->ConferencesTag;
+      $active_model = $this->Conference;
     }
 
     // there are a few ways to do this. We choose to enumerate querystrings so you have bookmarkable tag URLs
