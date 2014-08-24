@@ -14,6 +14,14 @@ echo $this->Html->link($conference['Conference']['title'], $conference['Conferen
 ;?>
 </h2>
 
+<div class="subject-tags">
+<?php
+  foreach($conference['Tag'] as $tag) {
+    echo '<span class="tag">'.$tag['name']."</span>\n";
+  }
+?>
+</div>
+
 <div class="calendars" style="margin: 1ex;">
 <?php  
 $site_url = Configure::read('site.home');

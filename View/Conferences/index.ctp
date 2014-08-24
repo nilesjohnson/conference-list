@@ -131,6 +131,7 @@ Last tag search is saved in a cookie.
 <?php 
 $site_url = Configure::read('site.home');
 $site_name = Configure::read('site.name');
+
 foreach ($conferences as $conference):
 if ($sort_condition == Null || $sort_condition == 'all') {
   $datearray = explode("-",$conference['Conference']['start_date']); 
@@ -162,6 +163,14 @@ if ($new_subsort != $curr_subsort) {
    ;?>
 </h3>
 <div class="conference">
+
+<div class="subject-tags">
+<?php
+  foreach($conference['Tag'] as $tag) {
+    echo '<span class="tag">'.$tag['name']."</span>\n";
+  }
+?>
+</div>
 
 <div class="calendars">
 <?php  echo
