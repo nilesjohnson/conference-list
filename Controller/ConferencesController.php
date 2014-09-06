@@ -427,8 +427,8 @@ class ConferencesController extends AppController {
       }
     }
     $this->set('mathCaptcha', $this->MathCaptcha->generateEquation());
-	$tags=$this->Conference->ConferencesTag->Tag->find('list');
-	$this->set(compact('tags'));
+    $tags=$this->Conference->ConferencesTag->Tag->find('list');
+    $this->set(compact('tags'));
   }
 
 
@@ -479,6 +479,8 @@ class ConferencesController extends AppController {
     }
     $this->Conference->id = $id;
     $this->set('countries',$this->countries);
+    $tags=$this->Conference->ConferencesTag->Tag->find('list');
+    $this->set(compact('tags'));
     if (empty($this->data)) {
       $this->data = $this->Conference->read();
       $this->request->data['Conference']['passed_key'] = $key;
