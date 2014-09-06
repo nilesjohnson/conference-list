@@ -132,13 +132,15 @@ Last tag search is saved in a cookie.
 $site_url = Configure::read('site.home');
 $site_name = Configure::read('site.name');
 
+//debug($conferences);
+//debug($conferencesTags);
 foreach ($conferences as $conference):
 if ($sort_condition == Null || $sort_condition == 'all') {
-  $datearray = explode("-",$conference['Conference']['start_date']); 
+  $datearray = explode("-",$conference['start_date']); 
   $new_subsort =  $months[(int)$datearray[1]]." ".$datearray[0]; 
  }
 if ($sort_condition == 'country') {
-  $new_subsort = $conference['Conference']['country'];
+  $new_subsort = $conference['country'];
  }
 if ($new_subsort != $curr_subsort) {
   echo '</div>';
@@ -156,9 +158,9 @@ if ($new_subsort != $curr_subsort) {
 
 <h3 class="title">
 <?php echo '<a href="'.
-   $conference['Conference']['homepage'].
+   $conference['homepage'].
    '">'.
-   $conference['Conference']['title'].
+   $conference['title'].
    '</a>'
    ;?>
 </h3>
@@ -166,7 +168,8 @@ if ($new_subsort != $curr_subsort) {
 
 <div class="subject-tags">
 <?php
-  foreach($conference['Tag'] as $tag) {
+  //debug($conference);
+  foreach($conferencesTags[$conference['id']] as $tag) {
     echo '<span class="tag">'.$tag['name']."</span>\n";
   }
 ?>
@@ -175,13 +178,13 @@ if ($new_subsort != $curr_subsort) {
 <div class="calendars">
 <?php  echo
   $this->Html->link('Google calendar',
-  $this->Gcal->gcal_url($conference['Conference']['id'], 
-                               $conference['Conference']['start_date'], 
-                               $conference['Conference']['end_date'],
-                               $conference['Conference']['title'],
-                               $conference['Conference']['city'],
-                               $conference['Conference']['country'],
-                               $conference['Conference']['homepage'],
+  $this->Gcal->gcal_url($conference['id'], 
+                               $conference['start_date'], 
+                               $conference['end_date'],
+                               $conference['title'],
+                               $conference['city'],
+                               $conference['country'],
+                               $conference['homepage'],
 			       $site_url,
 			       $site_name
                                ),
@@ -189,19 +192,19 @@ if ($new_subsort != $curr_subsort) {
 
 echo
   $this->Html->link('iCalendar .ics',
-  array('action'=>'ical', $conference['Conference']['id']),
+  array('action'=>'ical', $conference['id']),
   array('escape' => false,'class'=>'ics button'));
 ?>
 </div>
 
 <div class="dates">
-   <?php echo $conference['Conference']['start_date']." <small>through</small> ".$conference['Conference']['end_date'];?>
+   <?php echo $conference['start_date']." <small>through</small> ".$conference['end_date'];?>
 </div>
 
 <?php
-      if (!empty($conference['Conference']['institution'])) {
+      if (!empty($conference['institution'])) {
       	 echo "<div class=\"location\">";
-      	 echo $conference['Conference']['institution'];
+      	 echo $conference['institution'];
 	 echo "</div>";
       }
 
@@ -209,44 +212,44 @@ echo
 
 <div class="location">
 <?php 
-      echo $conference['Conference']['city']."; ".$conference['Conference']['country'];
+      echo $conference['city']."; ".$conference['country'];
 ?>
 </div>
 
 <div class="action">
-<a  id="description_<?php echo $conference['Conference']['id'];?>_plus" onclick="
-   document.getElementById('description_<?php echo $conference['Conference']['id'];?>').style.display='block'; 
-   document.getElementById('description_<?php echo $conference['Conference']['id'];?>_plus').style.display='none'; 
-   document.getElementById('description_<?php echo $conference['Conference']['id'];?>_minus').style.display='inline'; 
+<a  id="description_<?php echo $conference['id'];?>_plus" onclick="
+   document.getElementById('description_<?php echo $conference['id'];?>').style.display='block'; 
+   document.getElementById('description_<?php echo $conference['id'];?>_plus').style.display='none'; 
+   document.getElementById('description_<?php echo $conference['id'];?>_minus').style.display='inline'; 
    return false;" href="#">Description</a>
-<a  id="description_<?php echo $conference['Conference']['id'];?>_minus" onclick="
-   document.getElementById('description_<?php echo $conference['Conference']['id'];?>').style.display='none'; 
-   document.getElementById('description_<?php echo $conference['Conference']['id'];?>_plus').style.display='inline'; 
-   document.getElementById('description_<?php echo $conference['Conference']['id'];?>_minus').style.display='none'; 
+<a  id="description_<?php echo $conference['id'];?>_minus" onclick="
+   document.getElementById('description_<?php echo $conference['id'];?>').style.display='none'; 
+   document.getElementById('description_<?php echo $conference['id'];?>_plus').style.display='inline'; 
+   document.getElementById('description_<?php echo $conference['id'];?>_minus').style.display='none'; 
    return false;" href="#" style="display:none;"> - Description</a>
  | 
 <?php echo 
   $this->Html->link('View entry', 
-  array('action'=>'view', $conference['Conference']['id']));?>
+  array('action'=>'view', $conference['id']));?>
 <!--
  | 
 <?php /* echo 
   $this->Html->link('Edit', 
-  array('action'=>'edit', $conference['Conference']['id'], $conference['Conference']['edit_key'])); /**/?>
+  array('action'=>'edit', $conference['id'], $conference['edit_key'])); /**/?>
 -->
 
 </div>
 
-<div class="conference_minor" id="description_<?php echo $conference['Conference']['id']?>">
-<p>Meeting Type: <?php echo $conference['Conference']['meeting_type']?></p>
-<p>Subject Area: <?php echo $conference['Conference']['subject_area']?></p>
+<div class="conference_minor" id="description_<?php echo $conference['id']?>">
+<p>Meeting Type: <?php echo $conference['meeting_type']?></p>
+<p>Subject Area: <?php echo $conference['subject_area']?></p>
 <p>Contact: <?php echo 
-!$conference['Conference']['contact_name'] ? 'see conference website' : $conference['Conference']['contact_name']?></p>
+!$conference['contact_name'] ? 'see conference website' : $conference['contact_name']?></p>
 
 
 <h3>Description</h3>
 <div class="description"><?php echo 
-!$conference['Conference']['description'] ? 'none' : $conference['Conference']['description']
+!$conference['description'] ? 'none' : $conference['description']
 ?></div>
 </div>
 

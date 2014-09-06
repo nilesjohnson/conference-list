@@ -68,6 +68,7 @@ class ConferencesController extends AppController {
     $order_array =  array('Conference.start_date',
 			  'Conference.end_date',
 			  'Conference.title',
+			  'Tag.name',
 			  );
     $conditions = array (
 			 "Conference.end_date >" => date('Y-m-d', strtotime("-1 week"))
@@ -108,14 +109,16 @@ class ConferencesController extends AppController {
 	$index_link_array['?']['t'.$i] = $item;
       }
       array_push($display_options['conditions'],$tagquery);
-      $display_options['group'] = 'Conference.id';
+      //$display_options['group'] = 'Conference.id'; // grouping is done manually below
       //$this->Paginator->settings = array('conditions' => $tagquery);
       //$conferences=$this->paginate('ConferencesTag');
       $active_model = $this->Conference->ConferencesTag;
+      $regroup = true;
     }
     else {
       //otherwise do normal call
-      $active_model = $this->Conference;
+      $active_model = $this->Conference->ConferencesTag; //no, always search join table, since we want to display tags with conferences
+      $regroup = false;
     }
 
     // there are a few ways to do this. We choose to enumerate querystrings so you have bookmarkable tag URLs
@@ -157,8 +160,42 @@ class ConferencesController extends AppController {
 
     //debug($display_options);
     $this->set('past_link', array_merge($index_link_array,array('all')));
-    $this->set('conferences', $active_model->find('all', $display_options));
+    $conferencesTagsRaw = $active_model->find('all', $display_options);
 
+    // do manual regrouping
+    // surely this could be done more effeciently by
+    // some kind of join and sql GROUP BY . . . but I couldn't
+    // figure out how.
+    $conferences = array();
+    $conferencesTags = array();
+    $prev_id = -1;
+    foreach ($conferencesTagsRaw as $ct) {
+      // we are using the fact that we can find duplicate conferences
+      // by checking ids of previous entries
+      // because in this array entries with the same conference data
+      // will be next to eachother
+      $id = $ct['Conference']['id'];
+      if ($id != $prev_id) {
+	array_push($conferences,$ct['Conference']);
+	$conferencesTags[$id] = array();
+	$tagsForThisConference = $this->Conference->ConferencesTag->find('all',
+									 array('conditions' => array('ConferencesTag.conference_id' => $id),
+									       'fields' => array('Tag.id','Tag.name')));
+	foreach ($tagsForThisConference as $item) {
+	  array_push($conferencesTags[$id],$item['Tag']);
+	}
+	//array($ct['Tag']);
+	$prev_id = $id;
+      }
+      else {
+	//array_push($conferencesTags[$id],$ct['Tag']);
+      }
+    }
+
+    $this->set('conferences', $conferences);
+    $this->set('conferencesTags',$conferencesTags);
+
+    // currently NOT using paginator
     //using the paginator instead, it takes the same conditions
     //$this->Paginator->settings = array('conditions' => $conditions);
     //$conferences=$this->paginate('Conference');
