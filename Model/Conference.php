@@ -154,8 +154,8 @@ class Conference extends AppModel {
     }
     return true;
   }
-	public $hasAndBelongsToMany = array(
-		'Tag' => array(
+  public $hasAndBelongsToMany = array(
+	 'Tag' => array(
 			'className' => 'Tag',
 			'joinTable' => 'conferences_tags',
 			'foreignKey' => 'conference_id',
@@ -168,7 +168,7 @@ class Conference extends AppModel {
 			'offset' => '',
 			'finderQuery' => '',
 			'with'=>'ConferencesTag'
-		)
-	);
-
+			)
+				      );
+  
 }
