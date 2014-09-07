@@ -1,15 +1,15 @@
 //this is for all the select2 boxes . . very easy
  $(document).ready(function() {
  $("#TagTag").select2({
-	placeholder: "Select some tags",
+	placeholder: "Select subject tags",
 	allowClear: true,
-	width: "1000px"
+	width: "100%"
  }); 
  
  $("#ConferenceCountry").select2({
-	placeholder: "Select your Country",
+	placeholder: "Country...",
 	//allowClear: true,
-	width: "1000px"
+	width: "100%"
  }); 
  
  });

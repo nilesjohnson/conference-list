@@ -263,16 +263,24 @@ fieldset fieldset div {
 	clear: left;
 	margin: 0 20px;
 }
-form div {
-	clear: both;
-	margin-bottom: 1em;
+#ConferenceIndexForm {
+        padding: .5em 0 0 0;
+	width: 100%;
+}
+#ConferenceIndexForm .input {
+        padding: 0;
+	margin-bottom: 1pc;
+	width: 100%;
+}
+form {
 	padding: .5em;
-	vertical-align: text-top;
 }
 form .input {
 	color: #444;
 	padding-left: 5%;
+	margin-bottom: 2pc;
 	width: 80%;
+	vertical-align: text-top;
 }
 form .required {
 	font-weight: bold;

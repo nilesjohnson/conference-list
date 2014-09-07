@@ -69,8 +69,21 @@ function gcal_link($start,$end,$title,$location) {
 <hr/>
 <h1><?php echo $view_title; ?></h1>
 
-
 <div class="search_links">
+
+  <?php echo $sort_text ?>
+  <?php foreach ($search_links as $name => $array): ?>
+  <?php echo $this->Html->link($name, $array)." "; ?>
+  <?php endforeach; ?>
+
+  <div style="float:right;">
+    <?php echo $this->Html->link('Include Past',$past_link)?>
+    |
+    <?php echo $this->Html->link('RSS','/conferences/index.rss');?>
+  </div>
+
+
+
 
 <?php 
 
@@ -96,32 +109,23 @@ echo '</div>';
 
 //
 
-		echo $this->Form->create('Conference');
-		//the multi-select happens magically because of the HABTM and the variable $tags
-        echo $this->Form->input('Tag',array('value'=>$tagids));
-		//disables the SecurityComponent
-		//$this->Form->unlockField('Tag');
-        echo $this->Form->submit(__('Search', true), array('div' => false));
+	echo $this->Form->create('Conference');
+	//the multi-select happens magically because of the HABTM and the variable $tags
+        echo $this->Form->input('Tag',array('label'=>'Filter by subject','value'=>$tagids));
+	//disables the SecurityComponent
+	//$this->Form->unlockField('Tag');
+
+echo "<div><p>Click or type to select tags. Last tag search is saved in a cookie.</p><p>";
+echo $this->Html->link('Delete saved tags', array('controller' => 'conferences', 'action'=>'index', '?'=>array('t0' => '')));
+echo "</p></div>";
+
+        echo $this->Form->submit(__('Apply subject filter', true), array('div' => false));
         echo $this->Form->end();
 
 
 ?>
 
-<div><p>
-Last tag search is saved in a cookie.
-<?php echo $this->Html->link('Delete saved tags', array('controller' => 'conferences', 'action'=>'index', '?'=>array('t0' => '')));?>
-</p></div>
 
-  <?php echo $sort_text ?>
-  <?php foreach ($search_links as $name => $array): ?>
-  <?php echo $this->Html->link($name, $array)." "; ?>
-  <?php endforeach; ?>
-
-  <div style="float:right;">
-    <?php echo $this->Html->link('Include Past',$past_link)?>
-    |
-    <?php echo $this->Html->link('RSS','/conferences/index.rss');?>
-  </div>
 </div>
 
 
