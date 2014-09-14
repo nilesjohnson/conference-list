@@ -90,6 +90,14 @@ class Conference extends AppModel {
 			//'subject_area' => array(
 			//'rule' => 'notEmpty'
 			//),
+			'Tag' => array(
+				       'multiple' => array(
+							   'rule' => array('multiple', array('min' => 1)),
+							   'message' => 'You need to select at least one tag',
+							   'required' => true,
+							   ),
+				       ),
+
 			'homepage' => array(
 					    'rule' => array('url',true),
 					    'message' => 'Please supply a valid and complete url.'
