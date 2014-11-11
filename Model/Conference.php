@@ -90,6 +90,7 @@ class Conference extends AppModel {
 			//'subject_area' => array(
 			//'rule' => 'notEmpty'
 			//),
+
 			'homepage' => array(
 					    'rule' => array('url',true),
 					    'message' => 'Please supply a valid and complete url.'
@@ -154,21 +155,24 @@ class Conference extends AppModel {
     }
     return true;
   }
-	public $hasAndBelongsToMany = array(
-		'Tag' => array(
+
+  public $hasAndBelongsToMany = array(
+	 'Tag' => array(
 			'className' => 'Tag',
 			'joinTable' => 'conferences_tags',
 			'foreignKey' => 'conference_id',
 			'associationForeignKey' => 'tag_id',
 			'unique' => 'keepExisting',
+			/*
 			'conditions' => '',
 			'fields' => '',
 			'order' => '',
 			'limit' => '',
 			'offset' => '',
 			'finderQuery' => '',
+			*/
 			'with'=>'ConferencesTag'
-		)
-	);
-
+			)
+				      );
+  
 }

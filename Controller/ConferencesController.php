@@ -75,6 +75,9 @@ class ConferencesController extends AppController {
 			 );
     $display_options = array('conditions' => $conditions, 'order' => $order_array);    
 
+    // remove tag validation so tags are not required
+    $this->Conference->Tag->validator()->remove('Tag');
+
     // collect tags from post data
     // then extract the tags and put into array
     // either by Cookie or querystring
@@ -402,6 +405,7 @@ class ConferencesController extends AppController {
       if (!($this->Conference->validates($this->data['Conference']))) {
 	debug($this->Conference->validationErrors); //displays array info
 	foreach (Set::flatten($this->Conference->validationErrors) as $field => $message) {
+	  debug("field: ".$field." message: ".$message);
 	  $this->Conference->invalidate($field,$message);
 	}
 	$this->Session->setFlash('Please check for errors below.', 'FlashBad');
@@ -457,8 +461,8 @@ class ConferencesController extends AppController {
       }
     }
     $this->set('mathCaptcha', $this->MathCaptcha->generateEquation());
-	$tags=$this->Conference->ConferencesTag->Tag->find('list');
-	$this->set(compact('tags'));
+    $tags=$this->Conference->ConferencesTag->Tag->find('list');
+    $this->set(compact('tags'));
   }
 
 
@@ -509,6 +513,8 @@ class ConferencesController extends AppController {
     }
     $this->Conference->id = $id;
     $this->set('countries',$this->countries);
+    $tags=$this->Conference->ConferencesTag->Tag->find('list');
+    $this->set(compact('tags'));
     if (empty($this->data)) {
       $this->data = $this->Conference->read();
       $this->request->data['Conference']['passed_key'] = $key;
