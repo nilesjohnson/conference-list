@@ -47,6 +47,29 @@ AlgTop-Conf
 
 Announcement Data:
 
+<?php 
+echo $conference['Conference']['title']."\n";
+echo $conference['Conference']['start_date']." -- ".$conference['Conference']['end_date']."\n\n";
+
+echo $conference['Conference']['homepage']."\n\n";
+
+echo "Contact: ".$conference['Conference']['contact_name']."\n";
+
+echo "Institution: ".$conference['Conference']['institution']."\n";
+echo "City: ".$conference['Conference']['city']."\n";
+echo "Country: ".$conference['Conference']['country']."\n";
+echo "Meeting type: ".$conference['Conference']['meeting_type']."\n";
+echo "Subject Tags:\n";
+foreach($conference['Tag'] as $tag) {
+  echo '  * '.$tag['name']."\n";
+}
+echo "\n";
+
+echo "Description:\n";
+echo !$conference['Conference']['description'] ? 'none' : $conference['Conference']['description'];
+?>
+
+
 <?php
-echo $this->Display->asText($conference['Conference']);
+//echo $this->Display->asText($conference['Conference']);
 ?>
