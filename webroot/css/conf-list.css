@@ -618,6 +618,20 @@ div.subsort0 h2, div.subsort1 h2 {
     background-color: #EFEFF7;
     border-top: 1.5px solid #88a;
 }
+.subject-tags {
+    margin:5px;
+}
+.tag {
+    font-size:80%;
+    background-color:#efe;
+    padding:2px;
+    margin:3px;
+    border: 1px solid #9a9;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
 h3.title {
     margin-bottom: 1ex;
 }

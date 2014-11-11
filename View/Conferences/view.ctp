@@ -49,7 +49,7 @@ echo
 
 <dl>
 <?php foreach ($this->Display->asArray($conference['Conference']) as $entry){
-  if ($entry[0] != 'title' && $entry[0] != 'description') {
+  if ($entry[0] != 'title' && $entry[0] != 'description' && $entry[0] != 'subject_area') {
     echo "  <dt>".$entry[1]."</dt>\n";
     echo "  <dd>".$entry[2]."&nbsp;</dd>\n"; 
   }
