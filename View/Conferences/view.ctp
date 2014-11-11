@@ -1,9 +1,26 @@
 
+<div class="share-links">
+  <div class="g-plusone" data-href="<? echo $conference['Conference']['homepage']; ?>"></div>
+  <div style="display: inline-block;"><a href="https://twitter.com/share" class="twitter-share-button" 
+    data-text="<? echo $conference['Conference']['title']; ?>"
+    data-hashtags="ConferenceAnnouncement" 
+    data-url="<? echo $conference['Conference']['homepage'];?>">Tweet</a></div>
+</div>
+
+
 <h2 class="title">
 <?php 
 echo $this->Html->link($conference['Conference']['title'], $conference['Conference']['homepage']);
 ;?>
 </h2>
+
+<div class="subject-tags">
+<?php
+  foreach($conference['Tag'] as $tag) {
+    echo '<span class="tag">'.$tag['name']."</span>\n";
+  }
+?>
+</div>
 
 <div class="calendars" style="margin: 1ex;">
 <?php  

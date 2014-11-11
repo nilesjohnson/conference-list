@@ -18,10 +18,20 @@ class ConferencesController extends AppController {
 
   public $helpers = array('Js', 'Html', 'Text', 'Gcal', 'Display');
 
-  public $components = array('Email', 'RequestHandler', 'Session', 'MathCaptcha', 'Security');
-
+  public $components = array('Email', 'RequestHandler', 'Session', 'MathCaptcha', 'Security', 'Cookie');
+  
+  //Regular ol' $this->paginate() ceases to function when this is declared, but this allows for pagination of different Models within same Controller
+  /*
+	public $paginate = array(
+		'Conference' => array (),
+		'ConferencesTag'=>array()
+	   );
+  */
 
   public function beforeFilter() {
+    parent::beforeFilter(); //you're supposed to always have this, don't ask me why
+    $this->Cookie->name = 'confList';
+    $this->Cookie->time = '1 year';
     $this->Security->blackHoleCallback = 'blackhole';
   }
 
@@ -53,36 +63,146 @@ class ConferencesController extends AppController {
     $this->set('view_title','Upcoming Meetings');
     $this->set('months', $this->months);
     $this->set('sort_condition',$sort_condition);
+
+    // default sort conditions
+    $order_array =  array('Conference.start_date',
+			  'Conference.end_date',
+			  'Conference.title',
+			  'Tag.name',
+			  );
     $conditions = array (
 			 "Conference.end_date >" => date('Y-m-d', strtotime("-1 week"))
 			 );
+    $display_options = array('conditions' => $conditions, 'order' => $order_array);    
+
+    // collect tags from post data
+    // then extract the tags and put into array
+    // either by Cookie or querystring
+    $tagids=null;
+    $cookie=$this->Cookie->read('tags');
+    $index_link_array = array('controller' => 'conferences', 'action' => 'index');
+    if (isset($this->request->query['t0']) || isset($cookie)) {
+      if (isset($this->request->query['t0'])){
+	if ($this->request->query['t0'] == '') {
+	  $this->Cookie->delete('tags');
+	  return $this->redirect(array('action' => 'index'));
+	}
+	$i=0;
+	do {
+	  $tagids[$i]=$this->request->query['t'.$i];
+	  $i++;
+	  if ($i>100) break;
+	} while (isset($this->request->query['t'.$i]));
+	//debug($tagids);
+      }
+      else {
+	$tagids=$cookie;
+      }
+      // I opted NOT to use a manual JOIN here because of the dickery with Pagination
+      //but rest-assured, this is Dickery nonetheless!
+      $tagquery=array();
+      $index_link_array['?'] = array();
+      $temp_array = &$tagquery;
+      foreach ($tagids as $i => $item) {
+	$temp_array = &$temp_array['OR'];
+	$temp_array['ConferencesTag.tag_id'] =$item;
+	$index_link_array['?']['t'.$i] = $item;
+      }
+      array_push($display_options['conditions'],$tagquery);
+      //$display_options['group'] = 'Conference.id'; // grouping is done manually below
+      //$this->Paginator->settings = array('conditions' => $tagquery);
+      //$conferences=$this->paginate('ConferencesTag');
+      $active_model = $this->Conference->ConferencesTag;
+      $regroup = true;
+    }
+    else {
+      //otherwise do normal call
+      $active_model = $this->Conference->ConferencesTag; //no, always search join table, since we want to display tags with conferences
+      $regroup = false;
+    }
+
+    // there are a few ways to do this. We choose to enumerate querystrings so you have bookmarkable tag URLs
+    if ($this->request->is('post')) {
+      if (isset($this->request->data['Tag']['Tag']) && !empty($this->request->data['Tag']['Tag'])){
+	$querystring='';
+	foreach ($this->request->data['Tag']['Tag'] as $key=>$val){
+	  $querystring['t'.$key]=$val;
+	}
+	$this->Cookie->write('tags',$this->request->data['Tag']['Tag']);
+	return $this->redirect(array('action' => 'index','?'=>$querystring, $sort_condition));
+      }
+      else {
+	$this->Cookie->delete('tags');
+	return $this->redirect(array('action' => 'index'));
+      }
+    }
+
+
+    // set inputs for find/paginate based on $sort_condition
+    // and update search links
     if ($sort_condition == 'country') {
       // determine order_array and subsort function for this sort_condition
-      $order_array =  array('Conference.country',
-			    'Conference.start_date',
-			    'Conference.end_date',
-			    'Conference.title',
-			    );
-      $this->set('search_links', array('Date' => array('controller' => 'conferences', 'action' => 'index')));								   
+      array_unshift($display_options['order'],'Conference.country');
+      //array_push($index_link_array,'');
+      $this->set('search_links', array('Date' => $index_link_array));
+    }
+    elseif ($sort_condition == 'all') {
+      $this->set('sort_text','');
+      $this->set('view_title','All Meetings');
+      unset($display_options['conditions']['Conference.end_date >']);
+      //array_push($index_link_array,'country');
+      $this->set('search_links', array('Main List' => $index_link_array));
     }
     else {
       // determine order_array and subsort function for default sort_condition
-      $order_array =  array('Conference.start_date',
-			    'Conference.end_date',
-			    'Conference.title',
-			    );
-      $this->set('search_links', array('Country' => array('controller' => 'conferences', 'action' => 'index', 'country')));						       	
+      $this->set('search_links', array('Country' => array_merge($index_link_array,array('country'))));
     }
 
-    // find announcement items
-    if ($sort_condition == 'all') {
-      $this->set('sort_text','');
-      $this->set('view_title','All Meetings');
-      $conditions = array();
-      $this->set('search_links', array('Main List' => array('controller' => 'conferences', 'action' => 'index')));
+    //debug($display_options);
+    $this->set('past_link', array_merge($index_link_array,array('all')));
+    $conferencesTagsRaw = $active_model->find('all', $display_options);
+
+    // do manual regrouping
+    // surely this could be done more effeciently by
+    // some kind of join and sql GROUP BY . . . but I couldn't
+    // figure out how.
+    $conferences = array();
+    $conferencesTags = array();
+    $prev_id = -1;
+    foreach ($conferencesTagsRaw as $ct) {
+      // we are using the fact that we can find duplicate conferences
+      // by checking ids of previous entries
+      // because in this array entries with the same conference data
+      // will be next to eachother
+      $id = $ct['Conference']['id'];
+      if ($id != $prev_id) {
+	array_push($conferences,$ct['Conference']);
+	$conferencesTags[$id] = array();
+	$tagsForThisConference = $this->Conference->ConferencesTag->find('all',
+									 array('conditions' => array('ConferencesTag.conference_id' => $id),
+									       'fields' => array('Tag.id','Tag.name')));
+	foreach ($tagsForThisConference as $item) {
+	  array_push($conferencesTags[$id],$item['Tag']);
+	}
+	//array($ct['Tag']);
+	$prev_id = $id;
+      }
+      else {
+	//array_push($conferencesTags[$id],$ct['Tag']);
+      }
     }
-    $find_array = array('conditions' => $conditions, 'order' => $order_array);    
-    $this->set('conferences', $this->Conference->find('all', $find_array));
+
+    $this->set('conferences', $conferences);
+    $this->set('conferencesTags',$conferencesTags);
+
+    // currently NOT using paginator
+    //using the paginator instead, it takes the same conditions
+    //$this->Paginator->settings = array('conditions' => $conditions);
+    //$conferences=$this->paginate('Conference');
+	
+    $tags=$this->Conference->Tag->find('list');
+	
+    $this->set(compact('conferences', 'tags', 'tagids'));
 
     // process RSS feed      
     if( $this->RequestHandler->isRss() ){
@@ -337,6 +457,8 @@ class ConferencesController extends AppController {
       }
     }
     $this->set('mathCaptcha', $this->MathCaptcha->generateEquation());
+	$tags=$this->Conference->ConferencesTag->Tag->find('list');
+	$this->set(compact('tags'));
   }
 
 

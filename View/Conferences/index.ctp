@@ -1,7 +1,12 @@
 <!-- social networking buttons -->
-<!-- disabled
-<script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
-<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+<!-- currently disabled
+<div class="share-links">
+  <div class="g-plusone" data-href="<? echo Configure::read('site.home'); ?>"></div>
+  <div style="display: inline-block;"><a href="https://twitter.com/share" class="twitter-share-button" 
+    data-text="check out <? echo Configure::read('site.name'); ?>"
+    data-hashtags="MathConferences" 
+    data-url="<? echo Configure::read('site.home');?>">Tweet</a></div>
+</div>
 -->
 
 <?php
@@ -61,33 +66,59 @@ function gcal_link($start,$end,$title,$location) {
 </div>
 
 
-<!-- disabled
-<div id="sharingButtons">
-  <div class="sharingButton">
-    <g:plusone size="medium"></g:plusone>
-  </div>
-  <div class="sharingButton">
-    <iframe src="http://www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.nilesjohnson.net%2Falgtop-conf%2F&amp;send=false&amp;layout=button_count&amp;width=92&amp;show_faces=true&amp;action=like&amp;colorscheme=light&amp;font&amp;height=2em" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:92px;height:2em" allowTransparency="true"></iframe>
-  </div>
-  <div class="sharingButton">
-    <a href="http://twitter.com/share" class="twitter-share-button" data-count="horizontal">Tweet</a>
-  </div>
-  <div style="clear:both"></div>
-</div>
--->
-
 <hr/>
 <h1><?php echo $view_title; ?></h1>
 
+
 <div class="search_links">
+
+<?php 
+
+//just added this to show basic Paginator function
+/*
+echo '<div>';
+
+//notice clicking this will change from ASC to DESC it also changes the class name so you can draw a little arrow. Check out the default CakePHP CSS you'll see it
+echo $this->Paginator->sort('country').'<br/>';
+
+
+	echo $this->Paginator->counter(array(
+	'format' => __('Page {:page} of {:pages}, showing {:current} records out of {:count} total, starting on record {:start}, ending on {:end}')
+	)).'<br />';
+
+		echo $this->Paginator->prev('< ' . __('previous'), array(), null, array('class' => 'prev disabled'));
+		echo $this->Paginator->numbers(array('separator' => ''));
+		echo $this->Paginator->next(__('next') . ' >', array(), null, array('class' => 'next disabled'));
+
+
+echo '</div>';
+*/
+
+//
+
+		echo $this->Form->create('Conference');
+		//the multi-select happens magically because of the HABTM and the variable $tags
+        echo $this->Form->input('Tag',array('value'=>$tagids));
+		//disables the SecurityComponent
+		//$this->Form->unlockField('Tag');
+        echo $this->Form->submit(__('Search', true), array('div' => false));
+        echo $this->Form->end();
+
+
+?>
+
+<div><p>
+Last tag search is saved in a cookie.
+<?php echo $this->Html->link('Delete saved tags', array('controller' => 'conferences', 'action'=>'index', '?'=>array('t0' => '')));?>
+</p></div>
+
   <?php echo $sort_text ?>
   <?php foreach ($search_links as $name => $array): ?>
   <?php echo $this->Html->link($name, $array)." "; ?>
   <?php endforeach; ?>
 
   <div style="float:right;">
-    <?php echo $this->Html->link('Include Past',array('controller' =>
-    'conferences', 'action' => 'index', 'all'))?>
+    <?php echo $this->Html->link('Include Past',$past_link)?>
     |
     <?php echo $this->Html->link('RSS','/conferences/index.rss');?>
   </div>
@@ -100,13 +131,16 @@ function gcal_link($start,$end,$title,$location) {
 <?php 
 $site_url = Configure::read('site.home');
 $site_name = Configure::read('site.name');
+
+//debug($conferences);
+//debug($conferencesTags);
 foreach ($conferences as $conference):
 if ($sort_condition == Null || $sort_condition == 'all') {
-  $datearray = explode("-",$conference['Conference']['start_date']); 
+  $datearray = explode("-",$conference['start_date']); 
   $new_subsort =  $months[(int)$datearray[1]]." ".$datearray[0]; 
  }
 if ($sort_condition == 'country') {
-  $new_subsort = $conference['Conference']['country'];
+  $new_subsort = $conference['country'];
  }
 if ($new_subsort != $curr_subsort) {
   echo '</div>';
@@ -116,29 +150,41 @@ if ($new_subsort != $curr_subsort) {
   $subsort_counter += 1; 
   $subsort_counter = $subsort_counter % 2;
  }
+ 
+ 
+
 
 ?>
 
 <h3 class="title">
 <?php echo '<a href="'.
-   $conference['Conference']['homepage'].
+   $conference['homepage'].
    '">'.
-   $conference['Conference']['title'].
+   $conference['title'].
    '</a>'
    ;?>
 </h3>
 <div class="conference">
 
+<div class="subject-tags">
+<?php
+  //debug($conference);
+  foreach($conferencesTags[$conference['id']] as $tag) {
+    echo '<span class="tag">'.$tag['name']."</span>\n";
+  }
+?>
+</div>
+
 <div class="calendars">
 <?php  echo
   $this->Html->link('Google calendar',
-  $this->Gcal->gcal_url($conference['Conference']['id'], 
-                               $conference['Conference']['start_date'], 
-                               $conference['Conference']['end_date'],
-                               $conference['Conference']['title'],
-                               $conference['Conference']['city'],
-                               $conference['Conference']['country'],
-                               $conference['Conference']['homepage'],
+  $this->Gcal->gcal_url($conference['id'], 
+                               $conference['start_date'], 
+                               $conference['end_date'],
+                               $conference['title'],
+                               $conference['city'],
+                               $conference['country'],
+                               $conference['homepage'],
 			       $site_url,
 			       $site_name
                                ),
@@ -146,19 +192,19 @@ if ($new_subsort != $curr_subsort) {
 
 echo
   $this->Html->link('iCalendar .ics',
-  array('action'=>'ical', $conference['Conference']['id']),
+  array('action'=>'ical', $conference['id']),
   array('escape' => false,'class'=>'ics button'));
 ?>
 </div>
 
 <div class="dates">
-   <?php echo $conference['Conference']['start_date']." <small>through</small> ".$conference['Conference']['end_date'];?>
+   <?php echo $conference['start_date']." <small>through</small> ".$conference['end_date'];?>
 </div>
 
 <?php
-      if (!empty($conference['Conference']['institution'])) {
+      if (!empty($conference['institution'])) {
       	 echo "<div class=\"location\">";
-      	 echo $conference['Conference']['institution'];
+      	 echo $conference['institution'];
 	 echo "</div>";
       }
 
@@ -166,44 +212,44 @@ echo
 
 <div class="location">
 <?php 
-      echo $conference['Conference']['city']."; ".$conference['Conference']['country'];
+      echo $conference['city']."; ".$conference['country'];
 ?>
 </div>
 
 <div class="action">
-<a  id="description_<?php echo $conference['Conference']['id'];?>_plus" onclick="
-   document.getElementById('description_<?php echo $conference['Conference']['id'];?>').style.display='block'; 
-   document.getElementById('description_<?php echo $conference['Conference']['id'];?>_plus').style.display='none'; 
-   document.getElementById('description_<?php echo $conference['Conference']['id'];?>_minus').style.display='inline'; 
+<a  id="description_<?php echo $conference['id'];?>_plus" onclick="
+   document.getElementById('description_<?php echo $conference['id'];?>').style.display='block'; 
+   document.getElementById('description_<?php echo $conference['id'];?>_plus').style.display='none'; 
+   document.getElementById('description_<?php echo $conference['id'];?>_minus').style.display='inline'; 
    return false;" href="#">Description</a>
-<a  id="description_<?php echo $conference['Conference']['id'];?>_minus" onclick="
-   document.getElementById('description_<?php echo $conference['Conference']['id'];?>').style.display='none'; 
-   document.getElementById('description_<?php echo $conference['Conference']['id'];?>_plus').style.display='inline'; 
-   document.getElementById('description_<?php echo $conference['Conference']['id'];?>_minus').style.display='none'; 
+<a  id="description_<?php echo $conference['id'];?>_minus" onclick="
+   document.getElementById('description_<?php echo $conference['id'];?>').style.display='none'; 
+   document.getElementById('description_<?php echo $conference['id'];?>_plus').style.display='inline'; 
+   document.getElementById('description_<?php echo $conference['id'];?>_minus').style.display='none'; 
    return false;" href="#" style="display:none;"> - Description</a>
  | 
 <?php echo 
   $this->Html->link('View entry', 
-  array('action'=>'view', $conference['Conference']['id']));?>
+  array('action'=>'view', $conference['id']));?>
 <!--
  | 
 <?php /* echo 
   $this->Html->link('Edit', 
-  array('action'=>'edit', $conference['Conference']['id'], $conference['Conference']['edit_key'])); /**/?>
+  array('action'=>'edit', $conference['id'], $conference['edit_key'])); /**/?>
 -->
 
 </div>
 
-<div class="conference_minor" id="description_<?php echo $conference['Conference']['id']?>">
-<p>Meeting Type: <?php echo $conference['Conference']['meeting_type']?></p>
-<p>Subject Area: <?php echo $conference['Conference']['subject_area']?></p>
+<div class="conference_minor" id="description_<?php echo $conference['id']?>">
+<p>Meeting Type: <?php echo $conference['meeting_type']?></p>
+<p>Subject Area: <?php echo $conference['subject_area']?></p>
 <p>Contact: <?php echo 
-!$conference['Conference']['contact_name'] ? 'see conference website' : $conference['Conference']['contact_name']?></p>
+!$conference['contact_name'] ? 'see conference website' : $conference['contact_name']?></p>
 
 
 <h3>Description</h3>
 <div class="description"><?php echo 
-!$conference['Conference']['description'] ? 'none' : $conference['Conference']['description']
+!$conference['description'] ? 'none' : $conference['description']
 ?></div>
 </div>
 

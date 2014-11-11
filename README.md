@@ -68,7 +68,7 @@ Then there are five basic configuration steps necessary to get the app running:
 1. Update the rest of the settings in the private configuration file 
 from step 2.
 
-1. Create the necessary database table and (optionally) initial data 
+1. Create the necessary database tables and (optionally) initial data 
 for testing.  This can be done with the following MySQL commands (see `db_create_2.php`):
 
 
@@ -96,6 +96,66 @@ for testing.  This can be done with the following MySQL commands (see `db_create
           ('Test Conference 2', 'edit key', '2200-06-05', '2200-06-06', 'University', 'City', 'Country', 'conference', 'math', 'http://example.com', 'Name', 'test@example.com', 'This is an example entry.'),
           ('Test Conference 3', 'edit key', '2300-11-03', '2300-11-04', 'University', 'City', 'Country', 'conference', 'math', 'http://example.com', 'Name', 'test@example.com', 'This is an example entry.'),
           ('Test Conference 4', 'edit key', '2400-02-20', '2400-02-21', 'University', 'City', 'Country', 'conference', 'math', 'http://example.com', 'Name', 'test@example.com', 'This is an example entry.');
+
+
+        CREATE TABLE tags 
+		(
+		id INT NOT NULL AUTO_INCREMENT, 
+		PRIMARY KEY(id),
+		name varchar(255)
+		);
+
+        INSERT INTO tags (name)
+		VALUES
+          ('ac.commutative-algebra'),
+          ('ag.algebraic-geometry'),
+          ('ap.analysis-of-pdes'),
+          ('at.algebraic-topology'),
+          ('ca.classical-analysis-and-odes'),
+          ('co.combinatorics'),
+          ('ct.category-theory'),
+          ('cv.complex-variables'),
+          ('dg.differential-geometry'),
+          ('ds.dynamical-systems'),
+          ('fa.functional-analysis'),
+          ('gm.general-mathematics'),
+          ('gn.general-topology'),
+          ('gr.group-theory'),
+          ('gt.geometric-topology'),
+          ('ho.history-and-overview'),
+          ('it.information-theory'),
+          ('kt.k-theory-and-homology'),
+          ('lo.logic'),
+          ('mg.metric-geometry'),
+          ('mp.mathematical-physics'),
+          ('na.numerical-analysis'),
+          ('nt.number-theory'),
+          ('oa.operator-algebras'),
+          ('oc.optimization-and-control'),
+          ('pr.probability'),
+          ('qa.quantum-algebra'),
+          ('ra.rings-and-algebras'),
+          ('rt.representation-theory'),
+          ('sg.symplectic-geometry'),
+          ('sp.spectral-theory'),
+          ('st.statistics-theory');
+
+        CREATE TABLE conferences_tags(
+		id INT NOT NULL AUTO_INCREMENT,
+		PRIMARY KEY(id),
+		conference_id INT,
+		tag_id INT
+		);
+
+        INSERT INTO conferences_tags (conference_id, tag_id)
+		VALUES
+		  ('1','5'),
+		  ('2','10'),
+		  ('3','15'),
+		  ('4','20');
+
+        ALTER TABLE conferences_tags ADD INDEX (conference_id);
+		ALTER TABLE conferences_tags ADD INDEX (tag_id);
 
 
 ADMINISTRATION

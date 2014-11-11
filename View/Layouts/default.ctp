@@ -9,9 +9,29 @@
 echo $this->Html->meta(
     'favicon.ico',
     '/favicon.ico',
-    array('type' => 'icon')
-);
-echo $this->Html->css('conf-list');
+    array('type' => 'icon')) ."\n";
+
+echo $this->Html->css('conf-list') ."\n";
+
+// social buttons
+echo $this->Html->script('social');
+
+// jquery core
+echo $this->Html->script('//code.jquery.com/jquery-1.10.2.min.js') ."\n";
+
+// datepicker
+echo $this->Html->css('//code.jquery.com/ui/1.11.1/themes/redmond/jquery-ui.css')."\n";
+echo $this->Html->script('//code.jquery.com/ui/1.11.1/jquery-ui.js') ."\n";
+echo $this->Html->script('datepicker') ."\n";  //configuration for conflist app
+
+
+// select2
+//echo $this->Html->css('select2') ."\n";
+echo $this->Html->css('http://cdn.jsdelivr.net/select2/3.4.8/select2.css') ."\n";
+//echo $this->Html->script('select2');
+//echo $this->Html->script('http://cdn.jsdelivr.net/select2/3.4.8/select2.js') ."\n"; 
+echo $this->Html->script('http://cdn.jsdelivr.net/select2/3.4.8/select2.min.js') ."\n"; 
+echo $this->Html->script('select2_fields') ."\n";  //configuration for conflist app
 
 echo $this->fetch('meta');
 echo $this->fetch('css');
