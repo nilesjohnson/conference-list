@@ -90,13 +90,6 @@ class Conference extends AppModel {
 			//'subject_area' => array(
 			//'rule' => 'notEmpty'
 			//),
-			'Tag' => array(
-				       'multiple' => array(
-							   'rule' => array('multiple', array('min' => 1)),
-							   'message' => 'You need to select at least one tag',
-							   'required' => true,
-							   ),
-				       ),
 
 			'homepage' => array(
 					    'rule' => array('url',true),
@@ -162,6 +155,7 @@ class Conference extends AppModel {
     }
     return true;
   }
+
   public $hasAndBelongsToMany = array(
 	 'Tag' => array(
 			'className' => 'Tag',
@@ -169,12 +163,14 @@ class Conference extends AppModel {
 			'foreignKey' => 'conference_id',
 			'associationForeignKey' => 'tag_id',
 			'unique' => 'keepExisting',
+			/*
 			'conditions' => '',
 			'fields' => '',
 			'order' => '',
 			'limit' => '',
 			'offset' => '',
 			'finderQuery' => '',
+			*/
 			'with'=>'ConferencesTag'
 			)
 				      );

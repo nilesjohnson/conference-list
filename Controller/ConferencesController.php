@@ -75,6 +75,9 @@ class ConferencesController extends AppController {
 			 );
     $display_options = array('conditions' => $conditions, 'order' => $order_array);    
 
+    // remove tag validation so tags are not required
+    $this->Conference->Tag->validator()->remove('Tag');
+
     // collect tags from post data
     // then extract the tags and put into array
     // either by Cookie or querystring
@@ -372,6 +375,7 @@ class ConferencesController extends AppController {
       if (!($this->Conference->validates($this->data['Conference']))) {
 	debug($this->Conference->validationErrors); //displays array info
 	foreach (Set::flatten($this->Conference->validationErrors) as $field => $message) {
+	  debug("field: ".$field." message: ".$message);
 	  $this->Conference->invalidate($field,$message);
 	}
 	$this->Session->setFlash('Please check for errors below.', 'FlashBad');
