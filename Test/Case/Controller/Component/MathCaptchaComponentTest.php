@@ -1,6 +1,4 @@
-/*
- * This doesn't work at all; not sure why
- */
+<?php
 
 App::uses('Controller', 'Controller');
 App::uses('CakeRequest', 'Network');
@@ -53,3 +51,5 @@ class MathCaptchaComponentTest extends CakeTestCase {
     unset($this->Controller);
   }
 }
+
+?>
