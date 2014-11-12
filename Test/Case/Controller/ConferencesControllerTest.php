@@ -123,31 +123,9 @@ END:VCALENDAR';
  */
 
 	public function testAdd() {
-	  $Conferences = $this->generate('Conferences', 
-					 array('components'
-					       =>array('Session',
-						       'Email' 
-						       =>array('send')
-						       )
-					       ));
-	  $Conferences->Session
-	    ->expects($this->once())
-	    ->method('setFlash');
-	  /*
-	    $Conferences->Email
-	    ->expects($this->once())
-	    ->method('send')
-	    ->will($this->returnValue(true));
-	  */
-	  $this->testAction('/conferences/edit/4', 
-			    array('data'
-				  =>array('Conference' 
-					  =>array('title' => 'New Announcement')
-					  )
-				  ));
-	  $this->assertContains('/', $this->headers['Location']);
-	  echo "<h3>Testing add</h3>";
-	  debug($this->headers);
+	  $result = $this->testAction('/conferences/add');
+	  echo "<h3>Testing add (empty)</h3>";
+	  debug($result);
 	}
 
 
@@ -158,9 +136,25 @@ END:VCALENDAR';
  * @return void
  */
 	public function testEdit() {
-	  $result = $this->testAction('/conferences/edit/4');
+	  $Conferences = $this->generate('Conferences', 
+					 array('components'
+					       =>array('Session',
+						       'Email' 
+						       =>array('send')
+						       )
+					       ));
+	  $Conferences->Session
+	    ->expects($this->once())
+	    ->method('setFlash');
+	  $this->testAction('/conferences/edit/4', 
+			    array('data'
+				  =>array('Conference' 
+					  =>array('title' => 'New Announcement')
+					  )
+				  ));
+	  $this->assertContains('/', $this->headers['Location']);
 	  echo "<h3>Testing edit</h3>";
-	  debug($result);
+	  debug($this->headers);
 	}
 
 /**
