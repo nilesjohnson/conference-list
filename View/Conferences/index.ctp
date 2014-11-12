@@ -47,7 +47,7 @@ function gcal_link($start,$end,$title,$location) {
 
   echo $this->Form->submit(__('Apply subject filter', true), array('div' => false));
   echo "<br/>\n";
-  echo "<p style='margin-top:10px;'>".$this->Html->link('Delete saved tags', array('controller' => 'conferences', 'action'=>'index', '?'=>array('t0' => '')), array('class' => 'ics button'))."</p>\n";
+  echo "<p style='margin-top:10px;'>".$this->Html->link('Delete tag filter', array('controller' => 'conferences', 'action'=>'index', '?'=>array('t0' => '')), array('class' => 'ics button'))."</p>\n";
   echo $this->Form->end();
 ?>
 
