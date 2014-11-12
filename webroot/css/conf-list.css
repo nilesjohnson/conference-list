@@ -566,6 +566,24 @@ p {
     margin-top: 1pc;
 }
 
+#search_links {
+    float: right;
+    width: 300px;
+    margin-left: 40px;
+    padding-left: 10px;
+    border-left: 1px solid;
+}
+#search_links form {
+    padding-top:.8em;
+}
+#search_links form .select .select2-container {
+    max-height: 200px;
+    overflow: scroll;
+}
+hr.top {
+    clear: both;
+}
+
 #sub_header {
     background-color: #eee8e0;
     color: #333;

@@ -33,6 +33,26 @@ function gcal_link($start,$end,$title,$location) {
 */
 ?>
 
+<div id="search_links">
+
+<?php
+  echo $this->Form->create('Conference');
+  //the multi-select happens magically because of the HABTM and the variable $tags
+  echo $this->Form->input('Tag',array('label'=>'Filter by subject tags','value'=>$tagids));
+  //disables the SecurityComponent
+  //$this->Form->unlockField('Tag');
+
+  echo "<div><p>Click or type to select tags. Last tag search is saved in a cookie.</p><p>";
+  echo "</p></div>";
+
+  echo $this->Form->submit(__('Apply subject filter', true), array('div' => false));
+  echo "<br/>\n";
+  echo "<p style='margin-top:10px;'>".$this->Html->link('Delete saved tags', array('controller' => 'conferences', 'action'=>'index', '?'=>array('t0' => '')), array('class' => 'ics button'))."</p>\n";
+  echo $this->Form->end();
+?>
+
+</div>
+
 
 <div class="intro_text">
   <p>Welcome to the AlgTop-Conf List!  This is a home for conference
@@ -66,11 +86,11 @@ function gcal_link($start,$end,$title,$location) {
 </div>
 
 
-<hr/>
+
+<hr class="top"/>
 <h1><?php echo $view_title; ?></h1>
 
-<div class="search_links">
-
+<div>
   <?php echo $sort_text ?>
   <?php foreach ($search_links as $name => $array): ?>
   <?php echo $this->Html->link($name, $array)." "; ?>
@@ -81,7 +101,7 @@ function gcal_link($start,$end,$title,$location) {
     |
     <?php echo $this->Html->link('RSS','/conferences/index.rss');?>
   </div>
-
+</div>
 
 
 
@@ -109,26 +129,7 @@ echo '</div>';
 
 //
 
-	echo $this->Form->create('Conference');
-	//the multi-select happens magically because of the HABTM and the variable $tags
-        echo $this->Form->input('Tag',array('label'=>'Filter by subject','value'=>$tagids));
-	//disables the SecurityComponent
-	//$this->Form->unlockField('Tag');
-
-echo "<div><p>Click or type to select tags. Last tag search is saved in a cookie.</p><p>";
-echo $this->Html->link('Delete saved tags', array('controller' => 'conferences', 'action'=>'index', '?'=>array('t0' => '')));
-echo "</p></div>";
-
-        echo $this->Form->submit(__('Apply subject filter', true), array('div' => false));
-        echo $this->Form->end();
-
-
 ?>
-
-
-</div>
-
-
 
 
 <?php $curr_subsort = Null; $new_subsort = Null; $subsort_counter = 0; echo '<div id="subsort_start">'; ?>
