@@ -24,17 +24,19 @@ class ConferencesControllerTest extends ControllerTestCase {
  * @return void
  */
 	public function testIndex() {
-	  $result =$this->testAction('/');
+	  $result =$this->testAction('/',array('method'=>'get'));
 	  $this->assertEqual($this->vars['view_title'],'Upcoming Meetings');
 	  $this->assertEqual(count($this->vars['conferences']) > 0,true);
 	  echo "<h3>Testing Index</h3>";
+	  //debug($this->vars);
 	  debug(array('number of conferences' => count($this->vars['conferences']),
 		      'view title' => $this->vars['view_title']
 		      ));
 	}
 
+	
 	public function testIndexPast() {
-	  $result =$this->testAction('/conferences/index/all');
+	  $result =$this->testAction('/conferences/index/all',array('method'=>'get'));
 	  $this->assertEqual($this->vars['view_title'],'All Meetings');
 	  $this->assertEqual(count($this->vars['conferences']) > 0,true);
 	  echo "<h3>Testing Index Past</h3>";
@@ -44,7 +46,7 @@ class ConferencesControllerTest extends ControllerTestCase {
 	}
 
 	public function testIndexByCountry() {
-	  $result =$this->testAction('/conferences/index/country');
+	  $result =$this->testAction('/conferences/index/country',array('method'=>'get'));
 	  $this->assertEqual($this->vars['view_title'],'Upcoming Meetings');
 	  $this->assertEqual(count($this->vars['conferences']) > 0,true);
 	  $this->assertEqual($this->vars['sort_condition'],'country');
@@ -55,7 +57,7 @@ class ConferencesControllerTest extends ControllerTestCase {
 	}
 
 	public function testIndexRSS() {
-	  $result =$this->testAction('/conferences/index.rss');
+	  $result =$this->testAction('/conferences/index.rss',array('method'=>'get'));
 	  echo "<h3>Testing RSS</h3>";
 	  debug(array('number of conferences' => count($this->vars['conferences']),
 		      'view title' => $this->vars['view_title']
@@ -64,7 +66,6 @@ class ConferencesControllerTest extends ControllerTestCase {
 	  //debug($this->headers);
 	  //debug($this->vars);
 	}
-
 
 /**
  * testAbout method
