@@ -13,7 +13,9 @@ class ConferencesControllerTest extends ControllerTestCase {
  * @var array
  */
 	public $fixtures = array(
-		'app.conference'
+				 'app.conference',
+				 'app.tag',
+				 'app.conferencesTag'
 	);
 
 /**
