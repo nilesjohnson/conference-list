@@ -544,6 +544,7 @@ class ConferencesController extends AppController {
       throw new NotFoundException(__('Invalid conference'));
     }
     $this->Conference->id = $id;
+    $this->loadModel('Tag');
     $this->set('countries',$this->countries);
     $tags=$this->Conference->ConferencesTag->Tag->find('list');
     $this->set(compact('tags'));
@@ -566,7 +567,19 @@ class ConferencesController extends AppController {
         $this->Session->SetFlash('Invalid edit key. (1)','FlashBad');
         $this->redirect(array('action' => 'index'));
       }
-      if ($this->Conference->save($this->data)) {
+
+      // double-check Tags
+      if (!($this->Tag->tagsValidator($this->data['Tag']))) {
+	//debug($this->Tag->invalidFields());
+	$this->Tag->invalidate('Tag','Please supply at least one subject tag.');
+	$valid_data_2 = false;
+      }
+      else {
+	$valid_data_2 = true;
+      }
+      //debug($valid_data_2);
+
+      if ($valid_data_2 && $this->Conference->save($this->data)) {
 	$this->request->data = $this->Conference->read();
 	$Email = $this->prepEmail();
 	$Email->send();
