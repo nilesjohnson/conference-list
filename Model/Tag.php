@@ -4,14 +4,19 @@ App::uses('AppModel', 'Model');
 class Tag extends AppModel {
   public $validate = array(
 			   'Tag' => array(
-					  'rule' => 'notEmpty',
+					  // something has to be here
+					  // so that field is flagged as
+					  // required on the add form
+					  // but the rule is not used.
+					  //
+					  //'rule' => 'notEmpty',
 					  'message' => 'Please supply at least one subject tag.'
 					  ),
 			   );
 
-	public $hasAndBelongsToMany = array(
-		'Conference' => array(
-			'className' => 'Conference',
+  public $hasAndBelongsToMany = array(
+	     'Conference' => array(
+		        'className' => 'Conference',
 			'joinTable' => 'conferences_tags',
 			'foreignKey' => 'tag_id',
 			'associationForeignKey' => 'conference_id',
@@ -25,14 +30,14 @@ class Tag extends AppModel {
 			'finderQuery' => '',
 			*/
 			'with'=>'ConferencesTag'
-		)
-	);
+				   )
+				      );
+
 
   public function tagsValidator($check) {
-    // not used
-    debug($check);
-    return false;
-    //return ($check['Tag']!=false);
+    // this is called in the controller
+    //debug($check);
+    return ($check['Tag']!=false);
   }
 
 }

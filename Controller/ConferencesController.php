@@ -391,26 +391,32 @@ class ConferencesController extends AppController {
     $this->set('countries',$this->countries);
     $this->set('view_title', 'Add');
     //$this->loadModel('CcData');
+    $this->loadModel('Tag');
     if (!empty($this->data)) {
       // set model data
       //debug($this->data);  //displays array info
       $this->Conference->set($this->data);
+      $this->Tag->set($this->data['Tag']);
       //$this->ccdata = $this->data['CcData'];
       //$this->CcData->set($this->ccdata);
 
 
-      // test whether conference and cc data validates
-      $valid_data = true;
+      // test whether conference and tag data validates
+
       // check for invalid conference data
       if (!($this->Conference->validates($this->data['Conference']))) {
-	debug($this->Conference->validationErrors); //displays array info
+	//debug($this->Conference->validationErrors); //displays array info
 	foreach (Set::flatten($this->Conference->validationErrors) as $field => $message) {
-	  debug("field: ".$field." message: ".$message);
+	  //debug("field: ".$field." message: ".$message);
 	  $this->Conference->invalidate($field,$message);
 	}
 	$this->Session->setFlash('Please check for errors below.', 'FlashBad');
-	$valid_data = false;
-      }      
+	$valid_data_1 = false;
+      }
+      else {
+	$valid_data_1 = true;
+      }
+
       // when cc To: field nonempty, check for invalid cc data
       /*
       if ($this->ccdata['to'] != '' && !($this->CcData->validates($this->ccdata))) {
@@ -422,29 +428,26 @@ class ConferencesController extends AppController {
 	$valid_data = false;
       }	
       */
-      // if conference and cc data validates, check for valid captcha
-      if ($valid_data && $this->MathCaptcha->validates($this->data['Conference']['captcha'])) {
 
-	// change any 2-digit years in start/end dates to 4-digit years
-	$D = array('start_date','end_date');
-	foreach ($D as $d) {
-	  if (preg_match('/^\d\d-/',$this->data['Conference'][$d])) {
-	    $this->request->data['Conference'][$d] = '20'.$this->data['Conference'][$d];
-	  }
-	}
-	
-	// verify that all data saves, and send email(s)
-	if ($this->Conference->save($this->data)) {
-	  $this->request->data = $this->Conference->read();
-	  $Email = $this->prepEmail();
-	  $Email->send();
-	  $this->Session->setFlash('Your conference information has been saved.  An email with edit/delete links has been sent to the contact address.', 'FlashGood');
-	  if ($this->ccdata['to'] != '') {
-	    $this->Session->setFlash('Your conference information has been saved.  An email with edit/delete links has been sent to the contact address, and a separate announcement has been sent to the given addresses.', 'FlashGood');
-	  }
-	  $this->redirect(array('action' => 'index'));
-	}
+      // double-check Tags
+      if (!($this->Tag->tagsValidator($this->data['Tag']))) {
+	//debug($this->Tag->invalidFields());
+	$this->Tag->invalidate('Tag','Please supply at least one subject tag.');
+	$valid_data_2 = false;
       }
+      else {
+	$valid_data_2 = true;
+      }
+      //debug($valid_data_2);
+
+      // if conference and tag data validates, check for valid captcha
+      if ($valid_data_1 && 
+	  $valid_data_2 && 
+	  $this->MathCaptcha->validates($this->data['Conference']['captcha'])) {
+	// all good !
+	$this->save_and_send();
+      }
+      // else: something invalid
       else {
 	$this->Conference->invalidate('captcha','Please perform the indicated arithmetic.');
 	$this->Session->setFlash('Please check for errors below.', 'FlashBad');
@@ -465,7 +468,36 @@ class ConferencesController extends AppController {
     $this->set(compact('tags'));
   }
 
-
+  public function save_and_send() {
+    /*
+     * helper function to save data and send email
+     * ends with redirect
+     */
+    // change any 2-digit years in start/end dates to 4-digit years
+    $D = array('start_date','end_date');
+    foreach ($D as $d) {
+      if (preg_match('/^\d\d-/',$this->data['Conference'][$d])) {
+	$this->request->data['Conference'][$d] = '20'.$this->data['Conference'][$d];
+      }
+    }
+	
+    // verify that all data saves, and send email(s)
+    if ($this->Conference->save($this->data)) {
+      $this->request->data = $this->Conference->read();
+      $Email = $this->prepEmail();
+      $Email->send();
+      $this->Session->setFlash('Your conference information has been saved.  An email with edit/delete links has been sent to the contact address.', 'FlashGood');
+      /*
+	if ($this->ccdata['to'] != '') {
+	$this->Session->setFlash('Your conference information has been saved.  An email with edit/delete links has been sent to the contact address, and a separate announcement has been sent to the given addresses.', 'FlashGood');
+	}
+      */
+      $this->redirect(array('action' => 'index'));
+    } 
+    else {
+      $this->Session->setFlash('There was an error saving the data','FlashBad');
+    }
+  }
 
   /*
   public function add_baked() {
