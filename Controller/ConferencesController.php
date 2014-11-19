@@ -76,11 +76,16 @@ class ConferencesController extends AppController {
 
     // remove tag validation so tags are not required
     $this->Conference->Tag->validator()->remove('Tag');
-
+	
     // collect tags from post data
     // then extract the tags and put into array
     // either by Cookie or querystring
     $tagids=null;
+	//first check if we're supposed to be deleting tags
+	if (isset($this->request->query['t0'])){
+		$this->Cookie->delete('tags');
+		return $this->redirect(array('controller'=>null,'action' =>'/'));
+	}
     $cookie=$this->Cookie->read('tags');
     $index_link_array = array('controller' => 'conferences', 'action' => 'index');
     if (isset($this->params['tags']) || isset($cookie)) {
