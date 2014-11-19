@@ -521,6 +521,7 @@ class ConferencesController extends AppController {
     $this->set('countries',$this->countries);
     $tags=$this->Conference->ConferencesTag->Tag->find('list');
     $this->set(compact('tags'));
+	$this->set('edit',1);
     if (empty($this->data)) {
       $this->data = $this->Conference->read();
       $this->request->data['Conference']['passed_key'] = $key;
@@ -540,7 +541,7 @@ class ConferencesController extends AppController {
         $this->Session->SetFlash('Invalid edit key. (1)','FlashBad');
         $this->redirect(array('action' => 'index'));
       }
-
+	$this->render('add');
 
       if ($this->Checker->tagValid($this->data['Tag']) && $this->Conference->save($this->data)) {
 	$this->request->data = $this->Conference->read();
