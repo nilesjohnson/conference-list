@@ -63,7 +63,6 @@ class ConferencesController extends AppController {
     $this->set('view_title','Upcoming Meetings');
     $this->set('months', $this->months);
     $this->set('sort_condition',$sort_condition);
-
     // default sort conditions
     $order_array =  array('Conference.start_date',
 			  'Conference.end_date',
@@ -80,32 +79,28 @@ class ConferencesController extends AppController {
     $tagids=null;
     $cookie=$this->Cookie->read('tags');
     $index_link_array = array('controller' => 'conferences', 'action' => 'index');
-    if (isset($this->request->query['t0']) || isset($cookie)) {
-      if (isset($this->request->query['t0'])){
-	if ($this->request->query['t0'] == '') {
-	  $this->Cookie->delete('tags');
-	  return $this->redirect(array('action' => 'index'));
-	}
-	$i=0;
-	do {
-	  $tagids[$i]=$this->request->query['t'.$i];
-	  $i++;
-	  if ($i>100) break;
-	} while (isset($this->request->query['t'.$i]));
-	//debug($tagids);
-      }
-      else {
-	$tagids=$cookie;
-      }
+    if (isset($this->params['tags']) || isset($cookie)) {
+		if (isset($this->params['tags'])){
+			$tags=explode('-', $this->params['tags']);
+			$this->loadModel('Tag');
+			$this->Tag->recursive=0;
+			$tagids=array();
+			foreach ($tags as $tag){
+				$t=$this->Tag->find('first',array('conditions'=>array('Tag.name LIKE "'.$tag.'%"')));
+				//debug($t);
+				array_push($tagids,$t['Tag']['id']);
+			}
+		}
+    else {
+		$tagids=$cookie;
+    }
       // I opted NOT to use a manual JOIN here because of the dickery with Pagination
       //but rest-assured, this is Dickery nonetheless!
       $tagquery=array();
-      $index_link_array['?'] = array();
       $temp_array = &$tagquery;
       foreach ($tagids as $i => $item) {
 	$temp_array = &$temp_array['OR'];
 	$temp_array['ConferencesTag.tag_id'] =$item;
-	$index_link_array['?']['t'.$i] = $item;
       }
       array_push($display_options['conditions'],$tagquery);
       $display_options['group'] = 'Conference.id';
@@ -120,17 +115,23 @@ class ConferencesController extends AppController {
 
     // there are a few ways to do this. We choose to enumerate querystrings so you have bookmarkable tag URLs
     if ($this->request->is('post')) {
-      if (isset($this->request->data['Tag']['Tag']) && !empty($this->request->data['Tag']['Tag'])){
-	$querystring='';
-	foreach ($this->request->data['Tag']['Tag'] as $key=>$val){
-	  $querystring['t'.$key]=$val;
-	}
+    if (isset($this->request->data['Tag']['Tag']) && !empty($this->request->data['Tag']['Tag'])){
+		$tagnames=array();
+		$this->loadModel('Tag',array('recursive'=>0));
+		//$this->Tag->recursive=0;
+		foreach ($this->request->data['Tag']['Tag'] as $tag){
+			$t=$this->Tag->find('first',array('conditions'=>array('Tag.id'=>$tag)));
+				$t=explode('.',$t['Tag']['name']);
+				array_push($tagnames,$t[0]);
+			}
+		$tagstring=implode('-',$tagnames);
+		debug($tagstring);
 	$this->Cookie->write('tags',$this->request->data['Tag']['Tag']);
-	return $this->redirect(array('action' => 'index','?'=>$querystring, $sort_condition));
+	return $this->redirect(array('controller'=>null,'action' => $tagstring.'/', $sort_condition));
       }
       else {
 	$this->Cookie->delete('tags');
-	return $this->redirect(array('action' => 'index'));
+	return $this->redirect(array('controller'=>null,'action' => '/'));
       }
     }
 

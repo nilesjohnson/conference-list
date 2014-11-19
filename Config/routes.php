@@ -24,7 +24,14 @@
  * its action called 'display', and we pass a param to select the view file
  * to use (in this case, /app/View/Pages/home.ctp)...
  */
+ 		Router::redirect('/conferences/', array('controller' => 'conferences', 'action' => 'index'));
+		Router::redirect('/conferences', array('controller' => 'conferences', 'action' => 'index'));
+		//the basic route, the paginator might make this require changing
+        Router::connect('/:tags', array('controller' => 'conferences', 'action' => 'index'));
+		//to fix the country sorting for now
+        Router::connect('/conferences/index/country/:tags', array('controller' => 'conferences', 'action' => 'index'));
         Router::connect('/', array('controller' => 'conferences', 'action' => 'index'));
+
 /**
  * ...and connect the rest of 'Pages' controller's URLs.
  */
