@@ -7,6 +7,7 @@ App::uses('AppController', 'Controller');
  * @property PaginatorComponent $Paginator
  */
 
+
 class ConferencesController extends AppController {
 
 
@@ -18,7 +19,7 @@ class ConferencesController extends AppController {
 
   public $helpers = array('Js', 'Html', 'Text', 'Gcal', 'Display');
 
-  public $components = array('Email', 'RequestHandler', 'Session', 'MathCaptcha', 'Security', 'Cookie');
+  public $components = array('Email', 'RequestHandler', 'Session', 'MathCaptcha', 'Security', 'Cookie', 'Checker');
   
   //Regular ol' $this->paginate() ceases to function when this is declared, but this allows for pagination of different Models within same Controller
   /*
@@ -392,12 +393,17 @@ class ConferencesController extends AppController {
     $this->set('countries',$this->countries);
     $this->set('view_title', 'Add');
     //$this->loadModel('CcData');
-    $this->loadModel('Tag');
+    //not sure we even need this now
+	$this->loadModel('Tag');
     if (!empty($this->data)) {
       // set model data
       //debug($this->data);  //displays array info
       $this->Conference->set($this->data);
       $this->Tag->set($this->data['Tag']);
+	  
+	  //these don't really need separate variables but I did it anyway, feel free to include directly in IF statement
+	  $validconf=$this->Checker->conferenceValid($this->data['Conference']);
+	  $validtag=$this->Checker->tagValid($this->data['Tag']);
       //$this->ccdata = $this->data['CcData'];
       //$this->CcData->set($this->ccdata);
 
@@ -405,45 +411,11 @@ class ConferencesController extends AppController {
       // test whether conference and tag data validates
 
       // check for invalid conference data
-      if (!($this->Conference->validates($this->data['Conference']))) {
-	//debug($this->Conference->validationErrors); //displays array info
-	foreach (Set::flatten($this->Conference->validationErrors) as $field => $message) {
-	  //debug("field: ".$field." message: ".$message);
-	  $this->Conference->invalidate($field,$message);
-	}
-	$this->Session->setFlash('Please check for errors below.', 'FlashBad');
-	$valid_data_1 = false;
-      }
-      else {
-	$valid_data_1 = true;
-      }
 
-      // when cc To: field nonempty, check for invalid cc data
-      /*
-      if ($this->ccdata['to'] != '' && !($this->CcData->validates($this->ccdata))) {
-	//debug($this->CcData->invalidFields());  //displays array info
-	foreach ($this->CcData->invalidFields() as $field => $message) {
-	  $this->CcData->invalidate($field,$message);
-	}
-	$this->Session->setFlash('Please check for errors below.', 'FlashBad');
-	$valid_data = false;
-      }	
-      */
-
-      // double-check Tags
-      if (!($this->Tag->tagsValidator($this->data['Tag']))) {
-	//debug($this->Tag->invalidFields());
-	$this->Tag->invalidate('Tag','Please supply at least one subject tag.');
-	$valid_data_2 = false;
-      }
-      else {
-	$valid_data_2 = true;
-      }
       //debug($valid_data_2);
 
       // if conference and tag data validates, check for valid captcha
-      if ($valid_data_1 && 
-	  $valid_data_2 && 
+      if ($validtag && $validconf &&
 	  $this->MathCaptcha->validates($this->data['Conference']['captcha'])) {
 	// all good !
 	$this->save_and_send();
@@ -569,18 +541,8 @@ class ConferencesController extends AppController {
         $this->redirect(array('action' => 'index'));
       }
 
-      // double-check Tags
-      if (!($this->Tag->tagsValidator($this->data['Tag']))) {
-	//debug($this->Tag->invalidFields());
-	$this->Tag->invalidate('Tag','Please supply at least one subject tag.');
-	$valid_data_2 = false;
-      }
-      else {
-	$valid_data_2 = true;
-      }
-      //debug($valid_data_2);
 
-      if ($valid_data_2 && $this->Conference->save($this->data)) {
+      if ($this->Checker->tagValid($this->data['Tag']) && $this->Conference->save($this->data)) {
 	$this->request->data = $this->Conference->read();
 	$Email = $this->prepEmail();
 	$Email->send();
