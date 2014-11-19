@@ -16,7 +16,7 @@ class ConferencesController extends AppController {
   var $months = array("none", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
 
 
-  public $helpers = array('Js', 'Html', 'Gcal', 'Text');
+  public $helpers = array('Js', 'Html', 'Text', 'Gcal', 'Display');
 
   public $components = array('Email', 'RequestHandler', 'Session', 'MathCaptcha', 'Security', 'Cookie');
   
@@ -67,11 +67,15 @@ class ConferencesController extends AppController {
     $order_array =  array('Conference.start_date',
 			  'Conference.end_date',
 			  'Conference.title',
+			  'Tag.name',
 			  );
     $conditions = array (
 			 "Conference.end_date >" => date('Y-m-d', strtotime("-1 week"))
 			 );
     $display_options = array('conditions' => $conditions, 'order' => $order_array);    
+
+    // remove tag validation so tags are not required
+    $this->Conference->Tag->validator()->remove('Tag');
 
     // collect tags from post data
     // then extract the tags and put into array
@@ -103,14 +107,16 @@ class ConferencesController extends AppController {
 	$temp_array['ConferencesTag.tag_id'] =$item;
       }
       array_push($display_options['conditions'],$tagquery);
-      $display_options['group'] = 'Conference.id';
+      //$display_options['group'] = 'Conference.id'; // grouping is done manually below
       //$this->Paginator->settings = array('conditions' => $tagquery);
       //$conferences=$this->paginate('ConferencesTag');
       $active_model = $this->Conference->ConferencesTag;
+      $regroup = true;
     }
     else {
       //otherwise do normal call
-      $active_model = $this->Conference;
+      $active_model = $this->Conference->ConferencesTag; //no, always search join table, since we want to display tags with conferences
+      $regroup = false;
     }
 
     // there are a few ways to do this. We choose to enumerate querystrings so you have bookmarkable tag URLs
@@ -147,7 +153,7 @@ class ConferencesController extends AppController {
     elseif ($sort_condition == 'all') {
       $this->set('sort_text','');
       $this->set('view_title','All Meetings');
-      $display_options['conditions'] = array();
+      unset($display_options['conditions']['Conference.end_date >']);
       //array_push($index_link_array,'country');
       $this->set('search_links', array('Main List' => $index_link_array));
     }
@@ -156,9 +162,44 @@ class ConferencesController extends AppController {
       $this->set('search_links', array('Country' => array_merge($index_link_array,array('country'))));
     }
 
+    //debug($display_options);
     $this->set('past_link', array_merge($index_link_array,array('all')));
-    $this->set('conferences', $active_model->find('all', $display_options));
+    $conferencesTagsRaw = $active_model->find('all', $display_options);
 
+    // do manual regrouping
+    // surely this could be done more effeciently by
+    // some kind of join and sql GROUP BY . . . but I couldn't
+    // figure out how.
+    $conferences = array();
+    $conferencesTags = array();
+    $prev_id = -1;
+    foreach ($conferencesTagsRaw as $ct) {
+      // we are using the fact that we can find duplicate conferences
+      // by checking ids of previous entries
+      // because in this array entries with the same conference data
+      // will be next to eachother
+      $id = $ct['Conference']['id'];
+      if ($id != $prev_id) {
+	array_push($conferences,$ct['Conference']);
+	$conferencesTags[$id] = array();
+	$tagsForThisConference = $this->Conference->ConferencesTag->find('all',
+									 array('conditions' => array('ConferencesTag.conference_id' => $id),
+									       'fields' => array('Tag.id','Tag.name')));
+	foreach ($tagsForThisConference as $item) {
+	  array_push($conferencesTags[$id],$item['Tag']);
+	}
+	//array($ct['Tag']);
+	$prev_id = $id;
+      }
+      else {
+	//array_push($conferencesTags[$id],$ct['Tag']);
+      }
+    }
+
+    $this->set('conferences', $conferences);
+    $this->set('conferencesTags',$conferencesTags);
+
+    // currently NOT using paginator
     //using the paginator instead, it takes the same conditions
     //$this->Paginator->settings = array('conditions' => $conditions);
     //$conferences=$this->paginate('Conference');
@@ -292,6 +333,36 @@ class ConferencesController extends AppController {
   }
 
 
+  public function gcal($id) {
+    $this->Conference->id = $id;
+    if (empty($this->data)) {
+      $this->set('conference', $this->Conference->read());
+      $this->request->data = $this->Conference->read();
+    }
+
+    $start_date = $this->data['Conference']['start_date'];
+    $end_date = $this->data['Conference']['end_date'];
+    $title = $this->data['Conference']['title'];
+    $city = $this->data['Conference']['city'];
+    $country = $this->data['Conference']['country'];
+    $url = $this->data['Conference']['homepage'];
+    $conflist_url = Configure::read('site.home');
+    $conflist_name = Configure::read('site.name');
+
+    $start_string = str_replace('-','',$start_date);
+    $end_string = date('Ymd',strtotime($end_date." +1 day"));
+    $location = $city."; ".$country;
+    $Gcal_url = "http://www.google.com/calendar/event?action=TEMPLATE&".
+      "text=".urlencode($title)."&".
+      "dates=".$start_string."/".$end_string.
+      "&details=".$url.
+      "&location=".urlencode($location).
+      "&trp=false&sprop=".urlencode($conflist_url).
+      "&sprop=name:".urlencode($conflist_name);
+    return $Gcal_url;
+  }
+
+
   /*
   public function sort_country_unused(){
     $this->set('conferences', $this->Conference->find('all',
@@ -321,25 +392,32 @@ class ConferencesController extends AppController {
     $this->set('countries',$this->countries);
     $this->set('view_title', 'Add');
     //$this->loadModel('CcData');
+    $this->loadModel('Tag');
     if (!empty($this->data)) {
       // set model data
       //debug($this->data);  //displays array info
       $this->Conference->set($this->data);
+      $this->Tag->set($this->data['Tag']);
       //$this->ccdata = $this->data['CcData'];
       //$this->CcData->set($this->ccdata);
 
 
-      // test whether conference and cc data validates
-      $valid_data = true;
+      // test whether conference and tag data validates
+
       // check for invalid conference data
       if (!($this->Conference->validates($this->data['Conference']))) {
-	debug($this->Conference->validationErrors); //displays array info
+	//debug($this->Conference->validationErrors); //displays array info
 	foreach (Set::flatten($this->Conference->validationErrors) as $field => $message) {
+	  //debug("field: ".$field." message: ".$message);
 	  $this->Conference->invalidate($field,$message);
 	}
 	$this->Session->setFlash('Please check for errors below.', 'FlashBad');
-	$valid_data = false;
-      }      
+	$valid_data_1 = false;
+      }
+      else {
+	$valid_data_1 = true;
+      }
+
       // when cc To: field nonempty, check for invalid cc data
       /*
       if ($this->ccdata['to'] != '' && !($this->CcData->validates($this->ccdata))) {
@@ -351,29 +429,26 @@ class ConferencesController extends AppController {
 	$valid_data = false;
       }	
       */
-      // if conference and cc data validates, check for valid captcha
-      if ($valid_data && $this->MathCaptcha->validates($this->data['Conference']['captcha'])) {
 
-	// change any 2-digit years in start/end dates to 4-digit years
-	$D = array('start_date','end_date');
-	foreach ($D as $d) {
-	  if (preg_match('/^\d\d-/',$this->data['Conference'][$d])) {
-	    $this->request->data['Conference'][$d] = '20'.$this->data['Conference'][$d];
-	  }
-	}
-	
-	// verify that all data saves, and send email(s)
-	if ($this->Conference->save($this->data)) {
-	  $this->request->data = $this->Conference->read();
-	  $Email = $this->prepEmail();
-	  $Email->send();
-	  $this->Session->setFlash('Your conference information has been saved.  An email with edit/delete links has been sent to the contact address.', 'FlashGood');
-	  if ($this->ccdata['to'] != '') {
-	    $this->Session->setFlash('Your conference information has been saved.  An email with edit/delete links has been sent to the contact address, and a separate announcement has been sent to the given addresses.', 'FlashGood');
-	  }
-	  $this->redirect(array('action' => 'index'));
-	}
+      // double-check Tags
+      if (!($this->Tag->tagsValidator($this->data['Tag']))) {
+	//debug($this->Tag->invalidFields());
+	$this->Tag->invalidate('Tag','Please supply at least one subject tag.');
+	$valid_data_2 = false;
       }
+      else {
+	$valid_data_2 = true;
+      }
+      //debug($valid_data_2);
+
+      // if conference and tag data validates, check for valid captcha
+      if ($valid_data_1 && 
+	  $valid_data_2 && 
+	  $this->MathCaptcha->validates($this->data['Conference']['captcha'])) {
+	// all good !
+	$this->save_and_send();
+      }
+      // else: something invalid
       else {
 	$this->Conference->invalidate('captcha','Please perform the indicated arithmetic.');
 	$this->Session->setFlash('Please check for errors below.', 'FlashBad');
@@ -390,11 +465,40 @@ class ConferencesController extends AppController {
       }
     }
     $this->set('mathCaptcha', $this->MathCaptcha->generateEquation());
-	$tags=$this->Conference->ConferencesTag->Tag->find('list');
-	$this->set(compact('tags'));
+    $tags=$this->Conference->ConferencesTag->Tag->find('list');
+    $this->set(compact('tags'));
   }
 
-
+  public function save_and_send() {
+    /*
+     * helper function to save data and send email
+     * ends with redirect
+     */
+    // change any 2-digit years in start/end dates to 4-digit years
+    $D = array('start_date','end_date');
+    foreach ($D as $d) {
+      if (preg_match('/^\d\d-/',$this->data['Conference'][$d])) {
+	$this->request->data['Conference'][$d] = '20'.$this->data['Conference'][$d];
+      }
+    }
+	
+    // verify that all data saves, and send email(s)
+    if ($this->Conference->save($this->data)) {
+      $this->request->data = $this->Conference->read();
+      $Email = $this->prepEmail();
+      $Email->send();
+      $this->Session->setFlash('Your conference information has been saved.  An email with edit/delete links has been sent to the contact address.', 'FlashGood');
+      /*
+	if ($this->ccdata['to'] != '') {
+	$this->Session->setFlash('Your conference information has been saved.  An email with edit/delete links has been sent to the contact address, and a separate announcement has been sent to the given addresses.', 'FlashGood');
+	}
+      */
+      $this->redirect(array('action' => 'index'));
+    } 
+    else {
+      $this->Session->setFlash('There was an error saving the data','FlashBad');
+    }
+  }
 
   /*
   public function add_baked() {
@@ -441,7 +545,10 @@ class ConferencesController extends AppController {
       throw new NotFoundException(__('Invalid conference'));
     }
     $this->Conference->id = $id;
+    $this->loadModel('Tag');
     $this->set('countries',$this->countries);
+    $tags=$this->Conference->ConferencesTag->Tag->find('list');
+    $this->set(compact('tags'));
     if (empty($this->data)) {
       $this->data = $this->Conference->read();
       $this->request->data['Conference']['passed_key'] = $key;
@@ -461,7 +568,19 @@ class ConferencesController extends AppController {
         $this->Session->SetFlash('Invalid edit key. (1)','FlashBad');
         $this->redirect(array('action' => 'index'));
       }
-      if ($this->Conference->save($this->data)) {
+
+      // double-check Tags
+      if (!($this->Tag->tagsValidator($this->data['Tag']))) {
+	//debug($this->Tag->invalidFields());
+	$this->Tag->invalidate('Tag','Please supply at least one subject tag.');
+	$valid_data_2 = false;
+      }
+      else {
+	$valid_data_2 = true;
+      }
+      //debug($valid_data_2);
+
+      if ($valid_data_2 && $this->Conference->save($this->data)) {
 	$this->request->data = $this->Conference->read();
 	$Email = $this->prepEmail();
 	$Email->send();

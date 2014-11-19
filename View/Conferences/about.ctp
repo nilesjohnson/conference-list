@@ -134,6 +134,25 @@ particularly welcome!</p>
 
 -->
 
+<h2 class="target" id="tags_about">Subject Tags</h2>
+<div>
+
+<p>With subject tags, we can include announcements from a broader
+range of fields while still allowing users to focus the conferences
+relevant for their field.  When the tagging feature was first
+implemented, all announcements were tagged as 'at.algebraic-topology'.
+Future announcements are assigned a subject upon entry into the
+database.  The subject tags are taken from the <a
+href="http://arxiv.org/archive/math">arXiv.org math
+categories</a>.</p>
+
+<p>A visitor's choice of subject tags is stored in a browser cookie so
+it does not need to be re-entered with each new visit.  No other
+information is stored.  The button "Delete tag filter" immediately
+deletes this cookie.</p>
+
+</div>
+
 <h2 class="target" id="rss_about">RSS Feed</h2>
 <div>
 

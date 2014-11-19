@@ -13,7 +13,9 @@ class ConferencesControllerTest extends ControllerTestCase {
  * @var array
  */
 	public $fixtures = array(
-		'app.conference'
+				 'app.conference',
+				 'app.tag',
+				 'app.conferencesTag'
 	);
 
 /**
@@ -22,17 +24,19 @@ class ConferencesControllerTest extends ControllerTestCase {
  * @return void
  */
 	public function testIndex() {
-	  $result =$this->testAction('/');
+	  $result =$this->testAction('/',array('method'=>'get'));
 	  $this->assertEqual($this->vars['view_title'],'Upcoming Meetings');
 	  $this->assertEqual(count($this->vars['conferences']) > 0,true);
 	  echo "<h3>Testing Index</h3>";
+	  //debug($this->vars);
 	  debug(array('number of conferences' => count($this->vars['conferences']),
 		      'view title' => $this->vars['view_title']
 		      ));
 	}
 
+	
 	public function testIndexPast() {
-	  $result =$this->testAction('/conferences/index/all');
+	  $result =$this->testAction('/conferences/index/all',array('method'=>'get'));
 	  $this->assertEqual($this->vars['view_title'],'All Meetings');
 	  $this->assertEqual(count($this->vars['conferences']) > 0,true);
 	  echo "<h3>Testing Index Past</h3>";
@@ -42,7 +46,7 @@ class ConferencesControllerTest extends ControllerTestCase {
 	}
 
 	public function testIndexByCountry() {
-	  $result =$this->testAction('/conferences/index/country');
+	  $result =$this->testAction('/conferences/index/country',array('method'=>'get'));
 	  $this->assertEqual($this->vars['view_title'],'Upcoming Meetings');
 	  $this->assertEqual(count($this->vars['conferences']) > 0,true);
 	  $this->assertEqual($this->vars['sort_condition'],'country');
@@ -53,15 +57,15 @@ class ConferencesControllerTest extends ControllerTestCase {
 	}
 
 	public function testIndexRSS() {
-	  $result =$this->testAction('/conferences/index.rss');
+	  $result =$this->testAction('/conferences/index.rss',array('method'=>'get'));
 	  echo "<h3>Testing RSS</h3>";
 	  debug(array('number of conferences' => count($this->vars['conferences']),
 		      'view title' => $this->vars['view_title']
 		      ));
+	  $this->assertEqual(count($this->vars['conferences']),4);
 	  //debug($this->headers);
 	  //debug($this->vars);
 	}
-
 
 /**
  * testAbout method
@@ -88,8 +92,27 @@ class ConferencesControllerTest extends ControllerTestCase {
 
 	public function testIcal() {
 	  $result = $this->testAction('/conferences/ical/4');
+	  $expected = 'BEGIN:VCALENDAR
+VERSION:2.0
+BEGIN:VEVENT
+DTSTART:20501223
+DTEND:20501226
+LOCATION:City 4; Country 4
+SUMMARY:Phasellus feugiat conference
+URL:http://www.example4.net
+END:VEVENT
+END:VCALENDAR';
 	  echo "<h3>Testing ical</h3>";
 	  debug($result);
+	  $this->assertEqual($result,$expected);
+	}
+
+	public function testGcal() {
+	  $result = $this->testAction('/conferences/gcal/4');
+	  $expected = 'http://www.google.com/calendar/event?action=TEMPLATE&text=Phasellus+feugiat+conference&dates=20501223/20501226&details=http://www.example4.net&location=City+4%3B+Country+4&trp=false&sprop=http%3A%2F%2Fwww.nilesjohnson.net%2Fconflist-test&sprop=name:ConfList-Test';
+	  echo "<h3>Testing gcal</h3>";
+	  debug($result);
+	  $this->assertEqual($result,$expected);
 	}
 
 
@@ -100,31 +123,9 @@ class ConferencesControllerTest extends ControllerTestCase {
  */
 
 	public function testAdd() {
-	  $Conferences = $this->generate('Conferences', 
-					 array('components'
-					       =>array('Session',
-						       'Email' 
-						       =>array('send')
-						       )
-					       ));
-	  $Conferences->Session
-	    ->expects($this->once())
-	    ->method('setFlash');
-	  /*
-	    $Conferences->Email
-	    ->expects($this->once())
-	    ->method('send')
-	    ->will($this->returnValue(true));
-	  */
-	  $this->testAction('/conferences/edit/4', 
-			    array('data'
-				  =>array('Conference' 
-					  =>array('title' => 'New Announcement')
-					  )
-				  ));
-	  $this->assertContains('/', $this->headers['Location']);
-	  echo "<h3>Testing add</h3>";
-	  debug($this->headers);
+	  $result = $this->testAction('/conferences/add');
+	  echo "<h3>Testing add (empty)</h3>";
+	  debug($result);
 	}
 
 
@@ -135,9 +136,25 @@ class ConferencesControllerTest extends ControllerTestCase {
  * @return void
  */
 	public function testEdit() {
-	  $result = $this->testAction('/conferences/edit/4');
+	  $Conferences = $this->generate('Conferences', 
+					 array('components'
+					       =>array('Session',
+						       'Email' 
+						       =>array('send')
+						       )
+					       ));
+	  $Conferences->Session
+	    ->expects($this->once())
+	    ->method('setFlash');
+	  $this->testAction('/conferences/edit/4', 
+			    array('data'
+				  =>array('Conference' 
+					  =>array('title' => 'New Announcement')
+					  )
+				  ));
+	  $this->assertContains('/', $this->headers['Location']);
 	  echo "<h3>Testing edit</h3>";
-	  debug($result);
+	  debug($this->headers);
 	}
 
 /**
