@@ -143,7 +143,7 @@ class ConferencesController extends AppController {
 	  array_push($tagnames,$t[0]);
 	}
 	$tagstring=implode('-',$tagnames);
-	$this->Session->setFlash($tagstring,'FlashGood');
+	//$this->Session->setFlash($tagstring,'FlashGood'); // for testing
 	$this->Cookie->write('tags',$this->request->data['Tag']['Tag']);
 	return $this->redirect(array('controller'=>null,'action' => $tagstring.'/', $sort_condition));
       }
