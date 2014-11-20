@@ -18,15 +18,15 @@ class ConferencesController extends AppController {
 
   public $helpers = array('Js', 'Html', 'Text', 'Gcal', 'Display');
 
-  public $components = array('Email', 'RequestHandler', 'Session', 'MathCaptcha', 'Security', 'Cookie');
+  public $components = array('Email', 'RequestHandler', 'Session', 'Paginator', 'MathCaptcha', 'Security', 'Cookie');
   
   //Regular ol' $this->paginate() ceases to function when this is declared, but this allows for pagination of different Models within same Controller
-  /*
+
 	public $paginate = array(
 		'Conference' => array (),
 		'ConferencesTag'=>array()
 	   );
-  */
+
 
   public function beforeFilter() {
     parent::beforeFilter(); //you're supposed to always have this, don't ask me why
@@ -81,28 +81,34 @@ class ConferencesController extends AppController {
     // then extract the tags and put into array
     // either by Cookie or querystring
     $tagids=null;
-	//first check if we're supposed to be deleting tags
-	if (isset($this->request->query['t0'])){
-		$this->Cookie->delete('tags');
-		return $this->redirect(array('controller'=>null,'action' =>'/'));
-	}
+    //first check if we're supposed to be deleting tags
+    if (isset($this->request->query['t0'])){
+      $this->Cookie->delete('tags');
+      return $this->redirect(array('controller'=>null,'action' =>'/'));
+    }
     $cookie=$this->Cookie->read('tags');
     $index_link_array = array('controller' => 'conferences', 'action' => 'index');
     if (isset($this->params['tags']) || isset($cookie)) {
-		if (isset($this->params['tags'])){
-			$tags=explode('-', $this->params['tags']);
-			$this->loadModel('Tag');
-			$this->Tag->recursive=0;
-			$tagids=array();
-			foreach ($tags as $tag){
-				$t=$this->Tag->find('first',array('conditions'=>array('Tag.name LIKE "'.$tag.'%"')));
-				//debug($t);
-				array_push($tagids,$t['Tag']['id']);
-			}
-		}
-    else {
-		$tagids=$cookie;
-    }
+      if (isset($this->params['tags'])){
+	$tags=explode('-', $this->params['tags']);
+	$this->loadModel('Tag');
+	$this->Tag->recursive=0;
+	$tagids=array();
+	foreach ($tags as $tag){
+	  // get tag id numbers from names
+	  $t=$this->Tag->find('first',array('conditions'=>array('Tag.name LIKE "'.$tag.'%"')));
+	  //debug($t);
+	  if ($t) {
+	    array_push($tagids,$t['Tag']['id']);
+	  }
+	  else {
+	    $this->Session->setFlash('unknown tag '.$tag,'FlashBad');
+	  }
+	}
+      }
+      else {
+	$tagids=$cookie;
+      }
       // I opted NOT to use a manual JOIN here because of the dickery with Pagination
       //but rest-assured, this is Dickery nonetheless!
       $tagquery=array();
@@ -124,19 +130,20 @@ class ConferencesController extends AppController {
       $regroup = false;
     }
 
-    // there are a few ways to do this. We choose to enumerate querystrings so you have bookmarkable tag URLs
     if ($this->request->is('post')) {
-    if (isset($this->request->data['Tag']['Tag']) && !empty($this->request->data['Tag']['Tag'])){
-		$tagnames=array();
-		$this->loadModel('Tag',array('recursive'=>0));
-		//$this->Tag->recursive=0;
-		foreach ($this->request->data['Tag']['Tag'] as $tag){
-			$t=$this->Tag->find('first',array('conditions'=>array('Tag.id'=>$tag)));
-				$t=explode('.',$t['Tag']['name']);
-				array_push($tagnames,$t[0]);
-			}
-		$tagstring=implode('-',$tagnames);
-		debug($tagstring);
+      // read tags from form, or delete cookie
+      if (isset($this->request->data['Tag']['Tag']) && !empty($this->request->data['Tag']['Tag'])){
+	$tagnames=array();
+	$this->loadModel('Tag',array('recursive'=>0));
+	//$this->Tag->recursive=0;
+	foreach ($this->request->data['Tag']['Tag'] as $tag){
+	  // get tag names from id numbers
+	  $t=$this->Tag->find('first',array('conditions'=>array('Tag.id'=>$tag)));
+	  $t=explode('.',$t['Tag']['name']);
+	  array_push($tagnames,$t[0]);
+	}
+	$tagstring=implode('-',$tagnames);
+	$this->Session->setFlash($tagstring,'FlashGood');
 	$this->Cookie->write('tags',$this->request->data['Tag']['Tag']);
 	return $this->redirect(array('controller'=>null,'action' => $tagstring.'/', $sort_condition));
       }
