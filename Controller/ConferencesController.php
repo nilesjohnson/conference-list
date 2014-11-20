@@ -7,6 +7,7 @@ App::uses('AppController', 'Controller');
  * @property PaginatorComponent $Paginator
  */
 
+
 class ConferencesController extends AppController {
 
 
@@ -18,7 +19,7 @@ class ConferencesController extends AppController {
 
   public $helpers = array('Js', 'Html', 'Text', 'Gcal', 'Display');
 
-  public $components = array('Email', 'RequestHandler', 'Session', 'MathCaptcha', 'Security', 'Cookie');
+  public $components = array('Email', 'RequestHandler', 'Session', 'MathCaptcha', 'Security', 'Cookie', 'Checker');
   
   //Regular ol' $this->paginate() ceases to function when this is declared, but this allows for pagination of different Models within same Controller
   /*
@@ -63,7 +64,6 @@ class ConferencesController extends AppController {
     $this->set('view_title','Upcoming Meetings');
     $this->set('months', $this->months);
     $this->set('sort_condition',$sort_condition);
-
     // default sort conditions
     $order_array =  array('Conference.start_date',
 			  'Conference.end_date',
@@ -77,39 +77,40 @@ class ConferencesController extends AppController {
 
     // remove tag validation so tags are not required
     $this->Conference->Tag->validator()->remove('Tag');
-
+	
     // collect tags from post data
     // then extract the tags and put into array
     // either by Cookie or querystring
     $tagids=null;
+	//first check if we're supposed to be deleting tags
+	if (isset($this->request->query['t0'])){
+		$this->Cookie->delete('tags');
+		return $this->redirect(array('controller'=>null,'action' =>'/'));
+	}
     $cookie=$this->Cookie->read('tags');
     $index_link_array = array('controller' => 'conferences', 'action' => 'index');
-    if (isset($this->request->query['t0']) || isset($cookie)) {
-      if (isset($this->request->query['t0'])){
-	if ($this->request->query['t0'] == '') {
-	  $this->Cookie->delete('tags');
-	  return $this->redirect(array('action' => 'index'));
-	}
-	$i=0;
-	do {
-	  $tagids[$i]=$this->request->query['t'.$i];
-	  $i++;
-	  if ($i>100) break;
-	} while (isset($this->request->query['t'.$i]));
-	//debug($tagids);
-      }
-      else {
-	$tagids=$cookie;
-      }
+    if (isset($this->params['tags']) || isset($cookie)) {
+		if (isset($this->params['tags'])){
+			$tags=explode('-', $this->params['tags']);
+			$this->loadModel('Tag');
+			$this->Tag->recursive=0;
+			$tagids=array();
+			foreach ($tags as $tag){
+				$t=$this->Tag->find('first',array('conditions'=>array('Tag.name LIKE "'.$tag.'%"')));
+				//debug($t);
+				array_push($tagids,$t['Tag']['id']);
+			}
+		}
+    else {
+		$tagids=$cookie;
+    }
       // I opted NOT to use a manual JOIN here because of the dickery with Pagination
       //but rest-assured, this is Dickery nonetheless!
       $tagquery=array();
-      $index_link_array['?'] = array();
       $temp_array = &$tagquery;
       foreach ($tagids as $i => $item) {
 	$temp_array = &$temp_array['OR'];
 	$temp_array['ConferencesTag.tag_id'] =$item;
-	$index_link_array['?']['t'.$i] = $item;
       }
       array_push($display_options['conditions'],$tagquery);
       //$display_options['group'] = 'Conference.id'; // grouping is done manually below
@@ -126,17 +127,23 @@ class ConferencesController extends AppController {
 
     // there are a few ways to do this. We choose to enumerate querystrings so you have bookmarkable tag URLs
     if ($this->request->is('post')) {
-      if (isset($this->request->data['Tag']['Tag']) && !empty($this->request->data['Tag']['Tag'])){
-	$querystring='';
-	foreach ($this->request->data['Tag']['Tag'] as $key=>$val){
-	  $querystring['t'.$key]=$val;
-	}
+    if (isset($this->request->data['Tag']['Tag']) && !empty($this->request->data['Tag']['Tag'])){
+		$tagnames=array();
+		$this->loadModel('Tag',array('recursive'=>0));
+		//$this->Tag->recursive=0;
+		foreach ($this->request->data['Tag']['Tag'] as $tag){
+			$t=$this->Tag->find('first',array('conditions'=>array('Tag.id'=>$tag)));
+				$t=explode('.',$t['Tag']['name']);
+				array_push($tagnames,$t[0]);
+			}
+		$tagstring=implode('-',$tagnames);
+		debug($tagstring);
 	$this->Cookie->write('tags',$this->request->data['Tag']['Tag']);
-	return $this->redirect(array('action' => 'index','?'=>$querystring, $sort_condition));
+	return $this->redirect(array('controller'=>null,'action' => $tagstring.'/', $sort_condition));
       }
       else {
 	$this->Cookie->delete('tags');
-	return $this->redirect(array('action' => 'index'));
+	return $this->redirect(array('controller'=>null,'action' => '/'));
       }
     }
 
@@ -391,12 +398,17 @@ class ConferencesController extends AppController {
     $this->set('countries',$this->countries);
     $this->set('view_title', 'Add');
     //$this->loadModel('CcData');
+    //not sure we even need this now
     $this->loadModel('Tag');
     if (!empty($this->data)) {
       // set model data
       //debug($this->data);  //displays array info
       $this->Conference->set($this->data);
       $this->Tag->set($this->data['Tag']);
+	  
+      //these don't really need separate variables but I did it anyway, feel free to include directly in IF statement
+      $validconf=$this->Checker->conferenceValid($this->data['Conference']);
+      $validtag=$this->Checker->tagValid($this->data['Tag']);
       //$this->ccdata = $this->data['CcData'];
       //$this->CcData->set($this->ccdata);
 
@@ -404,45 +416,11 @@ class ConferencesController extends AppController {
       // test whether conference and tag data validates
 
       // check for invalid conference data
-      if (!($this->Conference->validates($this->data['Conference']))) {
-	//debug($this->Conference->validationErrors); //displays array info
-	foreach (Set::flatten($this->Conference->validationErrors) as $field => $message) {
-	  //debug("field: ".$field." message: ".$message);
-	  $this->Conference->invalidate($field,$message);
-	}
-	$this->Session->setFlash('Please check for errors below.', 'FlashBad');
-	$valid_data_1 = false;
-      }
-      else {
-	$valid_data_1 = true;
-      }
 
-      // when cc To: field nonempty, check for invalid cc data
-      /*
-      if ($this->ccdata['to'] != '' && !($this->CcData->validates($this->ccdata))) {
-	//debug($this->CcData->invalidFields());  //displays array info
-	foreach ($this->CcData->invalidFields() as $field => $message) {
-	  $this->CcData->invalidate($field,$message);
-	}
-	$this->Session->setFlash('Please check for errors below.', 'FlashBad');
-	$valid_data = false;
-      }	
-      */
-
-      // double-check Tags
-      if (!($this->Tag->tagsValidator($this->data['Tag']))) {
-	//debug($this->Tag->invalidFields());
-	$this->Tag->invalidate('Tag','Please supply at least one subject tag.');
-	$valid_data_2 = false;
-      }
-      else {
-	$valid_data_2 = true;
-      }
       //debug($valid_data_2);
 
       // if conference and tag data validates, check for valid captcha
-      if ($valid_data_1 && 
-	  $valid_data_2 && 
+      if ($validtag && $validconf &&
 	  $this->MathCaptcha->validates($this->data['Conference']['captcha'])) {
 	// all good !
 	$this->save_and_send();
@@ -548,6 +526,7 @@ class ConferencesController extends AppController {
     $this->set('countries',$this->countries);
     $tags=$this->Conference->ConferencesTag->Tag->find('list');
     $this->set(compact('tags'));
+    $this->set('edit',1);
     if (empty($this->data)) {
       $this->data = $this->Conference->read();
       $this->request->data['Conference']['passed_key'] = $key;
@@ -557,6 +536,8 @@ class ConferencesController extends AppController {
 	$this->Session->SetFlash('Invalid edit key. (2)','FlashBad');
 	$this->redirect(array('action' => 'index'));
       }
+      //debug('rendering add');
+      $this->render('add');
     } 
     else {
       // check that given key matches key from database
@@ -568,24 +549,16 @@ class ConferencesController extends AppController {
         $this->redirect(array('action' => 'index'));
       }
 
-      // double-check Tags
-      if (!($this->Tag->tagsValidator($this->data['Tag']))) {
-	//debug($this->Tag->invalidFields());
-	$this->Tag->invalidate('Tag','Please supply at least one subject tag.');
-	$valid_data_2 = false;
-      }
-      else {
-	$valid_data_2 = true;
-      }
-      //debug($valid_data_2);
-
-      if ($valid_data_2 && $this->Conference->save($this->data)) {
+      if ($this->Checker->tagValid($this->data['Tag']) && $this->Conference->save($this->data)) {
 	$this->request->data = $this->Conference->read();
 	$Email = $this->prepEmail();
 	$Email->send();
 
 	$this->Session->setFlash('Your conference announcement has been updated.  An email with the new edit/delete links has been sent to the contact address.','FlashGood');
 	$this->redirect(array('action' => 'index'));
+      }
+      else {
+	$this->Session->setFlash('Please check for errors below.', 'FlashBad');
       }
     }
   }
