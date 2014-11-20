@@ -7,9 +7,8 @@
  }); 
  
  $("#ConferenceCountry").select2({
-	placeholder: "Country...",
-	//allowClear: true,
-	width: "100%"
- }); 
- 
+        placeholder: "Country...",
+        //allowClear: true,
+        width: "100%",
+	matcher: function(term, text) { return text.toUpperCase().indexOf(term.toUpperCase())==0; } }); 
  });
