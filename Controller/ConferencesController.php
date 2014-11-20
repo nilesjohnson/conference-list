@@ -60,7 +60,7 @@ class ConferencesController extends AppController {
   }
 
   public function index($sort_condition=Null) {
-    debug($this->loadCountries());
+    //debug($this->loadCountries());
     $this->set('sort_text','Sort by: ');
     $this->set('view_title','Upcoming Meetings');
     $this->set('months', $this->months);
@@ -711,6 +711,7 @@ class ConferencesController extends AppController {
   */
 
   public function loadCountries($file = "test.csv") {
+    // test file not in repo; will add actual data...
     $tmpCountries = array();
     if (($handle = fopen("../webroot/test.csv", "r")) !== FALSE) {
       while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
