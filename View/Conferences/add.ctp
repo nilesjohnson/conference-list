@@ -27,8 +27,10 @@ echo $this->Form->input('Tag', array('label'=>'Subject tags', 'after'=>'Select o
 echo $this->Form->input('contact_name');
 echo $this->Form->input('contact_email', array('after'=>'never displayed publicly; confirmation and edit/delete codes will be sent to this address (or list of addresses)'));
 echo $this->Form->input('description', array('label'=>'Description: <br/><span style="font-size:80%;">Enter text, HTML, or <a href="http://daringfireball.net/projects/markdown/">Markdown</a>.</span>', 'rows' => '10'));
+
+echo '<div class="input"><p>Description Preview:</p><div class="wmd-preview"></div></div>';
+
 if (!isset($edit)) {
-	echo '<div class="input"><p>Description Preview:</p><div class="wmd-preview"></div></div>';
 	echo $this->Form->input('captcha', array('label' => 'Please Enter the Sum of ' . $mathCaptcha, 'after'=>'anti-spam'));
 }
 echo $this->Form->end('Submit');
