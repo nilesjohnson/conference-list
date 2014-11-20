@@ -536,7 +536,7 @@ class ConferencesController extends AppController {
 	$this->Session->SetFlash('Invalid edit key. (2)','FlashBad');
 	$this->redirect(array('action' => 'index'));
       }
-      debug('rendering add');
+      //debug('rendering add');
       $this->render('add');
     } 
     else {
@@ -556,6 +556,9 @@ class ConferencesController extends AppController {
 
 	$this->Session->setFlash('Your conference announcement has been updated.  An email with the new edit/delete links has been sent to the contact address.','FlashGood');
 	$this->redirect(array('action' => 'index'));
+      }
+      else {
+	$this->Session->setFlash('Please check for errors below.', 'FlashBad');
       }
     }
   }
