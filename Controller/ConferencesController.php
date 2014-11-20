@@ -60,7 +60,6 @@ class ConferencesController extends AppController {
   }
 
   public function index($sort_condition=Null) {
-    //debug($this->loadCountries());
     $this->set('sort_text','Sort by: ');
     $this->set('view_title','Upcoming Meetings');
     $this->set('months', $this->months);
@@ -404,7 +403,7 @@ class ConferencesController extends AppController {
 
 
   public function add() {
-    $this->set('countries',$this->countries);
+    $this->set('countries',$this->loadCountries());
     $this->set('view_title', 'Add');
     //$this->loadModel('CcData');
     //not sure we even need this now
@@ -532,7 +531,7 @@ class ConferencesController extends AppController {
     }
     $this->Conference->id = $id;
     $this->loadModel('Tag');
-    $this->set('countries',$this->countries);
+    $this->set('countries',$this->loadCountries());
     $tags=$this->Conference->ConferencesTag->Tag->find('list');
     $this->set(compact('tags'));
     $this->set('edit',1);
@@ -710,13 +709,28 @@ class ConferencesController extends AppController {
   }
   */
 
-  public function loadCountries($file = "test.csv") {
-    // test file not in repo; will add actual data...
+  public function loadCountries($file = "../webroot/files/countries/dist/countries.csv") {
     $tmpCountries = array();
-    if (($handle = fopen("../webroot/test.csv", "r")) !== FALSE) {
-      while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+    $tmpCountries['country'] =  "Country...";
+    if (($handle = fopen($file, "r")) !== FALSE) {
+      //setlocale(LC_CTYPE, "en.UTF16"); // for unicode; seems to be unnecessary
+      $data0 = fgetcsv($handle, 1000, ";");
+      while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {
         $num = count($data);
-	array_push($tmpCountries,$data);
+	$name = split(',',$data[0])[0];
+	if (!array_key_exists($data[10],$tmpCountries)) {
+	  $tmpCountries[$data[10]] = array();
+	}
+	// handle some common special cases
+	if ($name == "United States") {
+	  $tmpCountries[$data[10]]["USA"] = $name;
+	}
+	elseif ($name == "United Kingdom") {
+	  $tmpCountries[$data[10]]["UK"] = $name;
+	}
+	else {
+	  $tmpCountries[$data[10]][$name] = $name;
+	}
         //echo "<p> $num fields in line $row: <br /></p>\n";
       }
       fclose($handle);
@@ -724,7 +738,7 @@ class ConferencesController extends AppController {
     }
   }
 
-  public $countries = array(
+  public $countries_NOTUSED = array(
 			 "" => 'Country...', // value attribte of first element must be empty
 			 "Afganistan" => 'Afghanistan',
 			 "Albania" => 'Albania',
