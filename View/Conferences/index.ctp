@@ -66,6 +66,15 @@ function gcal_link($start,$end,$title,$location) {
   stored in database format so that useful search functions can be
   added as the list grows.</p>
 
+  <h4>Updates (sketch)</h4>
+  <ul>
+    <li>Now filter announcements by subject tags</li>
+    <li>Form for editing announcements is now the same as that for adding new announcements</li>
+    <li>New 'view' page for each announcement, and announcement data in confirmation emails</li>
+    <li>Select boxes improved with select2 (jquery)</li>    
+  </ul>	  
+
+<!--
   <h4>Updates 2014-02-16</h4>
 
   <p>We've upgraded the AlgTop-Conf software to <a
@@ -74,6 +83,7 @@ function gcal_link($start,$end,$title,$location) {
   substantial changes behind the scenes, but (hopefully!) minimal
   changes to the user interface.  If you notice something not working
   properly, please let Niles know.</p>
+-->
 
   <p>Additional update notes are available in the <a href="https://github.com/nilesjohnson/conference-list/commits/master" target="github">commit history</a> (GitHub).</p>
 
