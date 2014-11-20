@@ -60,6 +60,7 @@ class ConferencesController extends AppController {
   }
 
   public function index($sort_condition=Null) {
+    debug($this->loadCountries());
     $this->set('sort_text','Sort by: ');
     $this->set('view_title','Upcoming Meetings');
     $this->set('months', $this->months);
@@ -708,6 +709,19 @@ class ConferencesController extends AppController {
     return $this->redirect(array('action' => 'index'));
   }
   */
+
+  public function loadCountries($file = "test.csv") {
+    $tmpCountries = array();
+    if (($handle = fopen("../webroot/test.csv", "r")) !== FALSE) {
+      while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+        $num = count($data);
+	array_push($tmpCountries,$data);
+        //echo "<p> $num fields in line $row: <br /></p>\n";
+      }
+      fclose($handle);
+      return $tmpCountries;
+    }
+  }
 
   public $countries = array(
 			 "" => 'Country...', // value attribte of first element must be empty
