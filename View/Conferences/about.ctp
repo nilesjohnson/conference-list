@@ -11,23 +11,25 @@ To add an announcement, use the link at the top of the page.  An email address i
 
 <div id="add-message">
 <p>
-Thanks for adding your announcement to AlgTop-Conf; it is now available in the main list:<br/>
-http://www.nilesjohnson.net/algtop-conf/
+Thanks for adding your announcement to AlgTop-Conf.
+The announcement data is copied below, and is also available at:<br/>
+<?php echo $this->Html->url('view/25',true);?>
 </p>
+
 <p>
 If you need to edit or delete your announcement, use the unique edit/delete link:<br/>
-http://www.nilesjohnson.net/algtop-conf/conferences/edit/25/sguoULJI<br/>
+<?php echo $this->Html->url('edit/25/sguoULJI',true);?>
 </p>
 
 <p>
 Note that you will receive new edit/delete links after each update to your announcement.<br/>
 If you have any difficulties, questions, or comments, don't hesitate to contact the curators:
-http://www.nilesjohnson.net/conf-list_2/conferences/about#curators
+<?php echo $this->Html->url('about#curators',true);?>
 </p>
 
 <p>
 best,<br/>
-AlgTop-Conf
+<?php echo Configure::read('site.name');?>
 </p>
 </div>
 
