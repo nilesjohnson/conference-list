@@ -399,16 +399,16 @@ class ConferencesController extends AppController {
     $this->set('view_title', 'Add');
     //$this->loadModel('CcData');
     //not sure we even need this now
-	$this->loadModel('Tag');
+    $this->loadModel('Tag');
     if (!empty($this->data)) {
       // set model data
       //debug($this->data);  //displays array info
       $this->Conference->set($this->data);
       $this->Tag->set($this->data['Tag']);
 	  
-	  //these don't really need separate variables but I did it anyway, feel free to include directly in IF statement
-	  $validconf=$this->Checker->conferenceValid($this->data['Conference']);
-	  $validtag=$this->Checker->tagValid($this->data['Tag']);
+      //these don't really need separate variables but I did it anyway, feel free to include directly in IF statement
+      $validconf=$this->Checker->conferenceValid($this->data['Conference']);
+      $validtag=$this->Checker->tagValid($this->data['Tag']);
       //$this->ccdata = $this->data['CcData'];
       //$this->CcData->set($this->ccdata);
 
@@ -526,7 +526,7 @@ class ConferencesController extends AppController {
     $this->set('countries',$this->countries);
     $tags=$this->Conference->ConferencesTag->Tag->find('list');
     $this->set(compact('tags'));
-	$this->set('edit',1);
+    $this->set('edit',1);
     if (empty($this->data)) {
       $this->data = $this->Conference->read();
       $this->request->data['Conference']['passed_key'] = $key;
@@ -536,6 +536,8 @@ class ConferencesController extends AppController {
 	$this->Session->SetFlash('Invalid edit key. (2)','FlashBad');
 	$this->redirect(array('action' => 'index'));
       }
+      debug('rendering add');
+      $this->render('add');
     } 
     else {
       // check that given key matches key from database
@@ -546,7 +548,6 @@ class ConferencesController extends AppController {
         $this->Session->SetFlash('Invalid edit key. (1)','FlashBad');
         $this->redirect(array('action' => 'index'));
       }
-	$this->render('add');
 
       if ($this->Checker->tagValid($this->data['Tag']) && $this->Conference->save($this->data)) {
 	$this->request->data = $this->Conference->read();
