@@ -403,7 +403,7 @@ class ConferencesController extends AppController {
 
 
   public function add() {
-    $this->set('countries',$this->countries);
+    $this->set('countries',$this->loadCountries());
     $this->set('view_title', 'Add');
     //$this->loadModel('CcData');
     //not sure we even need this now
@@ -531,7 +531,7 @@ class ConferencesController extends AppController {
     }
     $this->Conference->id = $id;
     $this->loadModel('Tag');
-    $this->set('countries',$this->countries);
+    $this->set('countries',$this->loadCountries());
     $tags=$this->Conference->ConferencesTag->Tag->find('list');
     $this->set(compact('tags'));
     $this->set('edit',1);
@@ -709,7 +709,36 @@ class ConferencesController extends AppController {
   }
   */
 
-  public $countries = array(
+  public function loadCountries($file = "../webroot/files/countries/dist/countries.csv") {
+    $tmpCountries = array();
+    $tmpCountries['country'] =  "Country...";
+    if (($handle = fopen($file, "r")) !== FALSE) {
+      //setlocale(LC_CTYPE, "en.UTF16"); // for unicode; seems to be unnecessary
+      $data0 = fgetcsv($handle, 1000, ";");
+      while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {
+        $num = count($data);
+	$name = split(',',$data[0])[0];
+	if (!array_key_exists($data[10],$tmpCountries)) {
+	  $tmpCountries[$data[10]] = array();
+	}
+	// handle some common special cases
+	if ($name == "United States") {
+	  $tmpCountries[$data[10]]["USA"] = $name;
+	}
+	elseif ($name == "United Kingdom") {
+	  $tmpCountries[$data[10]]["UK"] = $name;
+	}
+	else {
+	  $tmpCountries[$data[10]][$name] = $name;
+	}
+        //echo "<p> $num fields in line $row: <br /></p>\n";
+      }
+      fclose($handle);
+      return $tmpCountries;
+    }
+  }
+
+  public $countries_NOTUSED = array(
 			 "" => 'Country...', // value attribte of first element must be empty
 			 "Afganistan" => 'Afghanistan',
 			 "Albania" => 'Albania',

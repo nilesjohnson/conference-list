@@ -215,6 +215,12 @@ The data for each announcement is stored in a database, so search functionality 
 </p>
 </div>
 
+<h2>Countries List</h2>
+<div>
+<p>The list of countries provided when adding new announcements is from the <?php echo $this->Html->link('World countries','https://github.com/mledoze/countries');?> database, licensed under the <?php echo $this->Html->link('Open Database License 1.0','http://opendatacommons.org/licenses/odbl/1.0/')?>.
+</p>
+</div>
+
 <h2>Source Code</h2>
 <div>
 <p>
