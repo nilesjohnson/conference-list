@@ -20,14 +20,14 @@ class ConferencesController extends AppController {
   public $helpers = array('Js', 'Html', 'Text', 'Gcal', 'Display');
 
   public $components = array('Email', 'RequestHandler', 'Session', 'Paginator', 'MathCaptcha', 'Security', 'Cookie', 'Checker');
-  
-  //Regular ol' $this->paginate() ceases to function when this is declared, but this allows for pagination of different Models within same Controller
 
-	public $paginate = array(
+  //Regular ol' $this->paginate() ceases to function when this is declared, but this allows for pagination of different Models within same Controller
+//and for some reason paginating Conferences gives an Internal Error on this... Not sure why
+  /*	public $paginate = array(
 		'Conference' => array (),
 		'ConferencesTag'=>array()
 	   );
-
+	   */
 
   public function beforeFilter() {
     parent::beforeFilter(); //you're supposed to always have this, don't ask me why
@@ -65,10 +65,11 @@ class ConferencesController extends AppController {
     $this->set('months', $this->months);
     $this->set('sort_condition',$sort_condition);
     // default sort conditions
-    $order_array =  array('Conference.start_date',
-			  'Conference.end_date',
-			  'Conference.title',
-			  'Tag.name',
+    $order_array =  array('Conference.start_date'
+			  //'Conference.end_date',
+			//  'Conference.title'
+			  //demons are invoked when using HABTM and Pagination (hence the manual join that has to take place)
+			  //'Tag.name',
 			  );
     $conditions = array (
 			 "Conference.end_date >" => date('Y-m-d', strtotime("-1 week"))
@@ -80,7 +81,7 @@ class ConferencesController extends AppController {
 	
     // collect tags from post data
     // then extract the tags and put into array
-    // either by Cookie or querystring
+    // either by Cookie or passed parameter
     $tagids=null;
 
     //first check if we're supposed to be deleting tags
@@ -111,28 +112,41 @@ class ConferencesController extends AppController {
       else {
 	$tagids=$cookie;
       }
-      // I opted NOT to use a manual JOIN here because of the dickery with Pagination
-      //but rest-assured, this is Dickery nonetheless!
-      $tagquery=array();
-      $temp_array = &$tagquery;
-      foreach ($tagids as $i => $item) {
+      //recursve array to build nested 'OR' list
+     $tagquery=array();
+     $temp_array = &$tagquery;
+     foreach ($tagids as $i => $item) {
 	$temp_array = &$temp_array['OR'];
 	$temp_array['ConferencesTag.tag_id'] =$item;
       }
       array_push($display_options['conditions'],$tagquery);
-      //$display_options['group'] = 'Conference.id'; // grouping is done manually below
-      //$this->Paginator->settings = array('conditions' => $tagquery);
-      //$conferences=$this->paginate('ConferencesTag');
-      $active_model = $this->Conference->ConferencesTag;
-      $regroup = true;
     }
-    else {
-      //otherwise do normal call
-      $active_model = $this->Conference->ConferencesTag; //no, always search join table, since we want to display tags with conferences
-      $regroup = false;
-    }
+	//setting a very low limit for testing
+	$display_options['limit']=3;
+	//manual join so aforementioned recursive array actually works
+	$display_options['joins'] = array(
+            array(
+                'table' => 'conferences_tags',
+                'alias' => 'ConferencesTag',
+                'type' => 'LEFT OUTER',
+                'conditions' => array("Conference.id = ConferencesTag.conference_id"),
+				//'group'=>'ConferencesTag.conference_id'
+            )
+      );
+	//so conferences with multiple tags do not repeat, also this seems the only way to fix paginator  
+	$display_options['group']= array('ConferencesTag.conference_id');
+	$this->paginate = $display_options;
+	$conferences=$this->paginate();
+    $tags=$this->Conference->Tag->find('list');
+	
+    $this->set(compact('conferences', 'tags', 'tagids'));
 
-    if ($this->request->is('post')) {
+    // process RSS feed      
+    if( $this->RequestHandler->isRss() ){
+      $this->set(compact('conferences'));
+    }
+	
+	if ($this->request->is('post')) {
       // read tags from form, or delete cookie
       if (isset($this->request->data['Tag']['Tag']) && !empty($this->request->data['Tag']['Tag'])){
 	$tagnames=array();
@@ -153,78 +167,6 @@ class ConferencesController extends AppController {
 	$this->Cookie->delete('tags');
 	return $this->redirect(array('controller'=>null,'action' => '/'));
       }
-    }
-
-
-    // set inputs for find/paginate based on $sort_condition
-    // and update search links
-    if ($sort_condition == 'country') {
-      // determine order_array and subsort function for this sort_condition
-      array_unshift($display_options['order'],'Conference.country');
-      //array_push($index_link_array,'');
-      $this->set('search_links', array('Date' => $index_link_array));
-    }
-    elseif ($sort_condition == 'all') {
-      $this->set('sort_text','');
-      $this->set('view_title','All Meetings');
-      unset($display_options['conditions']['Conference.end_date >']);
-      //array_push($index_link_array,'country');
-      $this->set('search_links', array('Main List' => $index_link_array));
-    }
-    else {
-      // determine order_array and subsort function for default sort_condition
-      $this->set('search_links', array('Country' => array_merge($index_link_array,array('country'))));
-    }
-
-    //debug($display_options);
-    $this->set('past_link', array_merge($index_link_array,array('all')));
-    $conferencesTagsRaw = $active_model->find('all', $display_options);
-
-    // do manual regrouping
-    // surely this could be done more effeciently by
-    // some kind of join and sql GROUP BY . . . but I couldn't
-    // figure out how.
-    $conferences = array();
-    $conferencesTags = array();
-    $prev_id = -1;
-    foreach ($conferencesTagsRaw as $ct) {
-      // we are using the fact that we can find duplicate conferences
-      // by checking ids of previous entries
-      // because in this array entries with the same conference data
-      // will be next to eachother
-      $id = $ct['Conference']['id'];
-      if ($id != $prev_id) {
-	array_push($conferences,$ct['Conference']);
-	$conferencesTags[$id] = array();
-	$tagsForThisConference = $this->Conference->ConferencesTag->find('all',
-									 array('conditions' => array('ConferencesTag.conference_id' => $id),
-									       'fields' => array('Tag.id','Tag.name')));
-	foreach ($tagsForThisConference as $item) {
-	  array_push($conferencesTags[$id],$item['Tag']);
-	}
-	//array($ct['Tag']);
-	$prev_id = $id;
-      }
-      else {
-	//array_push($conferencesTags[$id],$ct['Tag']);
-      }
-    }
-
-    $this->set('conferences', $conferences);
-    $this->set('conferencesTags',$conferencesTags);
-
-    // currently NOT using paginator
-    //using the paginator instead, it takes the same conditions
-    //$this->Paginator->settings = array('conditions' => $conditions);
-    //$conferences=$this->paginate('Conference');
-	
-    $tags=$this->Conference->Tag->find('list');
-	
-    $this->set(compact('conferences', 'tags', 'tagids'));
-
-    // process RSS feed      
-    if( $this->RequestHandler->isRss() ){
-      $this->set(compact('conferences'));
     }
   }
 

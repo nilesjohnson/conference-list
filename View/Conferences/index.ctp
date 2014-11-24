@@ -101,13 +101,30 @@ function gcal_link($start,$end,$title,$location) {
 <h1><?php echo $view_title; ?></h1>
 
 <div>
-  <?php echo $sort_text ?>
-  <?php foreach ($search_links as $name => $array): ?>
-  <?php echo $this->Html->link($name, $array)." "; ?>
-  <?php endforeach; ?>
+<?php
+//just added some basic Paginator sorts to give you an idea
+echo '<div>';
+
+//notice clicking this will change from ASC to DESC it also changes the class name so you can draw a little arrow. Check out the default CakePHP CSS you'll see it
+echo $this->Paginator->sort('country').'<br/>';
+echo $this->Paginator->sort('start_date').'<br/>';
+
+
+	echo $this->Paginator->counter(array(
+	'format' => __('Page {:page} of {:pages}, showing {:current} records out of {:count} total, starting on record {:start}, ending on {:end}')
+	)).'<br />';
+
+		echo $this->Paginator->prev('< ' . __('previous'), array(), null, array('class' => 'prev disabled')).' ';
+		echo $this->Paginator->numbers(array('separator' => ' | '));
+		echo ' '.$this->Paginator->next(__('next') . ' >', array(), null, array('class' => 'next disabled'));
+
+
+echo '</div>';
+
+?>
 
   <div style="float:right;">
-    <?php echo $this->Html->link('Include Past',$past_link)?>
+    <?php echo $this->Html->link('Include Past',array('action'=>'index','?'=>'past=true'))?>
     |
     <?php echo $this->Html->link('RSS','/conferences/index.rss');?>
   </div>
@@ -115,67 +132,20 @@ function gcal_link($start,$end,$title,$location) {
 
 
 
-<?php 
 
-//just added this to show basic Paginator function
-/*
-echo '<div>';
-
-//notice clicking this will change from ASC to DESC it also changes the class name so you can draw a little arrow. Check out the default CakePHP CSS you'll see it
-echo $this->Paginator->sort('country').'<br/>';
-
-
-	echo $this->Paginator->counter(array(
-	'format' => __('Page {:page} of {:pages}, showing {:current} records out of {:count} total, starting on record {:start}, ending on {:end}')
-	)).'<br />';
-
-		echo $this->Paginator->prev('< ' . __('previous'), array(), null, array('class' => 'prev disabled'));
-		echo $this->Paginator->numbers(array('separator' => ''));
-		echo $this->Paginator->next(__('next') . ' >', array(), null, array('class' => 'next disabled'));
-
-
-echo '</div>';
-*/
-
-//
-
-?>
 
 
 <?php $curr_subsort = Null; $new_subsort = Null; $subsort_counter = 0; echo '<div id="subsort_start">'; ?>
 <?php 
 $site_url = Configure::read('site.home');
 $site_name = Configure::read('site.name');
-
-//debug($conferences);
-//debug($conferencesTags);
 foreach ($conferences as $conference):
-if ($sort_condition == Null || $sort_condition == 'all') {
-  $datearray = explode("-",$conference['start_date']); 
-  $new_subsort =  $months[(int)$datearray[1]]." ".$datearray[0]; 
- }
-if ($sort_condition == 'country') {
-  $new_subsort = $conference['country'];
- }
-if ($new_subsort != $curr_subsort) {
-  echo '</div>';
-  $curr_subsort = $new_subsort;
-  echo '<div class="subsort' . $subsort_counter . '">';
-  echo '<h2>' . $new_subsort . '</h2>';
-  $subsort_counter += 1; 
-  $subsort_counter = $subsort_counter % 2;
- }
- 
- 
-
-
 ?>
-
 <h3 class="title">
 <?php echo '<a href="'.
-   $conference['homepage'].
+   $conference['Conference']['homepage'].
    '">'.
-   $conference['title'].
+   $conference['Conference']['title'].
    '</a>'
    ;?>
 </h3>
@@ -184,7 +154,7 @@ if ($new_subsort != $curr_subsort) {
 <div class="subject-tags">
 <?php
   //debug($conference);
-  foreach($conferencesTags[$conference['id']] as $tag) {
+  foreach($conference['Tag'] as $tag) {
     echo '<span class="tag">'.$tag['name']."</span>\n";
   }
 ?>
@@ -193,13 +163,13 @@ if ($new_subsort != $curr_subsort) {
 <div class="calendars">
 <?php  echo
   $this->Html->link('Google calendar',
-  $this->Gcal->gcal_url($conference['id'], 
-                               $conference['start_date'], 
-                               $conference['end_date'],
-                               $conference['title'],
-                               $conference['city'],
-                               $conference['country'],
-                               $conference['homepage'],
+  $this->Gcal->gcal_url($conference['Conference']['id'], 
+                               $conference['Conference']['start_date'], 
+                               $conference['Conference']['end_date'],
+                               $conference['Conference']['title'],
+                               $conference['Conference']['city'],
+                               $conference['Conference']['country'],
+                               $conference['Conference']['homepage'],
 			       $site_url,
 			       $site_name
                                ),
@@ -207,19 +177,19 @@ if ($new_subsort != $curr_subsort) {
 
 echo
   $this->Html->link('iCalendar .ics',
-  array('action'=>'ical', $conference['id']),
+  array('action'=>'ical', $conference['Conference']['id']),
   array('escape' => false,'class'=>'ics button'));
 ?>
 </div>
 
 <div class="dates">
-   <?php echo $conference['start_date']." <small>through</small> ".$conference['end_date'];?>
+   <?php echo $conference['Conference']['start_date']." <small>through</small> ".$conference['Conference']['end_date'];?>
 </div>
 
 <?php
-      if (!empty($conference['institution'])) {
+      if (!empty($conference['Conference']['institution'])) {
       	 echo "<div class=\"location\">";
-      	 echo $conference['institution'];
+      	 echo $conference['Conference']['institution'];
 	 echo "</div>";
       }
 
@@ -227,44 +197,38 @@ echo
 
 <div class="location">
 <?php 
-      echo $conference['city']."; ".$conference['country'];
+      echo $conference['Conference']['city']."; ".$conference['Conference']['country'];
 ?>
 </div>
 
 <div class="action">
-<a  id="description_<?php echo $conference['id'];?>_plus" onclick="
-   document.getElementById('description_<?php echo $conference['id'];?>').style.display='block'; 
-   document.getElementById('description_<?php echo $conference['id'];?>_plus').style.display='none'; 
-   document.getElementById('description_<?php echo $conference['id'];?>_minus').style.display='inline'; 
+<a  id="description_<?php echo $conference['Conference']['id'];?>_plus" onclick="
+   document.getElementById('description_<?php echo $conference['Conference']['id'];?>').style.display='block'; 
+   document.getElementById('description_<?php echo $conference['Conference']['id'];?>_plus').style.display='none'; 
+   document.getElementById('description_<?php echo $conference['Conference']['id'];?>_minus').style.display='inline'; 
    return false;" href="#">Description</a>
-<a  id="description_<?php echo $conference['id'];?>_minus" onclick="
-   document.getElementById('description_<?php echo $conference['id'];?>').style.display='none'; 
-   document.getElementById('description_<?php echo $conference['id'];?>_plus').style.display='inline'; 
-   document.getElementById('description_<?php echo $conference['id'];?>_minus').style.display='none'; 
+<a  id="description_<?php echo $conference['Conference']['id'];?>_minus" onclick="
+   document.getElementById('description_<?php echo $conference['Conference']['id'];?>').style.display='none'; 
+   document.getElementById('description_<?php echo $conference['Conference']['id'];?>_plus').style.display='inline'; 
+   document.getElementById('description_<?php echo $conference['Conference']['id'];?>_minus').style.display='none'; 
    return false;" href="#" style="display:none;"> - Description</a>
  | 
 <?php echo 
   $this->Html->link('View entry', 
-  array('action'=>'view', $conference['id']));?>
-<!--
- | 
-<?php /* echo 
-  $this->Html->link('Edit', 
-  array('action'=>'edit', $conference['id'], $conference['edit_key'])); /**/?>
--->
+  array('action'=>'view', $conference['Conference']['id']));?>
 
 </div>
 
 <div class="conference_minor" id="description_<?php echo $conference['id']?>">
-<p>Meeting Type: <?php echo $conference['meeting_type']?></p>
-<p>Subject Area: <?php echo $conference['subject_area']?></p>
+<p>Meeting Type: <?php echo $conference['Conference']['meeting_type']?></p>
+<p>Subject Area: <?php echo $conference['Conference']['subject_area']?></p>
 <p>Contact: <?php echo 
 !$conference['contact_name'] ? 'see conference website' : $conference['contact_name']?></p>
 
 
 <h3>Description</h3>
 <div class="description"><?php echo 
-!$conference['description'] ? 'none' : $conference['description']
+!$conference['description'] ? 'none' : $conference['Conference']['description']
 ?></div>
 </div>
 
@@ -277,12 +241,3 @@ echo
 <?php endforeach; ?>
 
 </div>
-
-
-
-
-
-
-
-
-
