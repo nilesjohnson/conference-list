@@ -130,7 +130,6 @@ class ConferencesController extends AppController {
                 'alias' => 'ConferencesTag',
                 'type' => 'LEFT OUTER',
                 'conditions' => array("Conference.id = ConferencesTag.conference_id"),
-				//'group'=>'ConferencesTag.conference_id'
             )
       );
 	//so conferences with multiple tags do not repeat, also this seems the only way to fix paginator  
