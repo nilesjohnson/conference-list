@@ -71,9 +71,9 @@ class ConferencesController extends AppController {
 			  //demons are invoked when using HABTM and Pagination (hence the manual join that has to take place)
 			  //'Tag.name',
 			  );
-    $conditions = array (
-			 "Conference.end_date >" => date('Y-m-d', strtotime("-1 week"))
-			 );
+	
+	$conditions=array();
+	if (!isset($this->request->query['past'])) $conditions = array ("Conference.end_date >" => date('Y-m-d', strtotime("-1 week")));
     $display_options = array('conditions' => $conditions, 'order' => $order_array);    
 
     // remove tag validation so tags are not required
