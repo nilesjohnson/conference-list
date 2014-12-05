@@ -133,12 +133,38 @@ echo '</div>';
 
 
 
-<?php $curr_subsort = Null; $new_subsort = Null; $subsort_counter = 0; echo '<div id="subsort_start">'; ?>
 <?php 
 $site_url = Configure::read('site.home');
 $site_name = Configure::read('site.name');
+
+// display headings for month or country
+$sort_condition = array_keys($this->Paginator->params()['order'])[0];
+$curr_subsort = Null; 
+$new_subsort = Null; 
+$subsort_counter = 0; 
+
+echo '<div id="subsort_start">';
+
 foreach ($conferences as $conference):
+
+// display headings for month or country
+if ($sort_condition == 'Conference.start_date') {
+  $datearray = explode("-",$conference['Conference']['start_date']); 
+  $new_subsort =  $months[(int)$datearray[1]]." ".$datearray[0]; 
+ }
+if ($sort_condition == 'Conference.country') {
+  $new_subsort = $conference['Conference']['country'];
+ }
+if ($new_subsort != $curr_subsort) {
+  echo '</div>';
+  $curr_subsort = $new_subsort;
+  echo '<div class="subsort' . $subsort_counter . '">';
+  echo '<h2>' . $new_subsort . '</h2>';
+  $subsort_counter += 1; 
+  $subsort_counter = $subsort_counter % 2;
+ }
 ?>
+
 <h3 class="title">
 <?php echo '<a href="'.
    $conference['Conference']['homepage'].
