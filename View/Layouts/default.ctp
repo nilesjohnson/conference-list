@@ -28,7 +28,7 @@ echo $this->Html->script('datepicker') ."\n";  //configuration for conflist app
 // select2
 //echo $this->Html->css('select2') ."\n";
 echo $this->Html->css('http://cdn.jsdelivr.net/select2/3.4.8/select2.css') ."\n";
-echo $this->Html->script('jquery.select-to-autocomplete.js');
+//echo $this->Html->script('select2');
 //echo $this->Html->script('http://cdn.jsdelivr.net/select2/3.4.8/select2.js') ."\n"; 
 echo $this->Html->script('http://cdn.jsdelivr.net/select2/3.4.8/select2.min.js') ."\n"; 
 echo $this->Html->script('select2_fields') ."\n";  //configuration for conflist app

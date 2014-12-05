@@ -1,7 +1,5 @@
 //this is for all the select2 boxes . . very easy
 $(document).ready(function() {
-
-
  var sortByMatchIndex;
  $sortByMatchIndex = function(results, container, query) {
      if (query.term) {
@@ -14,7 +12,7 @@ $(document).ready(function() {
      }
      return results;
  };
- 
+
 
  $("#TagTag").select2({
 	placeholder: "Select subject tags",
@@ -23,8 +21,7 @@ $(document).ready(function() {
         sortResults: $sortByMatchIndex
  }); 
  
- //this was using select2
- /*$("#ConferenceCountry").select2({
+ $("#ConferenceCountry").select2({
         placeholder: "Country...",
         //allowClear: true,
         width: "100%",
@@ -33,9 +30,5 @@ $(document).ready(function() {
 	},
 	sortResults: $sortByMatchIndex
 
- }); */
- 
- //this uses the nicer library
- $('#ConferenceCountry').selectToAutocomplete();
- 
+ }); 
 });
