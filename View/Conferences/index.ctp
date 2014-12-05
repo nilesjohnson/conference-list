@@ -133,8 +133,6 @@ echo '</div>';
 
 
 
-
-
 <?php $curr_subsort = Null; $new_subsort = Null; $subsort_counter = 0; echo '<div id="subsort_start">'; ?>
 <?php 
 $site_url = Configure::read('site.home');

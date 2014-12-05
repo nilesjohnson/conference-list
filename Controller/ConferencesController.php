@@ -65,15 +65,17 @@ class ConferencesController extends AppController {
     $this->set('months', $this->months);
     $this->set('sort_condition',$sort_condition);
     // default sort conditions
-    $order_array =  array('Conference.start_date'
-			  //'Conference.end_date',
-			//  'Conference.title'
+    $order_array =  array('Conference.start_date' => 'asc',
+			  'Conference.end_date' => 'asc',
+			  'Conference.title' => 'asc'
 			  //demons are invoked when using HABTM and Pagination (hence the manual join that has to take place)
 			  //'Tag.name',
 			  );
 	
-	$conditions=array();
-	if (!isset($this->request->query['past'])) $conditions = array ("Conference.end_date >" => date('Y-m-d', strtotime("-1 week")));
+    $conditions=array();
+    if (!isset($this->request->query['past'])) {
+      $conditions = array ("Conference.end_date >" => date('Y-m-d', strtotime("-1 week")));
+    }
     $display_options = array('conditions' => $conditions, 'order' => $order_array);    
 
     // remove tag validation so tags are not required
@@ -122,7 +124,7 @@ class ConferencesController extends AppController {
       array_push($display_options['conditions'],$tagquery);
     }
 	//setting a very low limit for testing
-	$display_options['limit']=3;
+	$display_options['limit']=10;
 	//manual join so aforementioned recursive array actually works
 	$display_options['joins'] = array(
             array(
@@ -135,9 +137,10 @@ class ConferencesController extends AppController {
 	//so conferences with multiple tags do not repeat, also this seems the only way to fix paginator  
 	$display_options['group']= array('ConferencesTag.conference_id');
 	$this->paginate = $display_options;
-	$conferences=$this->paginate();
+	//$this->paginate['order'] = $order_array;
+	//debug($this->paginate);
+	$conferences=$this->Paginator->paginate();
     $tags=$this->Conference->Tag->find('list');
-	
     $this->set(compact('conferences', 'tags', 'tagids'));
 
     // process RSS feed      
