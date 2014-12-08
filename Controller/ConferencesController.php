@@ -92,7 +92,7 @@ class ConferencesController extends AppController {
       return $this->redirect(array('controller'=>null,'action' =>'/'));
     }
     $cookie=$this->Cookie->read('tags');
-    $index_link_array = array('controller' => 'conferences', 'action' => 'index');
+    //$index_link_array = array('controller' => 'conferences', 'action' => 'index');
     if (isset($this->params['tags']) || isset($cookie)) {
       if (isset($this->params['tags'])){
 	$tags=explode('-', $this->params['tags']);

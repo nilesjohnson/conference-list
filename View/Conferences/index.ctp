@@ -243,16 +243,16 @@ echo
 
 </div>
 
-<div class="conference_minor" id="description_<?php echo $conference['id']?>">
+<div class="conference_minor" id="description_<?php echo $conference['Conference']['id']?>">
 <p>Meeting Type: <?php echo $conference['Conference']['meeting_type']?></p>
 <p>Subject Area: <?php echo $conference['Conference']['subject_area']?></p>
 <p>Contact: <?php echo 
-!$conference['contact_name'] ? 'see conference website' : $conference['contact_name']?></p>
+!$conference['Conference']['contact_name'] ? 'see conference website' : $conference['Conference']['contact_name']?></p>
 
 
 <h3>Description</h3>
 <div class="description"><?php echo 
-!$conference['description'] ? 'none' : $conference['Conference']['description']
+!$conference['Conference']['description'] ? 'none' : $conference['Conference']['description']
 ?></div>
 </div>
 
