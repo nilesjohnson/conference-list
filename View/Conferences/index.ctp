@@ -124,7 +124,7 @@ echo '</div>';
 ?>
 
   <div style="float:right;">
-    <?php echo $this->Html->link('Include Past',array('action'=>'index','?'=>'past=true'))?>
+    <?php echo $this->Html->link('Show Past',array('action'=>'index','?'=>'past=true'))?>
     |
     <?php echo $this->Html->link('RSS','/conferences/index.rss');?>
   </div>
@@ -230,16 +230,16 @@ echo
    document.getElementById('description_<?php echo $conference['Conference']['id'];?>').style.display='block'; 
    document.getElementById('description_<?php echo $conference['Conference']['id'];?>_plus').style.display='none'; 
    document.getElementById('description_<?php echo $conference['Conference']['id'];?>_minus').style.display='inline'; 
-   return false;" href="#">Description</a>
+   return false;" href="#">(+) Description</a>
 <a  id="description_<?php echo $conference['Conference']['id'];?>_minus" onclick="
    document.getElementById('description_<?php echo $conference['Conference']['id'];?>').style.display='none'; 
    document.getElementById('description_<?php echo $conference['Conference']['id'];?>_plus').style.display='inline'; 
    document.getElementById('description_<?php echo $conference['Conference']['id'];?>_minus').style.display='none'; 
-   return false;" href="#" style="display:none;"> - Description</a>
+   return false;" href="#" style="display:none;">(-) Description</a>
  | 
 <?php echo 
   $this->Html->link('View entry', 
-  array('action'=>'view', $conference['Conference']['id']));?>
+  array('action'=>'view', $conference['Conference']['id']), array('target' => 'view_blank'));?>
 
 </div>
 

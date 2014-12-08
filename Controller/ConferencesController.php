@@ -76,6 +76,9 @@ class ConferencesController extends AppController {
     if (!isset($this->request->query['past'])) {
       $conditions = array ("Conference.end_date >" => date('Y-m-d', strtotime("-1 week")));
     }
+    else {
+      $this->set('view_title','All Meetings');
+    }
     $display_options = array('conditions' => $conditions, 'order' => $order_array);    
 
     // remove tag validation so tags are not required
