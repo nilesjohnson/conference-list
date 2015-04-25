@@ -107,8 +107,10 @@ function gcal_link($start,$end,$title,$location) {
   <?php endforeach; ?>
 
   <div style="float:right;">
+<!--
     <?php echo $this->Html->link('Include Past',$past_link)?>
     |
+-->
     <?php echo $this->Html->link('RSS','/conferences/index.rss');?>
   </div>
 </div>
