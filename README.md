@@ -39,6 +39,28 @@ public lists (e.g. math conferences).  Its basic functions are:
 The application is based on the Cake PHP framework (version 2.4.5):  http://cakephp.org/
 
 
+CHANGELOG
+---------
+
+### v. 2.1 ###
+
+* Now filter announcements by subject tags
+
+* Form for editing announcements is now the same as that for adding
+  new announcements
+
+* New 'view' page for each announcement, and announcement data in
+  confirmation emails
+
+* Select boxes improved with select2 (jquery)
+
+* Links to sort by country or show past announcements have been
+  removed as these features are rarely used and are incompatible with
+  the subject tags.  If you would like to see these features
+  reimplemented, please let Niles know!
+
+
+
 CONFIGURATION
 -------------
 
