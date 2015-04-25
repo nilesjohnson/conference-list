@@ -101,11 +101,13 @@ function gcal_link($start,$end,$title,$location) {
 <h1><?php echo $view_title; ?></h1>
 
 <div>
+<!--
   <?php echo $sort_text ?>
   <?php foreach ($search_links as $name => $array): ?>
   <?php echo $this->Html->link($name, $array)." "; ?>
   <?php endforeach; ?>
-
+-->
+  &nbsp;
   <div style="float:right;">
 <!--
     <?php echo $this->Html->link('Include Past',$past_link)?>
