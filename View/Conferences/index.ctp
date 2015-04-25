@@ -38,7 +38,7 @@ function gcal_link($start,$end,$title,$location) {
 <?php
   echo $this->Form->create('Conference');
   //the multi-select happens magically because of the HABTM and the variable $tags
-  echo $this->Form->input('Tag',array('label'=>'Filter by subject tags','value'=>$tagids));
+  echo $this->Form->input('Tag',array('label'=>'Filter by arxiv subject tags','value'=>$tagids));
   //disables the SecurityComponent
   //$this->Form->unlockField('Tag');
 

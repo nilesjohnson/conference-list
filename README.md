@@ -3,11 +3,11 @@ Conference List Web App
 
 https://github.com/nilesjohnson/conference-list
 
-version 2.0
+version 2.1
 
-March 2014
+MM YYYY [in development!]
 
-Copyright (C) 2009--2014 Niles Johnson <http://www.nilesjohnson.net>
+Copyright (C) 2009--2015 Niles Johnson <http://www.nilesjohnson.net>
 
 Licensed under GNU GPL v.3 or later.  See LICENSE.txt for a copy of
 the license.
@@ -42,7 +42,7 @@ The application is based on the Cake PHP framework (version 2.4.5):  http://cake
 CHANGELOG
 ---------
 
-### v. 2.1 ###
+### v. 2.1 (development) ###
 
 * Now filter announcements by subject tags
 
