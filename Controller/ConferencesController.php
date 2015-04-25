@@ -405,6 +405,14 @@ class ConferencesController extends AppController {
   public function add() {
     $this->set('countries',$this->loadCountries());
     $this->set('view_title', 'Add');
+    $tagids=$this->Cookie->read('tags');
+    if (isset($tagids)) {
+      $this->set('tagids',$tagids);
+    } 
+    else {
+      $this->set('tagids',['4']);
+    }
+
     //$this->loadModel('CcData');
     //not sure we even need this now
     $this->loadModel('Tag');
