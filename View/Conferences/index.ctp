@@ -35,12 +35,13 @@ function gcal_link($start,$end,$title,$location) {
 
 <div id="search_links">
 
+<!--
 <?php
   echo $this->Form->create('Conference');
   //the multi-select happens magically because of the HABTM and the variable $tags
   echo $this->Form->input('Tag',array('label'=>'Filter by arxiv subject tags','value'=>$tagids));
   //disables the SecurityComponent
-  //$this->Form->unlockField('Tag');
+  $this->Form->unlockField('Tag');
 
   echo "<div><p>Click or type to select tags. Last tag search is saved in a cookie.</p><p>";
   echo "</p></div>";
@@ -50,7 +51,16 @@ function gcal_link($start,$end,$title,$location) {
   echo "<p style='margin-top:10px;'>".$this->Html->link('Delete subject filter', array('controller' => 'conferences', 'action'=>'index', '?'=>array('t0' => '')), array('class' => 'ics button'))."</p>\n";
   echo $this->Form->end();
 ?>
+-->
+</div>
 
+<div style="float:right">
+<ul>
+<?php foreach ($tags as $id => $tag): 
+$t = substr($tag,0,2)?>
+<li><a href="/<?php echo $t;?>"><?php echo $tag;?></a></li>
+<?php endforeach;?>
+</ul>
 </div>
 
 
