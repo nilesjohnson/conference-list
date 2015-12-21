@@ -52,7 +52,7 @@ class ConferencesController extends AppController {
       }
     }
     if ($type == 'csrf') {
-      throw new BadRequestException('CSRF token is either expired or corrupted.');
+      throw new BadRequestException('CSRF token is either expired or corrupted.  The CSRF token is a browser cookie which prevents certain types of web form abuse.  This cookie expires on use, and must be set for you to submit forms on this site.',500);
     }
     else {
       throw new BadRequestException('Unknown security error: request has been black-holed');
