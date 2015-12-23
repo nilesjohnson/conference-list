@@ -57,10 +57,12 @@ echo Configure::read('site.analytics');
       <?php echo $this->Html->link('About',array('controller' =>
      'conferences', 'action' => 'about'))?>
 
+<!--
       <div id="admin_contact">
 	Trouble? Comments? 
 	<?php echo $this->Html->link('Contact ' . Configure::read('site.host_name'),Configure::read('site.host_contact_url'));?>
       </div>
+-->
     </div>
   </div>
 

@@ -93,6 +93,11 @@ class ConferencesController extends AppController {
     if (isset($this->params['tags']) || isset($cookie)) {
       if (isset($this->params['tags'])){
 	$tags=explode('-', $this->params['tags']);
+	if ($tags[0] == 't0') {
+	  //delete tags if requested
+	  $this->Cookie->delete('tags');
+	  return $this->redirect(array('controller'=>null,'action' =>'/'));
+	}
 	$this->loadModel('Tag');
 	$this->Tag->recursive=0;
 	$tagids=array();
@@ -107,6 +112,7 @@ class ConferencesController extends AppController {
 	    $this->Session->setFlash('unknown tag '.$tag,'FlashBad');
 	  }
 	}
+	$this->Cookie->write('tags',$tagids);
       }
       else {
 	$tagids=$cookie;
