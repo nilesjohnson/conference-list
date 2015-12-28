@@ -234,7 +234,6 @@ class ConferencesController extends AppController {
     }
   }
 
-
   /*
   public function past_unused() {
     $order_array =  array('Conference.start_date',
