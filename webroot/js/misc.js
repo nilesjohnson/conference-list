@@ -1,0 +1,13 @@
+function updateTagLink() {
+  var x = document.getElementById("tag_select");
+  var v = [];
+  var i;
+  for (i = 0; i < x.options.length; i++) {
+    if (x.options[i].selected) {
+	v.push(x.options[i].text.split('.')[0]);
+    }
+  }
+  //console.log(v.join('-'));
+  document.getElementById('tag_link').href = '/'+v.join('-');
+  return false;
+}

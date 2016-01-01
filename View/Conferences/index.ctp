@@ -33,32 +33,7 @@ function gcal_link($start,$end,$title,$location) {
 */
 ?>
 
-<!--
 <div id="search_links">
-
-<?php
-  echo $this->Form->create('Conference');
-  //the multi-select happens magically because of the HABTM and the variable $tags
-  echo $this->Form->input('Tag',array('id'=>'tag_select','label'=>'Filter by arxiv subject tags','value'=>$tagids));
-  //disables the SecurityComponent
-  //$this->Form->unlockField('Tag');
-  $this->Js->get('#tag_select');
-  $this->Js->event('click',
-    $this->Js->alert('test'));
-    //link('mathmeetings.net',array('nt'),array('update'=>'#tag_link')));
-  echo "<p id='tag_link'>test here</p></div>";
-
-  echo "<div><p>";
-
-  //echo $this->Form->submit(__('Apply subject filter', true), array('div' => false));
-  echo "<br/>\n";
-  //echo "<p style='margin-top:10px;'>".$this->Html->link('Delete subject filter', array('controller' => 'conferences', 'action'=>'index', '?'=>array('t0' => '')), array('class' => 'ics button'))."</p>\n";
-  echo $this->Form->end();
-?>
-</div>
--->
-
-<div style="float:right; padding-left:.5ex; border-left: 1px solid #777; margin-left:.5ex;">
 <h2 style="margin: 0 0 1ex 0;">Choose a sublist of interest.</h2>
 <dl style="width:40ex;">
 <style>
@@ -86,6 +61,28 @@ $t = substr($tag,0,2)?>
 <?php endforeach;?>
 </ul>
 -->
+
+<?php
+  echo $this->Form->create('Conference');
+  //the multi-select happens magically because of the HABTM and the variable $tags
+  echo $this->Form->input('Tag',array(
+    'id'=>'tag_select',
+    'label'=>'Filter by arxiv subject tags',
+    'value'=>$tagids,
+    'onchange'=>'updateTagLink();'
+  ));
+  //disables the SecurityComponent
+  $this->Form->unlockField('Tag');
+  echo "<p><a id='tag_link' href='/'>test here</a></p></div>";
+
+  echo "<div><p>";
+
+  //echo $this->Form->submit(__('Apply subject filter', true), array('div' => false));
+  echo "<br/>\n";
+  //echo "<p style='margin-top:10px;'>".$this->Html->link('Delete subject filter', array('controller' => 'conferences', 'action'=>'index', '?'=>array('t0' => '')), array('class' => 'ics button'))."</p>\n";
+  echo $this->Form->end();
+?>
+
 </div>
 
 
