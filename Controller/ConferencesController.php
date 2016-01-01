@@ -523,7 +523,16 @@ class ConferencesController extends AppController {
     $Email->from(array(Configure::read('site.host_email') => Configure::read('site.name')));
     $to_array = preg_split("/[\s,]+/",$this->data['Conference']['contact_email']);
     $Email->to($to_array);
-    $Email->bcc(Configure::read('site.admin_email'));
+    $admin_email = Configure::read('site.admin_email');
+    $bcc_array = $admin_email['all'];
+    foreach($this->data['Tag'] as $tag) {
+      $t = explode('.',$tag['name'])[0];
+      if (array_key_exists($t,$admin_email)) {
+        $bcc_array = array_merge($bcc_array,$admin_email[$t]);
+      }
+    }
+    debug(array('bcc'=>join($bcc_array,',')));
+    //$Email->bcc(join(',',$bcc_array));
     $Email->subject(Configure::read('site.name') . ": " . $this->data['Conference']['title']);
     if (!is_null($id)) {
       $this->set('conference',$this->data);
