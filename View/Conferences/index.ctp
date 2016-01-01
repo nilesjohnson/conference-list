@@ -36,11 +36,6 @@ function gcal_link($start,$end,$title,$location) {
 <div id="search_links">
 <h2 style="margin: 0 0 1ex 0;">Choose a sublist of interest.</h2>
 <dl style="width:40ex;">
-<style>
-dd {
-  margin: 0 0 0 1ex;
-}
-</style>
 <dt><a href="/at-gt">Algebraic Topology</a></dt>
 <dd><span class="tag">at.algebraic-topology</span> 
 <span class="tag">gt.geometric-topology</span></dd>
@@ -53,14 +48,6 @@ dd {
 <dt><a href="/t0">All</a></dt>
 <dd><span style="font-size:80%;">Delete the sublist cookie and view all announcements.</span></dd>
 </dl>
-<!--
-<ul>
-<?php foreach ($tags as $id => $tag): 
-$t = substr($tag,0,2)?>
-<li><a href="/<?php echo $t;?>"><?php echo $tag;?></a></li>
-<?php endforeach;?>
-</ul>
--->
 
 <?php
   echo $this->Form->create('Conference');
@@ -73,12 +60,10 @@ $t = substr($tag,0,2)?>
   ));
   //disables the SecurityComponent
   $this->Form->unlockField('Tag');
-  echo "<p><a id='tag_link' href='/'>test here</a></p></div>";
-
-  echo "<div><p>";
+  echo "<p><a id='tag_link' href='/'>Use selected tags</a></p>";
 
   //echo $this->Form->submit(__('Apply subject filter', true), array('div' => false));
-  echo "<br/>\n";
+  //echo "<br/>\n";
   //echo "<p style='margin-top:10px;'>".$this->Html->link('Delete subject filter', array('controller' => 'conferences', 'action'=>'index', '?'=>array('t0' => '')), array('class' => 'ics button'))."</p>\n";
   echo $this->Form->end();
 ?>

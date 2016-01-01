@@ -566,6 +566,10 @@ p {
     margin-top: 1pc;
 }
 
+dd {
+    margin: 0 0 0 1ex;
+}
+
 #search_links {
     float: right;
     margin-left: .5ex;
