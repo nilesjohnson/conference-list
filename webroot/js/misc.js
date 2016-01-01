@@ -1,5 +1,5 @@
 function updateTagLink() {
-  var x = document.getElementById("tag_select");
+  var x = document.getElementById("TagTag");
   var v = [];
   var i;
   for (i = 0; i < x.options.length; i++) {

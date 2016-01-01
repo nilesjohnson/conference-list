@@ -46,25 +46,22 @@ function gcal_link($start,$end,$title,$location) {
 <dd><span class="tag">ac.commutative-algebra</span>
 <span class="tag">ag.algebraic-geometry</span></dd>
 <dt><a href="/t0">All</a></dt>
-<dd><span style="font-size:80%;">Delete the sublist cookie and view all announcements.</span></dd>
+<dd><span style="font-size:90%;">Delete the sublist cookie and view all announcements.</span></dd>
+<dt><a id='tag_link' href='/'>Custom</a></dt>
+<dd><span style="font-size:90%;">Use tags selected below</span></dd>
 </dl>
 
 <?php
   echo $this->Form->create('Conference');
   //the multi-select happens magically because of the HABTM and the variable $tags
   echo $this->Form->input('Tag',array(
-    'id'=>'tag_select',
-    'label'=>'Filter by arxiv subject tags',
+    'label'=>'',
     'value'=>$tagids,
-    'onchange'=>'updateTagLink();'
+    'onchange'=>'updateTagLink();',
+    'name'=>'tag_select',
   ));
   //disables the SecurityComponent
-  $this->Form->unlockField('Tag');
-  echo "<p><a id='tag_link' href='/'>Use selected tags</a></p>";
-
-  //echo $this->Form->submit(__('Apply subject filter', true), array('div' => false));
-  //echo "<br/>\n";
-  //echo "<p style='margin-top:10px;'>".$this->Html->link('Delete subject filter', array('controller' => 'conferences', 'action'=>'index', '?'=>array('t0' => '')), array('class' => 'ics button'))."</p>\n";
+  //$this->Form->unlockField('Tag');
   echo $this->Form->end();
 ?>
 

@@ -568,10 +568,12 @@ p {
 
 dd {
     margin: 0 0 0 1ex;
+    line-height: normal;
 }
 
 #search_links {
     float: right;
+    width: 21em;
     margin-left: .5ex;
     padding-left: .5ex;
     border-left: 1px solid #777;
