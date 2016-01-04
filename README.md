@@ -46,6 +46,8 @@ CHANGELOG
 
 * Now filter announcements by subject tags
 
+* Set specific admin email addresses for individual tags
+
 * Form for editing announcements is now the same as that for adding
   new announcements
 
