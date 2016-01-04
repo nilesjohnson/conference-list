@@ -42,7 +42,7 @@ class ConferenceFixture extends CakeTestFixture {
 		array(
 			'id' => 1,
 			'edit_key' => 'key1',
-			'title' => 'Lorem ipsum conference',
+			'title' => 'Lorem ipsum conference 1',
 			'start_date' => '2020-01-23',
 			'end_date' => '2020-01-25',
 			'duration' => 3,
@@ -60,7 +60,7 @@ class ConferenceFixture extends CakeTestFixture {
 		array(
 			'id' => 2,
 			'edit_key' => 'key2',
-			'title' => 'Aliquet feugiat conference',
+			'title' => 'Aliquet feugiat conference 2',
 			'start_date' => '2020-02-23',
 			'end_date' => '2020-02-25',
 			'duration' => 3,
@@ -76,9 +76,9 @@ class ConferenceFixture extends CakeTestFixture {
 			'description' => 'Lorem ipsum dolor sit amet, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.'
 		),
 		array(
-			'id' => 4,
+			'id' => 3,
 			'edit_key' => 'key3',
-			'title' => 'Convallis morbi conference',
+			'title' => 'Convallis morbi conference 3',
 			'start_date' => '2022-05-23',
 			'end_date' => '2022-05-25',
 			'duration' => 3,
@@ -94,9 +94,9 @@ class ConferenceFixture extends CakeTestFixture {
 			'description' => 'Lorem ipsum dolor sit amet, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.'
 		),
 		array(
-			'id' => 5,
+			'id' => 4,
 			'edit_key' => 'key4',
-			'title' => 'Phasellus feugiat conference',
+			'title' => 'Phasellus feugiat conference 4',
 			'start_date' => '2050-12-23',
 			'end_date' => '2050-12-25',
 			'duration' => 3,
@@ -109,6 +109,24 @@ class ConferenceFixture extends CakeTestFixture {
 			'homepage' => 'http://www.example4.net',
 			'contact_name' => 'Contact info',
 			'contact_email' => 'none@example4.net,also-this@example4.net,  and-this@example4.net  one-more@example.net',
+			'description' => 'Lorem ipsum dolor sit amet, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.'
+		),
+		array(
+			'id' => 5,
+			'edit_key' => 'key5',
+			'title' => 'Dapibus velit conference 5',
+			'start_date' => '2060-12-23',
+			'end_date' => '2060-12-25',
+			'duration' => 3,
+			'institution' => 'University 5',
+			'city' => 'City 5',
+			'region' => 'Region 5',
+			'country' => 'Country 5',
+			'meeting_type' => 'conference',
+			'subject_area' => '',
+			'homepage' => 'http://www.example5.net',
+			'contact_name' => 'Contact info',
+			'contact_email' => 'none@example5.net,also-this@example5.net,  and-this@example5.net  one-more@example.net',
 			'description' => 'Lorem ipsum dolor sit amet, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.'
 		),
 	);

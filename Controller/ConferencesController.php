@@ -193,6 +193,7 @@ class ConferencesController extends AppController {
     $conferences = array();
     $conferencesTags = array();
     $prev_id = -1;
+    //debug($conferencesTagsRaw);
     foreach ($conferencesTagsRaw as $ct) {
       // we are using the fact that we can find duplicate conferences
       // by checking ids of previous entries
@@ -529,15 +530,16 @@ class ConferencesController extends AppController {
     $to_array = preg_split("/[\s,]+/",$this->data['Conference']['contact_email']);
     $Email->to($to_array);
     $admin_email = Configure::read('site.admin_email');
-    $bcc_array = $admin_email['all'];
+    $Email->bcc($admin_email['all']);
+    $cc_array = [];
     foreach($this->data['Tag'] as $tag) {
       $t = explode('.',$tag['name'])[0];
       if (array_key_exists($t,$admin_email)) {
-        $bcc_array = array_merge($bcc_array,$admin_email[$t]);
+        $cc_array = array_merge($cc_array,$admin_email[$t]);
       }
     }
-    debug(array('bcc'=>join($bcc_array,',')));
-    //$Email->bcc(join(',',$bcc_array));
+    //debug(array('cc'=>join($cc_array,',')));
+    $Email->cc($cc_array);
     $Email->subject(Configure::read('site.name') . ": " . $this->data['Conference']['title']);
     if (!is_null($id)) {
       $this->set('conference',$this->data);

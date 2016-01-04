@@ -29,18 +29,29 @@ class ConferencesControllerTest extends ControllerTestCase {
  *
  * @return void
  */
-	public function testIndex() {
-	  echo "<h3>Testing Index</h3>";
-	  $result =$this->testAction('/',array('method'=>'get'));
-	  debug($this->vars);
-	  //$this->assertEqual($this->vars['view_title'],'Upcoming Meetings');
-	  //$this->assertEqual(count($this->vars['conferences']) > 0,true);
-	  //debug($this->Conference->data);
-	  //debug($this->vars['conferences']);
+	public function testIndex($t='',$e=5,$h='Index') {
+	  echo "<h3>Testing ".$h."</h3>";
+	  $action = '/'.$t;
+	  echo "<p>Action: '".$action."'</p>";
+	  $result =$this->testAction($action,array('method'=>'get'));
+	  //debug($this->vars);
+	  $this->assertEqual($this->vars['view_title'],'Upcoming Meetings');
+	  echo "<p>".$e." conferences</p>";
 	  debug(array('number of conferences' => count($this->vars['conferences']),
 		      'view title' => $this->vars['view_title']
 		      ));
+	  $this->assertEqual(count($this->vars['conferences']),$e);
+	  //debug($this->Conference->data);
+	  //debug($this->vars['conferences']);
 	}
+
+        public function testTags() {
+	  $this->testIndex('ag',1, 'Index Tags');
+        }
+
+        public function testTags2() {
+	  $this->testIndex('ap-ag',2, 'Index Tags');
+        }
 
 	/*
 	public function testIndexPast() {
@@ -66,12 +77,13 @@ class ConferencesControllerTest extends ControllerTestCase {
 	*/
 
 	public function testIndexRSS() {
-	  $result =$this->testAction('/conferences/index.rss',array('method'=>'get'));
-	  echo "<h3>Testing RSS</h3>";
-	  debug(array('number of conferences' => count($this->vars['conferences']),
-		      'view title' => $this->vars['view_title']
-		      ));
-	  $this->assertEqual(count($this->vars['conferences']),4);
+	  $this->testIndex('conferences/index.rss',5,'RSS');
+	  //debug($this->headers);
+	  //debug($this->vars);
+	}
+
+	public function testIndexRSSTags() {
+	  $this->testIndex('ag-ap.rss',2,'RSS Tags');
 	  //debug($this->headers);
 	  //debug($this->vars);
 	}
@@ -82,8 +94,8 @@ class ConferencesControllerTest extends ControllerTestCase {
  * @return void
  */
 	public function testAbout() {
-	  $result =$this->testAction('/conferences/about');
 	  echo "<h3>Testing About</h3>";
+	  $result =$this->testAction('/conferences/about');
 	  debug($result);
 	}
 
@@ -100,6 +112,7 @@ class ConferencesControllerTest extends ControllerTestCase {
 	}
 
 	public function testIcal() {
+	  echo "<h3>Testing ical</h3>";
 	  $result = $this->testAction('/conferences/ical/4');
 	  $expected = 'BEGIN:VCALENDAR
 VERSION:2.0
@@ -107,19 +120,18 @@ BEGIN:VEVENT
 DTSTART:20501223
 DTEND:20501226
 LOCATION:City 4; Country 4
-SUMMARY:Phasellus feugiat conference
+SUMMARY:Phasellus feugiat conference 4
 URL:http://www.example4.net
 END:VEVENT
 END:VCALENDAR';
-	  echo "<h3>Testing ical</h3>";
 	  debug($result);
 	  $this->assertEqual($result,$expected);
 	}
 
 	public function testGcal() {
-	  $result = $this->testAction('/conferences/gcal/4');
-	  $expected = 'http://www.google.com/calendar/event?action=TEMPLATE&text=Phasellus+feugiat+conference&dates=20501223/20501226&details=http://www.example4.net&location=City+4%3B+Country+4&trp=false&sprop=http%3A%2F%2Fwww.nilesjohnson.net%2Fconflist-test&sprop=name:ConfList-Test';
 	  echo "<h3>Testing gcal</h3>";
+	  $result = $this->testAction('/conferences/gcal/4');
+	  $expected = 'http://www.google.com/calendar/event?action=TEMPLATE&text=Phasellus+feugiat+conference+4&dates=20501223/20501226&details=http://www.example4.net&location=City+4%3B+Country+4&trp=false&sprop=http%3A%2F%2Fwww.nilesjohnson.net%2Fconflist-test&sprop=name:ConfList-Test';
 	  debug($result);
 	  $this->assertEqual($result,$expected);
 	}
@@ -132,8 +144,8 @@ END:VCALENDAR';
  */
 
 	public function testAdd() {
-	  $result = $this->testAction('/conferences/add');
 	  echo "<h3>Testing add (empty)</h3>";
+	  $result = $this->testAction('/conferences/add');
 	  debug($result);
 	}
 
@@ -145,25 +157,16 @@ END:VCALENDAR';
  * @return void
  */
 	public function testEdit() {
-	  $Conferences = $this->generate('Conferences', 
-					 array('components'
-					       =>array('Session',
-						       'Email' 
-						       =>array('send')
-						       )
-					       ));
-	  $Conferences->Session
-	    ->expects($this->once())
-	    ->method('setFlash');
+	  echo "<h3>Testing edit</h3>";
 	  $this->testAction('/conferences/edit/4', 
 			    array('data'
-				  =>array('Conference' 
-					  =>array('title' => 'New Announcement')
-					  )
-				  ));
+				  =>array('Conference' =>
+					  array('title' => 'New Announcement'),
+					  'Tag' => array('Tag' => 'mytag')
+					  ),
+				  )
+			    );
 	  $this->assertContains('/', $this->headers['Location']);
-	  echo "<h3>Testing edit</h3>";
-	  debug($this->headers);
 	}
 
 /**
@@ -172,48 +175,11 @@ END:VCALENDAR';
  * @return void
  */
 	public function testDelete() {
-	  $result = $this->testAction('/conferences/delete/4');
 	  echo "<h3>Testing delete</h3>";
+	  $result = $this->testAction('/conferences/delete/4');
 	  debug($result);
 	}
 
-
-	public function testPrepEmail() {
-	  $Conferences = $this
-	    ->generate('Conferences', 
-		       array(
-			     'components' 
-			     => array(
-				      'Session',
-				      'Email' 
-				      => array('send')
-				      )
-			     ));
-	  $result = $this->testAction('/conferences/prepEmail',
-				      array(
-					    'data'
-					    => array(
-						     'Conference' 
-						     => array('title' 
-							      => 'My New Conference',
-							      'contact_email' 
-							      => 'test@example.com')
-						     )
-					    ));
-	  echo "<h3>Testing email headers</h3>";
-	  debug(array('from'=>$result->from(),
-		      'to'=>$result->to(),
-		      'subject'=>$result->subject(),
-		      'cc'=>$result->cc(),
-		      'bcc'=>$result->bcc(),
-		      ));
-	}
-
-	public function testPrepEmailContent() {
-	  $result = $this->testAction('/conferences/prepEmail/4');
-	  echo "<h3>Testing content of email</h3>";
-	  debug($result);
-	}
 
 
 /**

@@ -56,7 +56,7 @@ class ConferenceTest extends CakeTestCase {
 	    $this->Conference->id=$entry['Conference']['id'];
 	    $this->Conference->read();
 	    $result = $this->Conference->beforeSave();
-	    debug($this->Conference->data);
+	    //debug($this->Conference->data);
 	    $this->assertEquals(true,$result);
 	  }
 	}

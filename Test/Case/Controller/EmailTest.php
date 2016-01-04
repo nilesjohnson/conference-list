@@ -27,31 +27,37 @@ class EmailTest extends ControllerTestCase {
 
 	public function testPrepEmail() {
 	  echo "<h3>Testing email headers</h3>";
-	  $Conferences = $this
-	    ->generate('Conferences', 
-		       array(
-			     'components' 
-			     => array(
-				      'Session',
-				      'Email' 
-				      => array('send')
-				      )
-			     ));
+	  echo "<p>Using fake data for 'New Announcement' with tags 'at', 'ct' and 'ag'</p>";
+	  $result = $this->testAction('/conferences/prepEmail', 
+			    array('data'
+				  =>array('Conference' =>
+					  array('title' => 'New Announcement',
+						'contact_email' => 'test@test.com other@test.com',
+						),
+					  'Tag' => array(array('name'=>'at.algebraic-topology'),
+							 array('name'=>'ct.category-theory'),
+							 array('name'=>'ag.algebraic-geometry'),
+							 )
+					  ),
+				  )
+			    );
+	  $headers = array('from'=>$result->from(),
+			   'to'=>$result->to(),
+			   'subject'=>$result->subject(),
+			   'cc'=>$result->cc(),
+			   'bcc'=>$result->bcc(),
+			   );
+	  debug($headers);
+	  $this->assertEqual(count($headers['cc']),3);
+	  $this->assertEqual(count($headers['bcc']),2);
 	}
 
 	public function testPrepEmailContent() {
 	  $result = $this->testAction('/conferences/prepEmail/4');
-	  //echo "<h3>Testing email headers</h3>";
-	  /*
-	  debug(array('from'=>$result->from(),
-		      'to'=>$result->to(),
-		      'subject'=>$result->subject(),
-		      'cc'=>$result->cc(),
-		      'bcc'=>$result->bcc(),
-		      ));
-	  */
 	  echo "<h3>Testing content of email</h3>";
 	  debug($result);
+	  debug(substr($result,1,30));
+	  $this->assertEqual(substr($result,1,35),"Thanks for adding your announcement");
 	}
 
 
