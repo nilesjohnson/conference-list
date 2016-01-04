@@ -68,6 +68,10 @@ Begin by cloning the git repository, e.g:
 
     git clone https://github.com/nilesjohnson/conference-list.git conference-list
 
+Ensure that you have the files from the 'countries' submodule 
+https://github.com/mledoze/countries.  You can do this with `git submodule init` 
+and `git submodule update`.
+
 If you don't yet have cake available, clone that too:
 
     git clone https://github.com/cakephp/cakephp.git cakephp

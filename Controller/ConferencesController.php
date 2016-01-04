@@ -52,7 +52,7 @@ class ConferencesController extends AppController {
       }
     }
     if ($type == 'csrf') {
-      throw new BadRequestException('CSRF token is either expired or corrupted.');
+      throw new BadRequestException('CSRF token is either expired or corrupted.  The CSRF token is a browser cookie which prevents certain types of web form abuse.  This cookie expires on use, and must be set for you to submit forms on this site.',500);
     }
     else {
       throw new BadRequestException('Unknown security error: request has been black-holed');
@@ -93,6 +93,11 @@ class ConferencesController extends AppController {
     if (isset($this->params['tags']) || isset($cookie)) {
       if (isset($this->params['tags'])){
 	$tags=explode('-', $this->params['tags']);
+	if ($tags[0] == 't0') {
+	  //delete tags if requested
+	  $this->Cookie->delete('tags');
+	  return $this->redirect(array('controller'=>null,'action' =>'/'));
+	}
 	$this->loadModel('Tag');
 	$this->Tag->recursive=0;
 	$tagids=array();
@@ -107,6 +112,7 @@ class ConferencesController extends AppController {
 	    $this->Session->setFlash('unknown tag '.$tag,'FlashBad');
 	  }
 	}
+	$this->Cookie->write('tags',$tagids);
       }
       else {
 	$tagids=$cookie;
@@ -227,7 +233,6 @@ class ConferencesController extends AppController {
       $this->set(compact('conferences'));
     }
   }
-
 
   /*
   public function past_unused() {

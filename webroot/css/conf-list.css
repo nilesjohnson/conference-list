@@ -566,12 +566,17 @@ p {
     margin-top: 1pc;
 }
 
+dd {
+    margin: 0 0 0 1ex;
+    line-height: normal;
+}
+
 #search_links {
     float: right;
-    width: 300px;
-    margin-left: 40px;
-    padding-left: 10px;
-    border-left: 1px solid;
+    width: 21em;
+    margin-left: .5ex;
+    padding-left: .5ex;
+    border-left: 1px solid #777;
 }
 #search_links form {
     padding-top:.8em;

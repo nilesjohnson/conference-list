@@ -34,20 +34,34 @@ function gcal_link($start,$end,$title,$location) {
 ?>
 
 <div id="search_links">
+<h2 style="margin: 0 0 1ex 0;">Choose a sublist of interest.</h2>
+<dl style="width:40ex;">
+<dt><a href="/at-gt">Algebraic Topology</a></dt>
+<dd><span class="tag">at.algebraic-topology</span> 
+<span class="tag">gt.geometric-topology</span></dd>
+<dt><a href="/ag-nt">Arithmetic Geometry</a></dt>
+<dd><span class="tag">algebraic-geometry</span>
+<span class="tag">nt.number-theory</span></dd>
+<dt><a href="/ac-ag">Commutative Algebra</a></dt>
+<dd><span class="tag">ac.commutative-algebra</span>
+<span class="tag">ag.algebraic-geometry</span></dd>
+<dt><a href="/t0">All</a></dt>
+<dd><span style="font-size:90%;">Delete the sublist cookie and view all announcements.</span></dd>
+<dt><a id='tag_link' href='/'>Custom</a></dt>
+<dd><span style="font-size:90%;">Use tags selected below</span></dd>
+</dl>
 
 <?php
   echo $this->Form->create('Conference');
   //the multi-select happens magically because of the HABTM and the variable $tags
-  echo $this->Form->input('Tag',array('label'=>'Filter by arxiv subject tags','value'=>$tagids));
+  echo $this->Form->input('Tag',array(
+    'label'=>'',
+    'value'=>$tagids,
+    'onchange'=>'updateTagLink();',
+    'name'=>'tag_select',
+  ));
   //disables the SecurityComponent
   //$this->Form->unlockField('Tag');
-
-  echo "<div><p>Click or type to select tags. Last tag search is saved in a cookie.</p><p>";
-  echo "</p></div>";
-
-  echo $this->Form->submit(__('Apply subject filter', true), array('div' => false));
-  echo "<br/>\n";
-  echo "<p style='margin-top:10px;'>".$this->Html->link('Delete subject filter', array('controller' => 'conferences', 'action'=>'index', '?'=>array('t0' => '')), array('class' => 'ics button'))."</p>\n";
   echo $this->Form->end();
 ?>
 
@@ -55,10 +69,13 @@ function gcal_link($start,$end,$title,$location) {
 
 
 <div class="intro_text">
-  <p>Welcome to the AlgTop-Conf List!  This is a home for conference
-  announcements in algebraic topology and, more generally, mathematics
-  meetings which may be of <em>any interest</em> to the algebraic
-  topology community.</p>
+
+  <p>Welcome to the MathMeetings.net list!  This is based
+  on the conference list software developed for conferences in
+  algebraic topology: <a href="http://nilesjohnson.net/algtop-conf"
+  target="blank">AlgTop-Conf</a>.</p>
+
+  <p><em style="font-size:110%; background-color:#feb">This is a demo, under development.</em></p>
 
   <p>There are a few other conference lists available, but this list
   aims to be more complete by allowing <em>anyone at all</em> to add
