@@ -34,7 +34,7 @@ class ConferencesTagFixture extends CakeTestFixture {
 				      'tag_id'=>1),
 				array('id'=>3,
 				      'conference_id'=>1,
-				      'tag_id'=>7),
+				      'tag_id'=>1),
 				array('id'=>4,
 				      'conference_id'=>2,
 				      'tag_id'=>4),
