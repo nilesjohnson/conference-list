@@ -24,10 +24,18 @@ class EmailTest extends ControllerTestCase {
  * @return void
  */
 
+	public function setUp() {
+	  parent::setUp();
+	  $Controller = new Controller();
+	  $this->Conference = ClassRegistry::init('Conference');
+	}
 
 	public function testPrepEmail() {
 	  echo "<h3>Testing email headers</h3>";
-	  echo "<p>Using fake data for 'New Announcement' with tags 'at', 'ct' and 'ag'</p>";
+	  $this->Conference->id = 4;
+	  debug(array('id'=>$this->Conference->id));
+	  $this->Conference->read();
+	  //debug($this->Conference->data);
 	  $result = $this->testAction('/conferences/prepEmail', 
 			    array('data'
 				  =>array('Conference' =>
@@ -41,6 +49,9 @@ class EmailTest extends ControllerTestCase {
 					  ),
 				  )
 			    );
+	  $result = $this->testAction('/conferences/prepEmail', 
+				      array('data' => $this->Conference->data)
+				      );
 	  $headers = array('from'=>$result->from(),
 			   'to'=>$result->to(),
 			   'subject'=>$result->subject(),
@@ -48,8 +59,8 @@ class EmailTest extends ControllerTestCase {
 			   'bcc'=>$result->bcc(),
 			   );
 	  debug($headers);
-	  $this->assertEqual(count($headers['cc']),3);
-	  $this->assertEqual(count($headers['bcc']),2);
+	  $this->assertEqual(count($headers['cc'])>0,true);
+	  $this->assertEqual(count($headers['bcc'])>0,true);
 	}
 
 	public function testPrepEmailContent() {
