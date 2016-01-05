@@ -66,7 +66,7 @@ foreach($conference['Tag'] as $tag) {
 echo "\n";
 
 echo "Description:\n";
-echo !$conference['Conference']['description'] ? 'none' : $conference['Conference']['description'];
+echo !$conference['Conference']['description'] ? 'none' : strip_tags($conference['Conference']['description']);
 ?>
 
 
