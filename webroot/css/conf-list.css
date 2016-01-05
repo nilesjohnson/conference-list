@@ -581,8 +581,8 @@ dd {
 #search_links form {
     padding-top:.8em;
 }
-#search_links form .select .select2-container {
-    max-height: 200px;
+#search_links form .select2-container-multi {
+    max-height: 5pc;
     overflow: scroll;
 }
 hr.top {
