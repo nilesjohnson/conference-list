@@ -151,28 +151,6 @@ END:VCALENDAR';
 	  //$this->assertRegExp('/<html/', $this->contents);
 	  //$this->assertRegExp('/<form/', $this->view);
 	}
-	public function testSaveAndSend() {
-	  echo "<h3>Testing save_and_send</h3>";
-	  $Conferences = $this->generate('Conferences', 
-					 array(
-					       'components' => array(
-								     'Session',
-								     'Email' => array('send')
-								     )
-					       ));
-	  $Conferences->Session
-	    ->expects($this->once())
-	    ->method('setFlash');
-	  $this->Conference->id = 4;
-	  //debug(array('id'=>$this->Conference->id));
-	  $this->Conference->read();
-	  $result = $this->testAction('/conferences/save_and_send',
-				      array('data' => $this->Conference->data));
-	  // test redirect
-	  $this->assertContains('/conferences/index/at-ag-ap', $this->headers['Location']);
-	  //debug($result);
-	}
-
 
 
 /**

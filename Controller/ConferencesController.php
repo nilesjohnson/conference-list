@@ -528,8 +528,13 @@ class ConferencesController extends AppController {
   }
   */
 
+  public function _getEmailer() {
+    // function to return emailer, so we can replace it during automated tests
+    return new CakeEmail();
+  }
+
   public function prepEmail($id = null) {
-    $Email = new CakeEmail();
+    $Email = $this->_getEmailer();
     if (!is_null($id)) {
       $this->Conference->id = $id;
       if (!$this->Conference->exists($id)) {
