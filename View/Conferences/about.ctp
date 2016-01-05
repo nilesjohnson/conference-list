@@ -6,7 +6,14 @@
 <h2>Adding Announcements</h2>
 <div>
 <p>
-To add an announcement, use the link at the top of the page.  An email address is required so that announcements you post can be edited or deleted.  To prevent spam, some simple arithmetic is also required.  When you add an announcement, you will receive a message like the following:
+To add an announcement, use the link at the top of the page.  An email
+address is required so that announcements you post can be edited or
+deleted.  To prevent spam, some simple arithmetic is also required.
+In addition, a security token is stored as a browser cookie.
+</p>
+
+<p>
+When you add an announcement, you will receive a message like the following:
 </p>
 
 <div id="add-message">
@@ -214,6 +221,40 @@ The data for each announcement is stored in a database, so search functionality 
 <div>
 <p>The list of countries provided when adding new announcements is from the <?php echo $this->Html->link('World countries','https://github.com/mledoze/countries');?> database, licensed under the <?php echo $this->Html->link('Open Database License 1.0','http://opendatacommons.org/licenses/odbl/1.0/')?>.
 </p>
+</div>
+
+<h2>Tracking</h2>
+<div>
+<p>
+We use Google Analytics for tracking visitors.  This provides a wealth
+of useful information about how the site is used, and helps us make
+decisions about how to improve functionality.  There are a variety of
+options for <a
+href="https://duckduckgo.com/?q=google+analytics+disable+tracking"
+target="blank">disabling Google Analytics</a>.
+</p>
+
+<p>External libraries typically also implement their own tracking.  On
+this site, we use some components of the Jquery javascript library and
+various social networking buttons on the announcement view pages.</p>
+
+</div>
+
+<h2>Browser Cookies</h2>
+<div>
+
+<p> The code from external libraries typically makes use of browser
+cookies.  This includes cookies from <tt>google.com</tt>,
+<tt>jquery.com</tt>, and <tt>twitter.com</tt>.  These are neither
+owned nor set directly by this site, and to our knowledge none of this
+site's functionality depends in a critical way on these cookies.<p>
+
+<p>This site does set a browser cookie to store a security key called
+a CSRF token.  This is used for processing the New Announcement form
+and ensures that malicious users cannot repeatedly submit
+announcements using the same successful captcha.  The cookie contains
+no user information and is immediately discarded upon use.</p>
+
 </div>
 
 <h2>Source Code</h2>
