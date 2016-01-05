@@ -65,7 +65,7 @@ function gcal_link($start,$end,$title,$location) {
 </dd>
 -->
 <dt><?php echo $this->Html->link(
-  'Custom', array('controller'=>null,'action'=>$tagstring), array('id'=>'tag_link'));?>
+  'Selected tags', array('controller'=>null,'action'=>$tagstring), array('id'=>'tag_link'));?>
 </dt>
 <dd>
   <span style="font-size:90%;">Use tags selected below</span>
@@ -78,7 +78,7 @@ function gcal_link($start,$end,$title,$location) {
   echo $this->Form->input('Tag',array(
     'label'=>'',
     'value'=>$tagids,
-    'onchange'=>'updateTagLink('.$this->Html->url(array('controller'=>null,'action'=>'')).');',
+    'onchange'=>"updateTagLink('".$this->Html->url(array('controller'=>null,'action'=>''))."');",
     'name'=>'tag_select',
   ));
   //disables the SecurityComponent
