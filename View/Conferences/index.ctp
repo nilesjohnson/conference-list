@@ -10,8 +10,6 @@
 -->
 
 <?php
-debug($tagids);
-debug($tagstring);
 /*
 echo $this->Js->link(array(
 'https://apis.google.com/js/plusone.js', 
@@ -58,12 +56,14 @@ function gcal_link($start,$end,$title,$location) {
   <span class="tag">ac.commutative-algebra</span>
   <span class="tag">ag.algebraic-geometry</span>
 </dd>
+<!--
 <dt><?php echo $this->Html->link(
   'All', array('controller'=>null,'action'=>''));?>
 </dt>
 <dd>
-  <span style="font-size:90%;"View all announcements.</span>
+  <span style="font-size:90%;">View all announcements.</span>
 </dd>
+-->
 <dt><?php echo $this->Html->link(
   'Custom', array('controller'=>null,'action'=>$tagstring), array('id'=>'tag_link'));?>
 </dt>
