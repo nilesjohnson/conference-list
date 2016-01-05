@@ -10,7 +10,7 @@
 -->
 
 <?php
-
+debug($tagids);
 /*
 echo $this->Js->link(array(
 'https://apis.google.com/js/plusone.js', 
@@ -36,19 +36,39 @@ function gcal_link($start,$end,$title,$location) {
 <div id="search_links">
 <h2 style="margin: 0 0 1ex 0;">Choose a sublist of interest.</h2>
 <dl style="width:40ex;">
-<dt><a href="/at-gt">Algebraic Topology</a></dt>
-<dd><span class="tag">at.algebraic-topology</span> 
-<span class="tag">gt.geometric-topology</span></dd>
-<dt><a href="/ag-nt">Arithmetic Geometry</a></dt>
-<dd><span class="tag">algebraic-geometry</span>
-<span class="tag">nt.number-theory</span></dd>
-<dt><a href="/ac-ag">Commutative Algebra</a></dt>
-<dd><span class="tag">ac.commutative-algebra</span>
-<span class="tag">ag.algebraic-geometry</span></dd>
-<dt><a href="/t0">All</a></dt>
-<dd><span style="font-size:90%;">Delete the sublist cookie and view all announcements.</span></dd>
-<dt><a id='tag_link' href='/'>Custom</a></dt>
-<dd><span style="font-size:90%;">Use tags selected below</span></dd>
+<dt><?php echo $this->Html->link(
+  'Algebraic Topology', array('controller'=>null,'action'=>'at-gt'));?>
+</dt>
+<dd>
+  <span class="tag">at.algebraic-topology</span> 
+  <span class="tag">gt.geometric-topology</span>
+</dd>
+<dt><?php echo $this->Html->link(
+  'Arithmetic Geometry', array('controller'=>null,'action'=>'ag-nt'));?>
+</dt>
+<dd>
+  <span class="tag">ag.algebraic-geometry</span>
+  <span class="tag">nt.number-theory</span>
+</dd>
+<dt><?php echo $this->Html->link(
+  'Commutative Algebra', array('controller'=>null,'action'=>'ac-ag'));?>
+</dt>
+<dd>
+  <span class="tag">ac.commutative-algebra</span>
+  <span class="tag">ag.algebraic-geometry</span>
+</dd>
+<dt><?php echo $this->Html->link(
+  'All', array('controller'=>null,'action'=>'t0'));?>
+</dt>
+<dd>
+  <span style="font-size:90%;">Delete the sublist cookie and view all announcements.</span>
+</dd>
+<dt><?php echo $this->Html->link(
+  'Custom', array('controller'=>null,'action'=>'t'), array('id'=>'tag_link'));?>
+</dt>
+<dd>
+  <span style="font-size:90%;">Use tags selected below</span>
+</dd>
 </dl>
 
 <?php
