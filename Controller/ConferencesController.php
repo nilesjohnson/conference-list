@@ -16,23 +16,26 @@ class ConferencesController extends AppController {
 
   var $months = array("none", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
 
+  //public $uses = array('Conferences');
 
   public $helpers = array('Js', 'Html', 'Text', 'Gcal', 'Display');
 
-  public $components = array('Email', 'RequestHandler', 'Session', 'Paginator', 'MathCaptcha', 'Security', 'Cookie', 'Checker');
+  public $components = array('Email', 'RequestHandler', 'Session', 'Paginator', 'MathCaptcha', 'Security', 'Checker');
   
   //Regular ol' $this->paginate() ceases to function when this is declared, but this allows for pagination of different Models within same Controller
 
-	public $paginate = array(
-		'Conference' => array (),
-		'ConferencesTag'=>array()
-	   );
+  public $paginate = array(
+			   'Conference' => array (),
+			   'ConferencesTag'=>array()
+			   );
 
 
   public function beforeFilter() {
     parent::beforeFilter(); //you're supposed to always have this, don't ask me why
-    $this->Cookie->name = 'confList';
-    $this->Cookie->time = '1 year';
+    $this->loadModel('Tag');
+    $this->Tag->recursive=0;
+    $this->set('tagstring','');
+    $this->set('tagids',array());
     $this->Security->blackHoleCallback = 'blackhole';
   }
 
@@ -59,11 +62,11 @@ class ConferencesController extends AppController {
     }
   }
 
-  public function index($sort_condition=Null) {
+  public function index($tagstring = null) {
     $this->set('sort_text','Sort by: ');
     $this->set('view_title','Upcoming Meetings');
     $this->set('months', $this->months);
-    $this->set('sort_condition',$sort_condition);
+    $this->set('sort_condition',null);
     // default sort conditions
     $order_array =  array('Conference.start_date',
 			  'Conference.end_date',
@@ -78,45 +81,18 @@ class ConferencesController extends AppController {
     // remove tag validation so tags are not required
     $this->Conference->Tag->validator()->remove('Tag');
 	
-    // collect tags from post data
-    // then extract the tags and put into array
-    // either by Cookie or querystring
+    // collect tag ids from post data
     $tagids=null;
 
-    //first check if we're supposed to be deleting tags
-    if (isset($this->request->query['t0'])){
-      $this->Cookie->delete('tags');
-      return $this->redirect(array('controller'=>null,'action' =>'/'));
-    }
-    $cookie=$this->Cookie->read('tags');
     $index_link_array = array('controller' => 'conferences', 'action' => 'index');
-    if (isset($this->params['tags']) || isset($cookie)) {
-      if (isset($this->params['tags'])){
-	$tags=explode('-', $this->params['tags']);
-	if ($tags[0] == 't0') {
-	  //delete tags if requested
-	  $this->Cookie->delete('tags');
-	  return $this->redirect(array('controller'=>null,'action' =>'/'));
-	}
-	$this->loadModel('Tag');
-	$this->Tag->recursive=0;
-	$tagids=array();
-	foreach ($tags as $tag){
-	  // get tag id numbers from names
-	  $t=$this->Tag->find('first',array('conditions'=>array('Tag.name LIKE "'.$tag.'%"')));
-	  //debug($t);
-	  if ($t) {
-	    array_push($tagids,$t['Tag']['id']);
-	  }
-	  else {
-	    $this->Session->setFlash('unknown tag '.$tag,'FlashBad');
-	  }
-	}
-	$this->Cookie->write('tags',$tagids);
-      }
-      else {
-	$tagids=$cookie;
-      }
+    if (isset($this->params['tags']) || isset($tagstring)) {
+      //debug($this->params['tags']);
+      //debug($tagstring);
+      $tagstring = $this->params['tags'] ? $this->params['tags'] : $tagstring;
+      //$this->loadModel('Tag');
+      //$this->Tag->recursive=0;
+      $tagids=$this->tag_ids_from_names(explode('-', $tagstring));
+
       // I opted NOT to use a manual JOIN here because of the dickery with Pagination
       //but rest-assured, this is Dickery nonetheless!
       $tagquery=array();
@@ -133,13 +109,16 @@ class ConferencesController extends AppController {
       $regroup = true;
     }
     else {
-      //otherwise do normal call
-      $active_model = $this->Conference->ConferencesTag; //no, always search join table, since we want to display tags with conferences
+      $tagstring = '';
+      $tagids = array();
+      $active_model = $this->Conference->ConferencesTag;
       $regroup = false;
     }
 
+    /*
     if ($this->request->is('post')) {
-      // read tags from form, or delete cookie
+    //when we used a form to set tags
+      debug('post!');
       if (isset($this->request->data['Tag']['Tag']) && !empty($this->request->data['Tag']['Tag'])){
 	$tagnames=array();
 	$this->loadModel('Tag',array('recursive'=>0));
@@ -155,13 +134,10 @@ class ConferencesController extends AppController {
 	$this->Cookie->write('tags',$this->request->data['Tag']['Tag']);
 	return $this->redirect(array('controller'=>null,'action' => $tagstring.'/', $sort_condition));
       }
-      else {
-	$this->Cookie->delete('tags');
-	return $this->redirect(array('controller'=>null,'action' => '/'));
-      }
     }
+    */
 
-
+    /*
     // set inputs for find/paginate based on $sort_condition
     // and update search links
     if ($sort_condition == 'country') {
@@ -181,9 +157,10 @@ class ConferencesController extends AppController {
       // determine order_array and subsort function for default sort_condition
       $this->set('search_links', array('Country' => array_merge($index_link_array,array('country'))));
     }
+    */
 
     //debug($display_options);
-    $this->set('past_link', array_merge($index_link_array,array('all')));
+    //$this->set('past_link', array_merge($index_link_array,array('all')));
     $conferencesTagsRaw = $active_model->find('all', $display_options);
 
     // do manual regrouping
@@ -227,13 +204,39 @@ class ConferencesController extends AppController {
 	
     $tags=$this->Conference->Tag->find('list');
 	
-    $this->set(compact('conferences', 'tags', 'tagids'));
+    $this->set(compact('conferences', 'tags', 'tagstring', 'tagids'));
 
     // process RSS feed      
     if( $this->RequestHandler->isRss() ){
       $this->set(compact('conferences'));
     }
   }
+
+
+  public function tag_name_from_id($tagid) {
+    // get tag names from id numbers
+    
+    $t = $this->Tag->find('first',array('conditions'=>array('Tag.id'=>$tagid)));
+    return $t['Tag']['name'];
+  }
+
+  public function tag_ids_from_names($tagnames) { 
+    $tagids = array();
+    //debug($tagnames);
+    foreach ($tagnames as $tagname){
+      // get tag id numbers from names
+      $t = $this->Tag->find('first',array('conditions'=>array('Tag.name LIKE "'.$tagname.'%"')));
+      //debug($t);
+      if ($t) {
+	array_push($tagids,$t['Tag']['id']);
+      }
+      else {
+	$this->Session->setFlash('Unknown subject tag: '.$tagname,'FlashBad');
+      }    
+    }
+    return $tagids;
+  }
+
 
   /*
   public function past_unused() {
@@ -408,20 +411,24 @@ class ConferencesController extends AppController {
   }
 
 
-  public function add() {
+  public function add($tagstring = null) {
     $this->set('countries',$this->loadCountries());
     $this->set('view_title', 'Add');
-    $tagids=$this->Cookie->read('tags');
-    if (isset($tagids)) {
+    if (isset($tagstring)) {
+      //debug($tagstring);
+      $this->set('tagstring',$tagstring);
+      //$this->loadModel('Tag');
+      $tagids=$this->tag_ids_from_names(explode('-', $tagstring));
       $this->set('tagids',$tagids);
     } 
     else {
-      $this->set('tagids',['4']);
+      $this->set('tagstring','');
+      $this->set('tagids',array());
     }
 
     //$this->loadModel('CcData');
     //not sure we even need this now
-    $this->loadModel('Tag');
+    //$this->loadModel('Tag');
     if (!empty($this->data)) {
       // set model data
       //debug($this->data);  //displays array info
@@ -484,6 +491,13 @@ class ConferencesController extends AppController {
     // verify that all data saves, and send email(s)
     if ($this->Conference->save($this->data)) {
       $this->request->data = $this->Conference->read();
+      $tagnames = array();
+      foreach($this->request->data['Tag'] as $tag) {
+	$t = explode('.',$tag['name'])[0];
+	array_push($tagnames,$t);
+      }
+      $tagstring = implode('-',$tagnames);
+      //debug($tagstring);
       $Email = $this->prepEmail();
       $Email->send();
       $this->Session->setFlash('Your conference information has been saved.  An email with edit/delete links has been sent to the contact address.', 'FlashGood');
@@ -492,7 +506,7 @@ class ConferencesController extends AppController {
 	$this->Session->setFlash('Your conference information has been saved.  An email with edit/delete links has been sent to the contact address, and a separate announcement has been sent to the given addresses.', 'FlashGood');
 	}
       */
-      $this->redirect(array('action' => 'index'));
+      $this->redirect(array('action' => 'index',$tagstring));
     } 
     else {
       $this->Session->setFlash('There was an error saving the data','FlashBad');

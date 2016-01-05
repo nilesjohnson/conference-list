@@ -3,10 +3,12 @@ if (isset($edit)){
 echo '<div class="conferences form">';
 $addedit='Edit';
 }
- else $addedit='Add';
+ else $addedit='New';
 echo '<h1>'.$addedit.' Meeting Information</h1>';
 
 echo $this->Form->create('Conference');
+echo $this->Form->submit('Submit');
+echo "<br />";
 if (isset($edit)){
 	echo $this->Form->input('id');
 	echo $this->Form->input('edit_key', array('type'=>'hidden'));

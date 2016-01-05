@@ -10,7 +10,6 @@
 -->
 
 <?php
-debug($tagids);
 /*
 echo $this->Js->link(array(
 'https://apis.google.com/js/plusone.js', 
@@ -57,14 +56,16 @@ function gcal_link($start,$end,$title,$location) {
   <span class="tag">ac.commutative-algebra</span>
   <span class="tag">ag.algebraic-geometry</span>
 </dd>
+<!--
 <dt><?php echo $this->Html->link(
-  'All', array('controller'=>null,'action'=>'t0'));?>
+  'All', array('controller'=>null,'action'=>''));?>
 </dt>
 <dd>
-  <span style="font-size:90%;">Delete the sublist cookie and view all announcements.</span>
+  <span style="font-size:90%;">View all announcements.</span>
 </dd>
+-->
 <dt><?php echo $this->Html->link(
-  'Custom', array('controller'=>null,'action'=>'t'), array('id'=>'tag_link'));?>
+  'Custom', array('controller'=>null,'action'=>$tagstring), array('id'=>'tag_link'));?>
 </dt>
 <dd>
   <span style="font-size:90%;">Use tags selected below</span>
@@ -77,7 +78,7 @@ function gcal_link($start,$end,$title,$location) {
   echo $this->Form->input('Tag',array(
     'label'=>'',
     'value'=>$tagids,
-    'onchange'=>'updateTagLink();',
+    'onchange'=>'updateTagLink('.$this->Html->url(array('controller'=>null,'action'=>'')).');',
     'name'=>'tag_select',
   ));
   //disables the SecurityComponent

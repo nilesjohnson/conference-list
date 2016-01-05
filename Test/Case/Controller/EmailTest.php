@@ -37,19 +37,6 @@ class EmailTest extends ControllerTestCase {
 	  $this->Conference->read();
 	  //debug($this->Conference->data);
 	  $result = $this->testAction('/conferences/prepEmail', 
-			    array('data'
-				  =>array('Conference' =>
-					  array('title' => 'New Announcement',
-						'contact_email' => 'test@test.com other@test.com',
-						),
-					  'Tag' => array(array('name'=>'at.algebraic-topology'),
-							 array('name'=>'ct.category-theory'),
-							 array('name'=>'ag.algebraic-geometry'),
-							 )
-					  ),
-				  )
-			    );
-	  $result = $this->testAction('/conferences/prepEmail', 
 				      array('data' => $this->Conference->data)
 				      );
 	  $headers = array('from'=>$result->from(),

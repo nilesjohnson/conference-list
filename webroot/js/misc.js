@@ -1,4 +1,4 @@
-function updateTagLink() {
+function updateTagLink(b) {
   var x = document.getElementById("TagTag");
   var v = [];
   var i;
@@ -8,6 +8,6 @@ function updateTagLink() {
     }
   }
   //console.log(v.join('-'));
-  document.getElementById('tag_link').href = '/'+v.join('-');
+  document.getElementById('tag_link').href = b+v.join('-');
   return false;
 }

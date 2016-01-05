@@ -39,6 +39,8 @@ echo $this->fetch('css');
 echo $this->fetch('script');
 
 echo Configure::read('site.analytics');
+//debug($tagids);
+//debug($tagstring);
 ?>
 
 </head>
@@ -53,7 +55,7 @@ echo Configure::read('site.analytics');
       'conferences', 'action' => 'index'))?>
       |
       <?php echo $this->Html->link('New Announcement',array('controller' =>
-     'conferences', 'action' => 'add'))?>
+     'conferences', 'action' => 'add', $tagstring))?>
       | 
       <?php echo $this->Html->link('About',array('controller' =>
      'conferences', 'action' => 'about'))?>

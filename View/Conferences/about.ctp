@@ -148,11 +148,6 @@ database.  The subject tags are taken from the <a
 href="http://arxiv.org/archive/math">arXiv.org math
 categories</a>.</p>
 
-<p>A visitor's choice of subject tags is stored in a browser cookie so
-it does not need to be re-entered with each new visit.  No other
-information is stored.  The button "Delete tag filter" immediately
-deletes this cookie.</p>
-
 </div>
 
 <h2 class="target" id="rss_about">RSS Feed</h2>
