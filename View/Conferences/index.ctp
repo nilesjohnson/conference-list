@@ -64,39 +64,17 @@ function gcal_link($start,$end,$title,$location) {
   <span style="font-size:90%;">View all announcements.</span>
 </dd>
 -->
-<dt><?php echo $this->Html->link(
-  'Selected tags', array('controller'=>null,'action'=>$tagstring), array('id'=>'tag_link'));?>
-</dt>
-<dd>
-  <span style="font-size:90%;">Use tags selected below</span>
-</dd>
 </dl>
 
-<?php
-  echo $this->Form->create('Conference');
-  //the multi-select happens magically because of the HABTM and the variable $tags
-  echo $this->Form->input('Tag',array(
-    'label'=>'',
-    'value'=>$tagids,
-    'onchange'=>"updateTagLink('".$this->Html->url(array('controller'=>null,'action'=>''))."');",
-    'name'=>'tag_select',
-  ));
-  //disables the SecurityComponent
-  //$this->Form->unlockField('Tag');
-  echo $this->Form->end();
-?>
 
 </div>
 
 
 <div class="intro_text">
 
-  <p>Welcome to the MathMeetings.net list!  This is based
-  on the conference list software developed for conferences in
-  algebraic topology: <a href="http://nilesjohnson.net/algtop-conf"
-  target="blank">AlgTop-Conf</a>.</p>
-
-  <p><em style="font-size:110%; background-color:#feb">This is a demo, under development.</em></p>
+  <p>Welcome to the MathMeetings.net list!  This is based on the
+  conference list software developed for conferences in algebraic
+  topology, AlgTop-Conf, now expanded to other mathematics subjects.</p>
 
   <p>There are a few other conference lists available, but this list
   aims to be more complete by allowing <em>anyone at all</em> to add
@@ -104,7 +82,13 @@ function gcal_link($start,$end,$title,$location) {
   stored in database format so that useful search functions can be
   added as the list grows.</p>
 
-  <h4>Updates (sketch)</h4>
+  <div class="new">
+    <h2>Know of a meeting not listed here?  Add it now!</h2>
+    <p>
+    <?php echo $this->Html->link('New Announcement', array('action' => 'add',$tagstring), array('class' => 'button', 'id' => 'add-button'));?>
+    </p>
+  </div>
+  <h4>Updates 2016-01</h4>
   <ul>
     <li>Now filter announcements by subject tags</li>
     <li>Form for editing announcements is now the same as that for adding new announcements</li>
@@ -125,12 +109,6 @@ function gcal_link($start,$end,$title,$location) {
 
   <p>Additional update notes are available in the <a href="https://github.com/nilesjohnson/conference-list" target="github">git repository</a> (GitHub).</p>
 
-  <div class="new">
-    <h2>Know of a meeting not listed here?  Add it now!</h2>
-    <p>
-    <?php echo $this->Html->link('New Announcement', array('action' => 'add'), array('class' => 'button', 'id' => 'add-button'));?>
-    </p>
-  </div>
 </div>
 
 
@@ -139,6 +117,23 @@ function gcal_link($start,$end,$title,$location) {
 <h1><?php echo $view_title; ?></h1>
 
 <div>
+<?php
+  echo $this->Form->create('Conference');
+  //the multi-select happens magically because of the HABTM and the variable $tags
+  echo $this->Form->input('Tag',array(
+    'label'=>'Selected tags',
+    'value'=>$tagids,
+    'onchange'=>"updateTagLink('".$this->Html->url(array('controller'=>null,'action'=>''))."');",
+    'name'=>'tag_select',
+  ));
+  //disables the SecurityComponent
+  //$this->Form->unlockField('Tag');
+  echo $this->Form->end();
+
+  echo $this->Html->link(
+  'Update tag selection', array('controller'=>null,'action'=>$tagstring), array('id'=>'tag_link'));
+?>
+
 <!--
   <?php echo $sort_text ?>
   <?php foreach ($search_links as $name => $array): ?>
@@ -151,13 +146,20 @@ function gcal_link($start,$end,$title,$location) {
     <?php echo $this->Html->link('Include Past',$past_link)?>
     |
 -->
-    <?php echo $this->Html->link('RSS','/conferences/index.rss');?>
+    <?php 
+if ($tagstring) {
+  echo $this->Html->link('RSS',array('controller'=>null,'action'=>$tagstring.'.rss'));
+}
+else {
+  echo $this->Html->link('RSS','index.rss');
+}
+?>
   </div>
 </div>
 
 
-
 <?php 
+//debug($tagstring);
 
 //just added this to show basic Paginator function
 /*

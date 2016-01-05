@@ -17,11 +17,12 @@
  */
 ?>
 
-Thanks for adding your announcement to 
+
 <?php 
-echo Configure::read('site.name');
+echo 'Thanks for adding your announcement to '.Configure::read('site.name').'.';
 ?>
-.  The announcement data is copied below, and is also available at:
+
+The announcement data is copied below, and is also available at:
 <?php
 echo $this->Html->url(array('action'=>'view', $conference['Conference']['id']), $full=true);
 ?>
@@ -33,8 +34,9 @@ echo $this->Html->url($url=array('action'=>'edit', $conference['Conference']['id
 ?>
 
 
-Note that you will receive a new edit/delete link after each update to your announcement.
-If you have any difficulties, questions, or comments, don't hesitate to contact the curators:
+Note that you will receive a new edit/delete link after each update to 
+your announcement.  If you have any difficulties, questions, or comments, 
+don't hesitate to contact the curators:
 <?php
 echo $this->Html->url($url=array('action'=>'about#curators'), $full=true);
 ?>
@@ -42,7 +44,7 @@ echo $this->Html->url($url=array('action'=>'about#curators'), $full=true);
 
 
 best,
-AlgTop-Conf
+The Curators
 
 
 Announcement Data:

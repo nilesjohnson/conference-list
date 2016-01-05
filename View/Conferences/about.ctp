@@ -2,6 +2,24 @@
 
 <h1><?php echo $view_title; ?></h1>
 
+<p>MathMeetings.net provides a list of conferences and similar
+meetings in mathematics.  There are a number of other such lists, but
+this list aims to be more complete by allowing <em>anyone at all</em>
+to add announcements.  This is similar in spirit to a wiki, but the
+announcements are formatted and stored in a database for efficient
+searching and sorting.</p>
+
+<p>Announcements are filtered by subject tags, and are curated by <a
+href=#curators>the volunteers listed below</a>.  <em>Note</em>: This site
+restricts itself to meetings whose focus is mathematics.  Announcements
+about more general meetings are typically not appropriate and may be
+deleted.</p>
+
+<p>The site is developed by <a href="http://nilesjohnson.net"
+target="blank">Niles Johnson</a>.  Please <a href="http://nilesjohnson.net/contact.html"
+target="blank">contact Niles</a> if you have
+further quesitons or comments!</p>
+
 
 <h2>Adding Announcements</h2>
 <div>
@@ -17,27 +35,43 @@ When you add an announcement, you will receive a message like the following:
 </p>
 
 <div id="add-message">
-<p>
-Thanks for adding your announcement to AlgTop-Conf.
-The announcement data is copied below, and is also available at:<br/>
-<?php echo $this->Html->url('view/25',true);?>
-</p>
 
-<p>
-If you need to edit or delete your announcement, use the unique edit/delete link:<br/>
-<?php echo $this->Html->url('edit/25/sguoULJI',true);?>
-</p>
+<pre>Thanks for adding your announcement to MathMeetings.net.
+The announcement data is copied below, and is also available at:
+http://mathmeetings.net/conferences/view/28
 
-<p>
-Note that you will receive new edit/delete links after each update to your announcement.<br/>
-If you have any difficulties, questions, or comments, don't hesitate to contact the curators:
-<?php echo $this->Html->url('about#curators',true);?>
-</p>
+If you need to edit or delete your announcement, use the unique edit/delete link:
+http://mathmeetings.net/conferences/edit/28/YSZf1X2W
 
-<p>
-best,<br/>
-<?php echo Configure::read('site.name');?>
-</p>
+Note that you will receive a new edit/delete link after each update to
+your announcement.  If you have any difficulties, questions, or
+comments, don't hesitate to contact the curators:
+http://mathmeetings.net/conferences/about#curators
+
+
+best,
+The Curators
+
+
+Announcement Data:
+
+My Interesting Conference!
+2016-04-01 -- 2016-04-01
+
+http://math.osu.edu
+
+Contact: Niles Johnson
+Institution: Ohio State University
+City: Columbus, OH
+Country: USA
+Meeting type: conference
+Subject Tags:
+  * at.algebraic-topology
+  * ag.algebraic-geometry
+
+Description:
+This conference is going to be great!  See the website for more details.
+</pre>
 </div>
 
 <p>
@@ -190,14 +224,27 @@ formatted file for importing into other software.</p>
 
 <h2 class="target" id="curators">Curators</h2>
 <div>
-<p>
-The people listed here have volunteered to help curate the AlgTop-Conf list.  They help keep the list up-to-date by adding new announcements, if the organizers haven't done so themselves.  They receive a copy of the edit/delete keys for each announcement, and can help if you have any trouble posting or updating your announcements.
-</p>
 
+<p> The people listed here have volunteered to help curate this site.
+They help keep the list up-to-date by adding new announcements, if the
+organizers haven't done so themselves.  They receive a copy of the
+edit/delete keys for each announcement, and can help if you have any
+trouble posting or updating your announcements.  </p>
+
+<p>If you would like to volunteer, please <a
+href="http://nilesjohnson.net/contact.html" target="blank">let Niles
+know</a>!</p>
+
+<h3>Algebraic and Geometric Topology</h3>
 <ul>
 <li><a href="http://www.pitt.edu/~krk56/">Chris Kapulkin</a>, University of Pittsburgh</li>
 <li>Majid Rasouli</li>
 <li><a href="http://dwhite03.web.wesleyan.edu/">David White</a>, Wesleyan University</li>
+</ul>
+
+<h3>Arithmetic Geometry</h3>
+<ul>
+<li><a href="http://www.math.ucsd.edu/~kedlaya/" target="curator">Kiran Kedlaya</a>, UCSD</li>
 </ul>
 </div>
 
@@ -270,7 +317,7 @@ href="https://github.com/nilesjohnson/conference-list"
 target="github">Browse the source</a>, have a look at the <a
 href="https://github.com/nilesjohnson/conference-list/issues"
 target="github">open issues</a>, and clone a working copy of the code.
-Contact Niles if you have further questions!</p> </div>
+<a href="http://nilesjohnson.net/contact.html" target="blank">Contact Niles</a> if you have further questions!</p> </div>
 
 
 
