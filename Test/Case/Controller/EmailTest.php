@@ -54,8 +54,8 @@ class EmailTest extends ControllerTestCase {
 	  echo "<h3>Testing content of email</h3>";
 	  $result = $this->testAction('/conferences/prepEmail/4');
 	  debug($result);
-	  debug(substr($result,1,30));
-	  $this->assertEqual(substr($result,1,35),"Thanks for adding your announcement");
+	  debug(substr($result,2,35));
+	  $this->assertEqual(substr($result,2,35),"Thanks for adding your announcement");
 	}
 
 	public function testSaveAndSend() {
