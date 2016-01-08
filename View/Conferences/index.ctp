@@ -36,25 +36,27 @@ function gcal_link($start,$end,$title,$location) {
 <h2 style="margin: 0 0 1ex 0;">Choose a sublist of interest.</h2>
 <dl style="width:40ex;">
 <dt><?php echo $this->Html->link(
-  'Algebraic Topology', array('controller'=>null,'action'=>'at-gt'));?>
-</dt>
-<dd>
-  <span class="tag">at.algebraic-topology</span> 
-  <span class="tag">gt.geometric-topology</span>
-</dd>
-<dt><?php echo $this->Html->link(
   'Arithmetic Geometry', array('controller'=>null,'action'=>'ag-nt'));?>
 </dt>
 <dd>
   <span class="tag">ag.algebraic-geometry</span>
   <span class="tag">nt.number-theory</span>
 </dd>
+<!--
 <dt><?php echo $this->Html->link(
   'Commutative Algebra', array('controller'=>null,'action'=>'ac-ag'));?>
 </dt>
 <dd>
   <span class="tag">ac.commutative-algebra</span>
   <span class="tag">ag.algebraic-geometry</span>
+</dd>
+-->
+<dt><?php echo $this->Html->link(
+  'Topology', array('controller'=>null,'action'=>'at-gt'));?>
+</dt>
+<dd>
+  <span class="tag">at.algebraic-topology</span> 
+  <span class="tag">gt.geometric-topology</span>
 </dd>
 <!--
 <dt><?php echo $this->Html->link(
@@ -66,7 +68,7 @@ function gcal_link($start,$end,$title,$location) {
 -->
 </dl>
 
-
+<h2>Or choose your own subject tags below</h2>
 </div>
 
 
@@ -114,26 +116,9 @@ function gcal_link($start,$end,$title,$location) {
 
 
 <hr class="top"/>
-<h1><?php echo $view_title; ?></h1>
+<h1 style="float:left;"><?php echo $view_title; ?></h1>
 
 <div>
-<?php
-  echo $this->Form->create('Conference');
-  //the multi-select happens magically because of the HABTM and the variable $tags
-  echo $this->Form->input('Tag',array(
-    'label'=>'Selected tags',
-    'value'=>$tagids,
-    'onchange'=>"updateTagLink('".$this->Html->url(array('controller'=>null,'action'=>''))."');",
-    'name'=>'tag_select',
-  ));
-  //disables the SecurityComponent
-  //$this->Form->unlockField('Tag');
-  echo $this->Form->end();
-
-  echo $this->Html->link(
-  'Update tag selection', array('controller'=>null,'action'=>$tagstring), array('id'=>'tag_link'));
-?>
-
 <!--
   <?php echo $sort_text ?>
   <?php foreach ($search_links as $name => $array): ?>
@@ -155,6 +140,26 @@ else {
 }
 ?>
   </div>
+
+<?php
+  echo $this->Form->create('Conference');
+  //the multi-select happens magically because of the HABTM and the variable $tags
+  echo $this->Form->input('Tag',array(
+    'label'=>'Subject tags',
+    'value'=>$tagids,
+    'onchange'=>"updateTagLink('".$this->Html->url(array('controller'=>null,'action'=>''))."');",
+    'name'=>'tag_select',
+    'after' => $this->Html->link(
+  'Update tag selection', array('controller'=>null,'action'=>$tagstring), array('id'=>'tag_link')),
+  ));
+  //disables the SecurityComponent
+  //$this->Form->unlockField('Tag');
+  echo $this->Form->end();
+
+  //echo $this->Html->link(
+  //'Update tag selection', array('controller'=>null,'action'=>$tagstring), array('id'=>'tag_link'));
+?>
+
 </div>
 
 
