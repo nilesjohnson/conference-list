@@ -15,10 +15,8 @@ if (isset($edit)){
 }
 
 echo $this->Form->input('title');
-//echo $this->Form->input('edit_key', array('type'=>'hidden'));
 echo $this->Form->input('start_date', array('type'=>'text', 'div'=>'input datefield', 'after'=>'yyyy-mm-dd'));
 echo $this->Form->input('end_date', array('type'=>'text', 'div'=>'input datefield', 'after'=>'yyyy-mm-dd'));
-//echo $this->Form->input('duration');
 echo $this->Form->input('city', array('label'=>'City and State/Province'));
 
 echo "\n"."<!-- country data from https://github.com/mledoze/countries licensed under Open Database License 1.0 -->\n";
@@ -26,7 +24,6 @@ echo $this->Form->input('country', array( 'type'=>'select', 'options'=>$countrie
 echo $this->Form->input('homepage', array('label'=>'Conference website'));
 echo $this->Form->input('institution', array('label'=>'Host institution', 'after'=>'University, institute, etc.'));
 echo $this->Form->input('meeting_type', array('after'=>'e.g. conference, summer school, special session, etc.'));
-//echo $this->Form->input('subject_area', array('after'=>'comma-separated list'));
 echo $this->Form->input('Tag', array('label'=>'Subject tags', 'after'=>'Arxiv subject areas.  Select one or more; type to narrow options', 'multiple'=>true, 'default'=>$tagids));
 echo $this->Form->input('contact_name');
 echo $this->Form->input('contact_email', array('after'=>'never displayed publicly; confirmation and edit/delete codes will be sent to this address (or list of addresses)'));

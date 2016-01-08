@@ -17,19 +17,6 @@ echo $this->Js->link(array(
 ), false);
 */
 
-/*
-function gcal_link($start,$end,$title,$location) {
-  $start_string = str_replace('-','',$start);
-  $end_string = date('Ymd',strtotime($end." +1 day"));
-  $url = "http://www.google.com/calendar/event?action=TEMPLATE&".
-    "text=".$title."&".
-    "dates=".$start_string."/".$end_string.
-    "&details=".
-    "&location=".$location.
-    "&trp=false&sprop=http%3A%2F%2Fwww.nilesjohnson.net%2Falgtop-conf&sprop=name:AlgTop-Conf";
-  return $url;
-}
-*/
 ?>
 
 <div id="search_links">
@@ -119,25 +106,14 @@ function gcal_link($start,$end,$title,$location) {
 <h1 style="float:left;"><?php echo $view_title; ?></h1>
 
 <div>
-<!--
-  <?php echo $sort_text ?>
-  <?php foreach ($search_links as $name => $array): ?>
-  <?php echo $this->Html->link($name, $array)." "; ?>
-  <?php endforeach; ?>
--->
-  &nbsp;
   <div style="float:right;">
-<!--
-    <?php echo $this->Html->link('Include Past',$past_link)?>
-    |
--->
-    <?php 
-if ($tagstring) {
-  echo $this->Html->link('RSS',array('controller'=>null,'action'=>$tagstring.'.rss'));
-}
-else {
-  echo $this->Html->link('RSS','index.rss');
-}
+<?php 
+  if ($tagstring) {
+    echo $this->Html->link('RSS',array('controller'=>null,'action'=>$tagstring.'.rss'));
+  }
+  else {
+    echo $this->Html->link('RSS','index.rss');
+  }
 ?>
   </div>
 
@@ -163,41 +139,11 @@ else {
 </div>
 
 
-<?php 
-//debug($tagstring);
-
-//just added this to show basic Paginator function
-/*
-echo '<div>';
-
-//notice clicking this will change from ASC to DESC it also changes the class name so you can draw a little arrow. Check out the default CakePHP CSS you'll see it
-echo $this->Paginator->sort('country').'<br/>';
-
-
-	echo $this->Paginator->counter(array(
-	'format' => __('Page {:page} of {:pages}, showing {:current} records out of {:count} total, starting on record {:start}, ending on {:end}')
-	)).'<br />';
-
-		echo $this->Paginator->prev('< ' . __('previous'), array(), null, array('class' => 'prev disabled'));
-		echo $this->Paginator->numbers(array('separator' => ''));
-		echo $this->Paginator->next(__('next') . ' >', array(), null, array('class' => 'next disabled'));
-
-
-echo '</div>';
-*/
-
-//
-
-?>
-
-
 <?php $curr_subsort = Null; $new_subsort = Null; $subsort_counter = 0; echo '<div id="subsort_start">'; ?>
 <?php 
 $site_url = Configure::read('site.home');
 $site_name = Configure::read('site.name');
 
-//debug($conferences);
-//debug($conferencesTags);
 foreach ($conferences as $conference):
 if ($sort_condition == Null || $sort_condition == 'all') {
   $datearray = explode("-",$conference['start_date']); 
@@ -295,12 +241,11 @@ echo
 <?php echo 
   $this->Html->link('View entry', 
   array('action'=>'view', $conference['id']));?>
-<!--
- | 
-<?php /* echo 
-  $this->Html->link('Edit', 
+
+<?php /* //print edit links  
+  echo ' | '.$this->Html->link('Edit', 
   array('action'=>'edit', $conference['id'], $conference['edit_key'])); /**/?>
--->
+
 
 </div>
 
