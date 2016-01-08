@@ -716,9 +716,8 @@ div.flash_bad {
     font-weight: bold;
 }
 
-div#add-message {
+div#add-message pre{
     font-family: Courier, monospace;
-    background-color: #eee8e0;
     border:2px dotted #A1BDC4;
 }
 

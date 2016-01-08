@@ -16,9 +16,11 @@ about more general meetings are typically not appropriate and may be
 deleted.</p>
 
 <p>The site is developed by <a href="http://nilesjohnson.net"
-target="blank">Niles Johnson</a>.  Please <a href="http://nilesjohnson.net/contact.html"
-target="blank">contact Niles</a> if you have
-further quesitons or comments!</p>
+target="blank">Niles Johnson</a>.  It began as a list for conferences
+in topology, but with the addition of subject tags we hope that it
+will be useful more generally.  Please <a
+href="http://nilesjohnson.net/contact.html" target="blank">contact
+Niles</a> if you have further quesitons or comments!</p>
 
 
 <h2>Adding Announcements</h2>
@@ -61,7 +63,7 @@ My Interesting Conference!
 http://math.osu.edu
 
 Contact: Niles Johnson
-Institution: Ohio State University
+Institution: The Ohio State University
 City: Columbus, OH
 Country: USA
 Meeting type: conference
@@ -189,6 +191,10 @@ database.  The subject tags are taken from the <a
 href="http://arxiv.org/archive/math">arXiv.org math
 categories</a>.</p>
 
+<p>Subject tags are supported on the main list, the rss feed, and the
+new announcement form.  On the form, any active subject tags are used
+to set the default tags for the new announcement.</p>
+
 </div>
 
 <h2 class="target" id="rss_about">RSS Feed</h2>
@@ -197,7 +203,9 @@ categories</a>.</p>
 <p> An RSS feed is an electronic format for publishing information
 that is frequently updated.  Using a feed reader, one can quickly scan
 the list of topics.  New topics which have not yet been viewed are
-highlighted for convenience.</p>
+highlighted for convenience.  One can also parse the rss feed with
+external software to develop an alternative front end for the
+list.</p>
 
 <p>The <a
 href="http://www.nilesjohnson.net/algtop-conf/conferences/index.rss">RSS
@@ -235,18 +243,19 @@ trouble posting or updating your announcements.  </p>
 href="http://nilesjohnson.net/contact.html" target="blank">let Niles
 know</a>!</p>
 
-<h3>Algebraic and Geometric Topology</h3>
+<h3>Arithmetic Geometry</h3>
+<ul>
+<li><a href="http://www.math.ucsd.edu/~kedlaya/" target="curator">Kiran Kedlaya</a>, UCSD</li>
+</ul>
+</div>
+
+<h3>Topology</h3>
 <ul>
 <li><a href="http://www.pitt.edu/~krk56/">Chris Kapulkin</a>, University of Pittsburgh</li>
 <li>Majid Rasouli</li>
 <li><a href="http://dwhite03.web.wesleyan.edu/">David White</a>, Wesleyan University</li>
 </ul>
 
-<h3>Arithmetic Geometry</h3>
-<ul>
-<li><a href="http://www.math.ucsd.edu/~kedlaya/" target="curator">Kiran Kedlaya</a>, UCSD</li>
-</ul>
-</div>
 
 <!-- reporting disabled
 <h2>Reporting Problems</h2>

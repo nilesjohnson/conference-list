@@ -33,7 +33,7 @@ function gcal_link($start,$end,$title,$location) {
 ?>
 
 <div id="search_links">
-<h2 style="margin: 0 0 1ex 0;">Choose a sublist of interest.</h2>
+<h2 style="margin: 0 0 1ex 0;">Choose a sublist of interest</h2>
 <dl style="width:40ex;">
 <dt><?php echo $this->Html->link(
   'Arithmetic Geometry', array('controller'=>null,'action'=>'ag-nt'));?>
