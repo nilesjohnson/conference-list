@@ -12,7 +12,6 @@ class ConferencesController extends AppController {
 
 
   var $name = 'Conferences';
-  //var $hasOne = 'CcData';  // model for cc data
 
   var $months = array("none", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
 
@@ -81,7 +80,6 @@ class ConferencesController extends AppController {
     // remove tag validation so tags are not required
     $this->Conference->Tag->validator()->remove('Tag');
 	
-    // collect tag ids from post data
     $tagids=null;
 
     $index_link_array = array('controller' => 'conferences', 'action' => 'index');
@@ -89,12 +87,8 @@ class ConferencesController extends AppController {
       //debug($this->params['tags']);
       //debug($tagstring);
       $tagstring = $this->params['tags'] ? $this->params['tags'] : $tagstring;
-      //$this->loadModel('Tag');
-      //$this->Tag->recursive=0;
       $tagids=$this->tag_ids_from_names(explode('-', $tagstring));
 
-      // I opted NOT to use a manual JOIN here because of the dickery with Pagination
-      //but rest-assured, this is Dickery nonetheless!
       $tagquery=array();
       $temp_array = &$tagquery;
       foreach ($tagids as $i => $item) {
@@ -102,9 +96,6 @@ class ConferencesController extends AppController {
 	$temp_array['ConferencesTag.tag_id'] =$item;
       }
       array_push($display_options['conditions'],$tagquery);
-      //$display_options['group'] = 'Conference.id'; // grouping is done manually below
-      //$this->Paginator->settings = array('conditions' => $tagquery);
-      //$conferences=$this->paginate('ConferencesTag');
       $active_model = $this->Conference->ConferencesTag;
       $regroup = true;
     }
@@ -115,52 +106,8 @@ class ConferencesController extends AppController {
       $regroup = false;
     }
 
-    /*
-    if ($this->request->is('post')) {
-    //when we used a form to set tags
-      debug('post!');
-      if (isset($this->request->data['Tag']['Tag']) && !empty($this->request->data['Tag']['Tag'])){
-	$tagnames=array();
-	$this->loadModel('Tag',array('recursive'=>0));
-	//$this->Tag->recursive=0;
-	foreach ($this->request->data['Tag']['Tag'] as $tag){
-	  // get tag names from id numbers
-	  $t=$this->Tag->find('first',array('conditions'=>array('Tag.id'=>$tag)));
-	  $t=explode('.',$t['Tag']['name']);
-	  array_push($tagnames,$t[0]);
-	}
-	$tagstring=implode('-',$tagnames);
-	//$this->Session->setFlash($tagstring,'FlashGood'); // for testing
-	$this->Cookie->write('tags',$this->request->data['Tag']['Tag']);
-	return $this->redirect(array('controller'=>null,'action' => $tagstring.'/', $sort_condition));
-      }
-    }
-    */
-
-    /*
-    // set inputs for find/paginate based on $sort_condition
-    // and update search links
-    if ($sort_condition == 'country') {
-      // determine order_array and subsort function for this sort_condition
-      array_unshift($display_options['order'],'Conference.country');
-      //array_push($index_link_array,'');
-      $this->set('search_links', array('Date' => $index_link_array));
-    }
-    elseif ($sort_condition == 'all') {
-      $this->set('sort_text','');
-      $this->set('view_title','All Meetings');
-      unset($display_options['conditions']['Conference.end_date >']);
-      //array_push($index_link_array,'country');
-      $this->set('search_links', array('Main List' => $index_link_array));
-    }
-    else {
-      // determine order_array and subsort function for default sort_condition
-      $this->set('search_links', array('Country' => array_merge($index_link_array,array('country'))));
-    }
-    */
 
     //debug($display_options);
-    //$this->set('past_link', array_merge($index_link_array,array('all')));
     $conferencesTagsRaw = $active_model->find('all', $display_options);
 
     // do manual regrouping
@@ -186,22 +133,13 @@ class ConferencesController extends AppController {
 	foreach ($tagsForThisConference as $item) {
 	  array_push($conferencesTags[$id],$item['Tag']);
 	}
-	//array($ct['Tag']);
 	$prev_id = $id;
-      }
-      else {
-	//array_push($conferencesTags[$id],$ct['Tag']);
       }
     }
 
     $this->set('conferences', $conferences);
     $this->set('conferencesTags',$conferencesTags);
 
-    // currently NOT using paginator
-    //using the paginator instead, it takes the same conditions
-    //$this->Paginator->settings = array('conditions' => $conditions);
-    //$conferences=$this->paginate('Conference');
-	
     $tags=$this->Conference->Tag->find('list');
 	
     $this->set(compact('conferences', 'tags', 'tagstring', 'tagids'));
@@ -214,8 +152,6 @@ class ConferencesController extends AppController {
 
 
   public function tag_name_from_id($tagid) {
-    // get tag names from id numbers
-    
     $t = $this->Tag->find('first',array('conditions'=>array('Tag.id'=>$tagid)));
     return $t['Tag']['name'];
   }
@@ -237,85 +173,6 @@ class ConferencesController extends AppController {
     return $tagids;
   }
 
-
-  /*
-  public function past_unused() {
-    $order_array =  array('Conference.start_date',
-			    'Conference.end_date',
-			    'Conference.title',
-			    );
-    $find_array = array('order' => $order_array);    
-    $this->set('conferences', $this->Conference->find('all', $find_array));
-
-  }
-  */
-
-  /*
-  function report($id = null) {
-    $this->Conference->id = $id;
-    if (empty($this->data)) {
-      $this->set('conference', $this->Conference->read());
-      $this->data = $this->Conference->read();
-    } 
-    else {
-      if ($this->MathCaptcha->validates($this->data['Conference']['captcha'])) {
-	if (empty($this->data['Conference']['report_comment'])){
-	  $this->set('conference', $this->Conference->read());
-	  $this->data = $this->Conference->read();
-	  $this->Session->setFlash('Please include a comment', 'FlashBad');
-	}
-	else {
-	  $report_comment = $this->data['Conference']['report_comment'];
-	  $this->request->data = $this->Conference->read();
-	  $this->request->data['Conference']['report_comment'] = $report_comment;
-	  //$this->EmailKey->report_item($id,$this->data,$this->admin_email);
-	  $this->Session->setFlash('Your comment has been reported; please allow a few days for action to be taken.', 'FlashGood');
-	  $this->redirect(array('action'=>'index'));
-	}
-      }
-      else {
-	$this->set('conference', $this->Conference->read());	
-	$this->request->data = $this->Conference->read();
-	$this->Conference->invalidate('captcha','Please perform the indicated arithmetic.');
-	$this->Session->setFlash('Please perform the indicated arithmetic before submitting the form.', 'FlashBad');
-      }
-    }
-    $this->set('mathCaptcha', $this->MathCaptcha->generateEquation());
-  }
-  */
-
-
-  /*
-  public function view_unused($id = null, $key = null) {
-    $this->Conference->id = $id;
-    if (empty($this->data)) {
-      $this->set('conference', $this->Conference->read());
-      $this->request->data = $this->Conference->read();
-    } 
-    else {
-      if ($this->data['Conference']['edit_key'] != $this->Conference->field('edit_key')) {
-	$this->Session->SetFlash('Invalid edit key.','FlashBad');
-	$this->redirect(array('action' => 'index'));
-      }
-      if ($this->MathCaptcha->validates($this->data['Conference']['captcha'])) {
-	$this->Conference->delete($id);
-	$this->Session->setFlash('The conference announcement has been deleted.', 'FlashGood');
-	$this->redirect(array('action'=>'index'));
-      }
-      else {
-	$this->set('conference', $this->Conference->read());
-	$this->request->data = $this->Conference->read();
-	$this->Conference->invalidate('captcha','Please perform the indicated arithmetic.');
-	$this->Session->setFlash('Please perform the indicated arithmetic before submitting the form.', 'FlashBad');
-      }
-    }
-    $this->set('mathCaptcha', $this->MathCaptcha->generateEquation());
-    if ($key != $this->data['Conference']['edit_key']) {
-      $this->Session->SetFlash('Invalid edit key.','FlashBad');
-      $this->redirect(array('action' => 'index'));
-    }
-  }
-  */
   
   public function ical($id=null) {
     $this->Conference->id = $id;
@@ -357,6 +214,7 @@ class ConferencesController extends AppController {
 
 
   public function gcal($id) {
+    // Is this used for anything?
     $this->Conference->id = $id;
     if (empty($this->data)) {
       $this->set('conference', $this->Conference->read());
@@ -386,22 +244,6 @@ class ConferencesController extends AppController {
   }
 
 
-  /*
-  public function sort_country_unused(){
-    $this->set('conferences', $this->Conference->find('all',
-						      array('order' => array(
-									     'Conference.country',
-									     'Conference.start_date',
-									     'Conference.end_date',
-									     'Conference.title',
-									     ))));
-  }
-
-
-
-  */
-
-
   public function view($id = null) {
     if (!$this->Conference->exists($id)) {
       throw new NotFoundException(__('Invalid conference'));
@@ -417,7 +259,6 @@ class ConferencesController extends AppController {
     if (isset($tagstring)) {
       //debug($tagstring);
       $this->set('tagstring',$tagstring);
-      //$this->loadModel('Tag');
       $tagids=$this->tag_ids_from_names(explode('-', $tagstring));
       $this->set('tagids',$tagids);
     } 
@@ -426,9 +267,6 @@ class ConferencesController extends AppController {
       $this->set('tagids',array());
     }
 
-    //$this->loadModel('CcData');
-    //not sure we even need this now
-    //$this->loadModel('Tag');
     if (!empty($this->data)) {
       // set model data
       //debug($this->data);  //displays array info
@@ -438,15 +276,11 @@ class ConferencesController extends AppController {
       //these don't really need separate variables but I did it anyway, feel free to include directly in IF statement
       $validconf=$this->Checker->conferenceValid($this->data['Conference']);
       $validtag=$this->Checker->tagValid($this->data['Tag']);
-      //$this->ccdata = $this->data['CcData'];
-      //$this->CcData->set($this->ccdata);
 
 
       // test whether conference and tag data validates
 
       // check for invalid conference data
-
-      //debug($valid_data_2);
 
       // if conference and tag data validates, check for valid captcha
       if ($validtag && $validconf &&
@@ -501,32 +335,12 @@ class ConferencesController extends AppController {
       $Email = $this->prepEmail();
       $Email->send();
       $this->Session->setFlash('Your conference information has been saved.  An email with edit/delete links has been sent to the contact address.', 'FlashGood');
-      /*
-	if ($this->ccdata['to'] != '') {
-	$this->Session->setFlash('Your conference information has been saved.  An email with edit/delete links has been sent to the contact address, and a separate announcement has been sent to the given addresses.', 'FlashGood');
-	}
-      */
       $this->redirect(array('action' => 'index',$tagstring));
     } 
     else {
       $this->Session->setFlash('There was an error saving the data','FlashBad');
     }
   }
-
-  /*
-  public function add_baked() {
-    if ($this->request->is('post')) {
-      $this->Conference->create();
-      if ($this->Conference->save($this->request->data)) {
-        $this->Session->setFlash(__('The conference has been saved.'));
-        return $this->redirect(array('action' => 'index'));
-      } 
-      else {
-        $this->Session->setFlash(__('The conference could not be saved. Please, try again.'));
-      }
-    }
-  }
-  */
 
   public function _getEmailer() {
     // function to return emailer, so we can replace it during automated tests
@@ -615,28 +429,6 @@ class ConferencesController extends AppController {
   }
   
 
-
-  /*
-  public function edit_baked($id = null) {
-    if (!$this->Conference->exists($id)) {
-      throw new NotFoundException(__('Invalid conference'));
-    }
-    if ($this->request->is(array('post', 'put'))) {
-      if ($this->Conference->save($this->request->data)) {
-        $this->Session->setFlash(__('The conference has been saved.'));
-        return $this->redirect(array('action' => 'index'));
-      }
-      else {
-        $this->Session->setFlash(__('The conference could not be saved. Please, try again.'));
-      }
-    } 
-    else {
-      $options = array('conditions' => array('Conference.' . $this->Conference->primaryKey => $id));
-      $this->request->data = $this->Conference->find('first', $options);
-    }
-  }
-  */
-
   public function delete($id = null) {
     $this->Conference->id = $id;
     if (!$this->Conference->exists()) {
@@ -672,85 +464,8 @@ class ConferencesController extends AppController {
 	  $this->set('valid_admin',true);
 	}
     }
-    /*
-    $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.";
-    $key_array = str_split($this->Conference->field('edit_key'));
-    $shift_array = array(18,3,-12,24,-5,-7,2,21);
-    $i = 0;
-    foreach ($key_array as $l) {
-      $key_code_array[] = (strpos($chars,$l) + $shift_array[$i]) % 62;
-      $i = $i+1;
-    }
-    $this->set('key_code','['.implode(',',$key_code_array).']');
-    //$this->set('key_code', $this->Conference->field('edit_key'));
-    */
   }
 
-
-  /*
-  public function admin_index() {
-    $this->Conference->recursive = 0;
-    $this->set('conferences', $this->Paginator->paginate());
-  }
-
-  public function admin_view($id,$key) {
-    if (!$this->Conference->exists($id)) {
-      throw new NotFoundException(__('Invalid conference'));
-    }
-    if ($key != Configure::read('site.admin_key')) {
-      throw new NotFoundException(__('Invalid admin key'));
-    }
-    $options = array('conditions' => array('Conference.' . $this->Conference->primaryKey => $id));
-    $this->set('conference', $this->Conference->find('first', $options));
-  }
-
-  public function admin_add() {
-    if ($this->request->is('post')) {
-      $this->Conference->create();
-      if ($this->Conference->save($this->request->data)) {
-        $this->Session->setFlash(__('The conference has been saved.'));
-        return $this->redirect(array('action' => 'index'));
-      }
-      else {
-        $this->Session->setFlash(__('The conference could not be saved. Please, try again.'));
-      }
-    }
-  }
-
-  public function admin_edit($id = null) {
-    if (!$this->Conference->exists($id)) {
-      throw new NotFoundException(__('Invalid conference'));
-    }
-    if ($this->request->is(array('post', 'put'))) {
-      if ($this->Conference->save($this->request->data)) {
-        $this->Session->setFlash(__('The conference has been saved.'));
-        return $this->redirect(array('action' => 'index'));
-      }
-      else {
-        $this->Session->setFlash(__('The conference could not be saved. Please, try again.'));
-      }
-    }
-    else {
-      $options = array('conditions' => array('Conference.' . $this->Conference->primaryKey => $id));
-      $this->request->data = $this->Conference->find('first', $options);
-    }
-  }
-
-  public function admin_delete($id = null) {
-    $this->Conference->id = $id;
-    if (!$this->Conference->exists()) {
-      throw new NotFoundException(__('Invalid conference'));
-    }
-    $this->request->onlyAllow('post', 'delete');
-    if ($this->Conference->delete()) {
-      $this->Session->setFlash(__('The conference has been deleted.'));
-    }
-    else {
-      $this->Session->setFlash(__('The conference could not be deleted. Please, try again.'));
-    }
-    return $this->redirect(array('action' => 'index'));
-  }
-  */
 
   public function loadCountries($file = "../webroot/files/countries/dist/countries.csv") {
     $tmpCountries = array();
@@ -781,254 +496,5 @@ class ConferencesController extends AppController {
     }
   }
 
-  public $countries_NOTUSED = array(
-			 "" => 'Country...', // value attribte of first element must be empty
-			 "Afganistan" => 'Afghanistan',
-			 "Albania" => 'Albania',
-			 "Algeria" => 'Algeria',
-			 "American Samoa" => 'American Samoa',
-			 "Andorra" => 'Andorra',
-			 "Angola" => 'Angola',
-			 "Anguilla" => 'Anguilla',
-			 "Antigua &amp; Barbuda" => 'Antigua & Barbuda',
-			 "Argentina" => 'Argentina',
-			 "Armenia" => 'Armenia',
-			 "Aruba" => 'Aruba',
-			 "Australia" => 'Australia',
-			 "Austria" => 'Austria',
-			 "Azerbaijan" => 'Azerbaijan',
-			 "Bahamas" => 'Bahamas',
-			 "Bahrain" => 'Bahrain',
-			 "Bangladesh" => 'Bangladesh',
-			 "Barbados" => 'Barbados',
-			 "Belarus" => 'Belarus',
-			 "Belgium" => 'Belgium',
-			 "Belize" => 'Belize',
-			 "Benin" => 'Benin',
-			 "Bermuda" => 'Bermuda',
-			 "Bhutan" => 'Bhutan',
-			 "Bolivia" => 'Bolivia',
-			 "Bonaire" => 'Bonaire',
-			 "Bosnia &amp; Herzegovina" => 'Bosnia & Herzegovina',
-			 "Botswana" => 'Botswana',
-			 "Brazil" => 'Brazil',
-			 "British Indian Ocean Ter" => 'British Indian Ocean Ter',
-			 "Brunei" => 'Brunei',
-			 "Bulgaria" => 'Bulgaria',
-			 "Burkina Faso" => 'Burkina Faso',
-			 "Burundi" => 'Burundi',
-			 "Cambodia" => 'Cambodia',
-			 "Cameroon" => 'Cameroon',
-			 "Canada" => 'Canada',
-			 "Canary Islands" => 'Canary Islands',
-			 "Cape Verde" => 'Cape Verde',
-			 "Cayman Islands" => 'Cayman Islands',
-			 "Central African Republic" => 'Central African Republic',
-			 "Chad" => 'Chad',
-			 "Channel Islands" => 'Channel Islands',
-			 "Chile" => 'Chile',
-			 "China" => 'China',
-			 "Christmas Island" => 'Christmas Island',
-			 "Cocos Island" => 'Cocos Island',
-			 "Colombia" => 'Colombia',
-			 "Comoros" => 'Comoros',
-			 "Congo" => 'Congo',
-			 "Cook Islands" => 'Cook Islands',
-			 "Costa Rica" => 'Costa Rica',
-			 "Cote DIvoire" => "Cote D'Ivoire",
-			 "Croatia" => 'Croatia',
-			 "Cuba" => 'Cuba',
-			 "Curaco" => 'Curacao',
-			 "Cyprus" => 'Cyprus',
-			 "Czech Republic" => 'Czech Republic',
-			 "Denmark" => 'Denmark',
-			 "Djibouti" => 'Djibouti',
-			 "Dominica" => 'Dominica',
-			 "Dominican Republic" => 'Dominican Republic',
-			 "East Timor" => 'East Timor',
-			 "Ecuador" => 'Ecuador',
-			 "Egypt" => 'Egypt',
-			 "El Salvador" => 'El Salvador',
-			 "Equatorial Guinea" => 'Equatorial Guinea',
-			 "Eritrea" => 'Eritrea',
-			 "Estonia" => 'Estonia',
-			 "Ethiopia" => 'Ethiopia',
-			 "Falkland Islands" => 'Falkland Islands',
-			 "Faroe Islands" => 'Faroe Islands',
-			 "Fiji" => 'Fiji',
-			 "Finland" => 'Finland',
-			 "France" => 'France',
-			 "French Guiana" => 'French Guiana',
-			 "French Polynesia" => 'French Polynesia',
-			 "French Southern Ter" => 'French Southern Ter',
-			 "Gabon" => 'Gabon',
-			 "Gambia" => 'Gambia',
-			 "Georgia" => 'Georgia',
-			 "Germany" => 'Germany',
-			 "Ghana" => 'Ghana',
-			 "Gibraltar" => 'Gibraltar',
-			 "Great Britain" => 'Great Britain',
-			 "Greece" => 'Greece',
-			 "Greenland" => 'Greenland',
-			 "Grenada" => 'Grenada',
-			 "Guadeloupe" => 'Guadeloupe',
-			 "Guam" => 'Guam',
-			 "Guatemala" => 'Guatemala',
-			 "Guinea" => 'Guinea',
-			 "Guyana" => 'Guyana',
-			 "Haiti" => 'Haiti',
-			 "Hawaii" => 'Hawaii',
-			 "Honduras" => 'Honduras',
-			 "Hong Kong" => 'Hong Kong',
-			 "Hungary" => 'Hungary',
-			 "Iceland" => 'Iceland',
-			 "India" => 'India',
-			 "Indonesia" => 'Indonesia',
-			 "Iran" => 'Iran',
-			 "Iraq" => 'Iraq',
-			 "Ireland" => 'Ireland',
-			 "Isle of Man" => 'Isle of Man',
-			 "Israel" => 'Israel',
-			 "Italy" => 'Italy',
-			 "Jamaica" => 'Jamaica',
-			 "Japan" => 'Japan',
-			 "Jordan" => 'Jordan',
-			 "Kazakhstan" => 'Kazakhstan',
-			 "Kenya" => 'Kenya',
-			 "Kiribati" => 'Kiribati',
-			 "Korea North" => 'Korea North',
-			 "Korea South" => 'Korea South',
-			 "Kuwait" => 'Kuwait',
-			 "Kyrgyzstan" => 'Kyrgyzstan',
-			 "Laos" => 'Laos',
-			 "Latvia" => 'Latvia',
-			 "Lebanon" => 'Lebanon',
-			 "Lesotho" => 'Lesotho',
-			 "Liberia" => 'Liberia',
-			 "Libya" => 'Libya',
-			 "Liechtenstein" => 'Liechtenstein',
-			 "Lithuania" => 'Lithuania',
-			 "Luxembourg" => 'Luxembourg',
-			 "Macau" => 'Macau',
-			 "Macedonia" => 'Macedonia',
-			 "Madagascar" => 'Madagascar',
-			 "Malaysia" => 'Malaysia',
-			 "Malawi" => 'Malawi',
-			 "Maldives" => 'Maldives',
-			 "Mali" => 'Mali',
-			 "Malta" => 'Malta',
-			 "Marshall Islands" => 'Marshall Islands',
-			 "Martinique" => 'Martinique',
-			 "Mauritania" => 'Mauritania',
-			 "Mauritius" => 'Mauritius',
-			 "Mayotte" => 'Mayotte',
-			 "Mexico" => 'Mexico',
-			 "Midway Islands" => 'Midway Islands',
-			 "Moldova" => 'Moldova',
-			 "Monaco" => 'Monaco',
-			 "Mongolia" => 'Mongolia',
-			 "Montserrat" => 'Montserrat',
-			 "Morocco" => 'Morocco',
-			 "Mozambique" => 'Mozambique',
-			 "Myanmar" => 'Myanmar',
-			 "Nambia" => 'Nambia',
-			 "Nauru" => 'Nauru',
-			 "Nepal" => 'Nepal',
-			 "Netherland Antilles" => 'Netherland Antilles',
-			 "Netherlands" => 'Netherlands (Holland, Europe)',
-			 "Nevis" => 'Nevis',
-			 "New Caledonia" => 'New Caledonia',
-			 "New Zealand" => 'New Zealand',
-			 "Nicaragua" => 'Nicaragua',
-			 "Niger" => 'Niger',
-			 "Nigeria" => 'Nigeria',
-			 "Niue" => 'Niue',
-			 "Norfolk Island" => 'Norfolk Island',
-			 "Norway" => 'Norway',
-			 "Oman" => 'Oman',
-			 "Pakistan" => 'Pakistan',
-			 "Palau Island" => 'Palau Island',
-			 "Palestine" => 'Palestine',
-			 "Panama" => 'Panama',
-			 "Papua New Guinea" => 'Papua New Guinea',
-			 "Paraguay" => 'Paraguay',
-			 "Peru" => 'Peru',
-			 "Phillipines" => 'Philippines',
-			 "Pitcairn Island" => 'Pitcairn Island',
-			 "Poland" => 'Poland',
-			 "Portugal" => 'Portugal',
-			 "Puerto Rico" => 'Puerto Rico',
-			 "Qatar" => 'Qatar',
-			 "Republic of Montenegro" => 'Republic of Montenegro',
-			 "Republic of Serbia" => 'Republic of Serbia',
-			 "Reunion" => 'Reunion',
-			 "Romania" => 'Romania',
-			 "Russia" => 'Russia',
-			 "Rwanda" => 'Rwanda',
-			 "St Barthelemy" => 'St Barthelemy',
-			 "St Eustatius" => 'St Eustatius',
-			 "St Helena" => 'St Helena',
-			 "St Kitts-Nevis" => 'St Kitts-Nevis',
-			 "St Lucia" => 'St Lucia',
-			 "St Maarten" => 'St Maarten',
-			 "St Pierre &amp; Miquelon" => 'St Pierre & Miquelon',
-			 "St Vincent &amp; Grenadines" => 'St Vincent & Grenadines',
-			 "Saipan" => 'Saipan',
-			 "Samoa" => 'Samoa',
-			 "Samoa American" => 'Samoa American',
-			 "San Marino" => 'San Marino',
-			 "Sao Tome &amp; Principe" => 'Sao Tome & Principe',
-			 "Saudi Arabia" => 'Saudi Arabia',
-			 "Senegal" => 'Senegal',
-			 "Seychelles" => 'Seychelles',
-			 "Sierra Leone" => 'Sierra Leone',
-			 "Singapore" => 'Singapore',
-			 "Slovakia" => 'Slovakia',
-			 "Slovenia" => 'Slovenia',
-			 "Solomon Islands" => 'Solomon Islands',
-			 "Somalia" => 'Somalia',
-			 "South Africa" => 'South Africa',
-			 "Spain" => 'Spain',
-			 "Sri Lanka" => 'Sri Lanka',
-			 "Sudan" => 'Sudan',
-			 "Suriname" => 'Suriname',
-			 "Swaziland" => 'Swaziland',
-			 "Sweden" => 'Sweden',
-			 "Switzerland" => 'Switzerland',
-			 "Syria" => 'Syria',
-			 "Tahiti" => 'Tahiti',
-			 "Taiwan" => 'Taiwan',
-			 "Tajikistan" => 'Tajikistan',
-			 "Tanzania" => 'Tanzania',
-			 "Thailand" => 'Thailand',
-			 "Togo" => 'Togo',
-			 "Tokelau" => 'Tokelau',
-			 "Tonga" => 'Tonga',
-			 "Trinidad &amp; Tobago" => 'Trinidad & Tobago',
-			 "Tunisia" => 'Tunisia',
-			 "Turkey" => 'Turkey',
-			 "Turkmenistan" => 'Turkmenistan',
-			 "Turks &amp; Caicos Is" => 'Turks & Caicos Is',
-			 "Tuvalu" => 'Tuvalu',
-			 "Uganda" => 'Uganda',
-			 "Ukraine" => 'Ukraine',
-			 "United Arab Erimates" => 'United Arab Emirates',
-			 "UK" => 'United Kingdom',
-			 "USA" => 'United States of America',
-			 "Uraguay" => 'Uruguay',
-			 "Uzbekistan" => 'Uzbekistan',
-			 "Vanuatu" => 'Vanuatu',
-			 "Vatican City State" => 'Vatican City State',
-			 "Venezuela" => 'Venezuela',
-			 "Vietnam" => 'Vietnam',
-			 "Virgin Islands (Brit)" => 'Virgin Islands (Brit)',
-			 "Virgin Islands (USA)" => 'Virgin Islands (USA)',
-			 "Wake Island" => 'Wake Island',
-			 "Wallis &amp; Futana Is" => 'Wallis & Futana Is',
-			 "Yemen" => 'Yemen',
-			 "Zaire" => 'Zaire',
-			 "Zambia" => 'Zambia',
-			 "Zimbabwe" => 'Zimbabwe',
-			 );
 
 }
