@@ -144,8 +144,14 @@ END:VCALENDAR';
  */
 	public function testDelete() {
 	  echo "<h3>Testing delete</h3>";
-	  $result = $this->testAction('/conferences/delete/4');
-	  debug($result);
+	  $this->Conference->id = 4;
+	  debug($this->Conference->read('title'));
+	  $result = $this->testAction('/conferences/delete/4/wrong');
+	  $this->assertEqual((bool)$this->Conference->read(),true);
+	  $result = $this->testAction('/conferences/delete/4/key4');
+	  $this->assertEqual((bool)$this->Conference->read(),false);
+	  //debug(array('id'=>$this->Conference->id));
+	  //debug($result);
 	}
 
 

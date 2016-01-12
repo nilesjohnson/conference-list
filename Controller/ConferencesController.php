@@ -335,7 +335,7 @@ class ConferencesController extends AppController {
       $Email = $this->prepEmail();
       $Email->send();
       $this->Session->setFlash('Your conference information has been saved.  An email with edit/delete links has been sent to the contact address.', 'FlashGood');
-      $this->redirect(array('action' => 'index',$tagstring));
+      return $this->redirect(array('action' => 'index',$tagstring));
     } 
     else {
       $this->Session->setFlash('There was an error saving the data','FlashBad');
@@ -399,7 +399,7 @@ class ConferencesController extends AppController {
 
       if ($key != $this->data['Conference']['edit_key']) {
 	$this->Session->SetFlash('Invalid edit key. (2)','FlashBad');
-	$this->redirect(array('action' => 'index'));
+	return $this->redirect(array('action' => 'index'));
       }
     } 
     else {
@@ -409,7 +409,7 @@ class ConferencesController extends AppController {
       ));
       if ($key != $prev['Conference']['edit_key']) {
         $this->Session->SetFlash('Invalid edit key. (1)','FlashBad');
-        $this->redirect(array('action' => 'index'));
+        return $this->redirect(array('action' => 'index'));
       }
 
       $validconf=$this->Checker->conferenceValid($this->data['Conference']);
@@ -433,7 +433,7 @@ class ConferencesController extends AppController {
     //debug($this->Conference->read('edit_key')['Conference']['edit_key']);
     if ($key != $this->Conference->read('edit_key')['Conference']['edit_key']) {
       $this->Session->SetFlash('Invalid edit key. (3)','FlashBad');
-      $this->redirect(array('action' => 'index'));
+      return $this->redirect(array('action' => 'index'));
     }
     if (!$this->Conference->exists()) {
       throw new NotFoundException(__('Invalid conference'));
