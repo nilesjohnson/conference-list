@@ -401,8 +401,6 @@ class ConferencesController extends AppController {
 	$this->Session->SetFlash('Invalid edit key. (2)','FlashBad');
 	$this->redirect(array('action' => 'index'));
       }
-      //debug('rendering add');
-      $this->render('add');
     } 
     else {
       // check that given key matches key from database
@@ -414,23 +412,29 @@ class ConferencesController extends AppController {
         $this->redirect(array('action' => 'index'));
       }
 
-      if ($this->Checker->tagValid($this->data['Tag']) && $this->Conference->save($this->data)) {
-	$this->request->data = $this->Conference->read();
-	$Email = $this->prepEmail();
-	$Email->send();
-
-	$this->Session->setFlash('Your conference announcement has been updated.  An email with the new edit/delete links has been sent to the contact address.','FlashGood');
-	$this->redirect(array('action' => 'index'));
+      $validconf=$this->Checker->conferenceValid($this->data['Conference']);
+      $validtag=$this->Checker->tagValid($this->data['Tag']);
+      // test whether conference and tag data validates
+      // check for invalid conference data
+      if ($validtag && $validconf) {
+	$this->save_and_send();
       }
       else {
 	$this->Session->setFlash('Please check for errors below.', 'FlashBad');
       }
     }
+    //debug('rendering add');
+    $this->render('add'); // always render the add view
   }
   
 
-  public function delete($id = null) {
+  public function delete($id = null, $key = null) {
     $this->Conference->id = $id;
+    //debug($this->Conference->read('edit_key')['Conference']['edit_key']);
+    if ($key != $this->Conference->read('edit_key')['Conference']['edit_key']) {
+      $this->Session->SetFlash('Invalid edit key. (3)','FlashBad');
+      $this->redirect(array('action' => 'index'));
+    }
     if (!$this->Conference->exists()) {
       throw new NotFoundException(__('Invalid conference'));
     }

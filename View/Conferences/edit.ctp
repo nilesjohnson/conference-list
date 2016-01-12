@@ -1,4 +1,5 @@
 <div class="conferences form">
+<?php debug('This form is not used');?>
 <?php echo $this->Form->create('Conference'); ?>
 	<fieldset>
 		<legend><?php echo __('Edit Conference'); ?></legend>

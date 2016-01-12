@@ -42,7 +42,7 @@ echo '</div>';
 	<h3><?php echo __('Actions'); ?></h3>
 	<ul>
 
-		<li><?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $this->Form->value('Conference.id')), null, __('Are you sure you want to delete # %s?', $this->Form->value('Conference.id'))); ?></li>
+		<li><?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $this->Form->value('Conference.id'),$this->Form->value('Conference.edit_key')), null, __('Are you sure you want to delete "%s"?', $this->Form->value('Conference.title'))); ?></li>
 		<li><?php echo $this->Html->link(__('List Conferences'), array('action' => 'index')); ?></li>
 	</ul>
 </div>
