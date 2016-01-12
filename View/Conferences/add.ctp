@@ -25,8 +25,8 @@ echo $this->Form->input('homepage', array('label'=>'Conference website'));
 echo $this->Form->input('institution', array('label'=>'Host institution', 'after'=>'University, institute, etc.'));
 echo $this->Form->input('meeting_type', array('after'=>'e.g. conference, summer school, special session, etc.'));
 echo $this->Form->input('Tag', array('label'=>'Subject tags', 'after'=>'Arxiv subject areas.  Select one or more; type to narrow options', 'multiple'=>true, 'default'=>$tagids));
-echo $this->Form->input('contact_name');
-echo $this->Form->input('contact_email', array('after'=>'never displayed publicly; confirmation and edit/delete codes will be sent to this address (or list of addresses)'));
+echo $this->Form->input('contact_name', array('label'=>'Contact Name(s), comma separated'));
+echo $this->Form->input('contact_email', array('label'=>'Contact Email(s), comma separated', 'after'=>'never displayed publicly; confirmation and edit/delete codes will be sent to these addresses'));
 echo $this->Form->input('description', array('label'=>'Description: <br/><span style="font-size:80%;">Enter text, HTML, or <a href="http://daringfireball.net/projects/markdown/">Markdown</a>.</span>', 'rows' => '10'));
 
 echo '<div class="input"><p>Description Preview:</p><div class="wmd-preview"></div></div>';
