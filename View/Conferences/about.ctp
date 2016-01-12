@@ -94,6 +94,17 @@ database.  The subject tags are taken from the <a
 href="http://arxiv.org/archive/math">arXiv.org math
 categories</a>.</p>
 
+<p>The link to update tags on the home page is generated automatically by javascript.  If you prefer not to use javascript, you can easily create the appropriate URL by hand.  Simply use the 2-letter codes for each subject, separated by dashes.  For example, to choose <span class="tag">at.algebraic-topology</span> and <span class="tag">ct.category-theory</span>, use the following URL:
+<pre>
+http://mathmeetings.net/at-ct
+</pre>
+</p>
+
+<p>Note: Multiple tags are combined with an OR condition, meaning that
+you will see announcements which are tagged with any of the tags you
+select.  For now, it does not seem useful to introduce more complex
+search logic.</p>
+
 <p>Subject tags are supported on the main list, the rss feed, and the
 new announcement form.  On the form, any active subject tags are used
 to set the default tags for the new announcement.</p>

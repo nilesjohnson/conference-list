@@ -126,7 +126,8 @@ echo $this->Js->link(array(
     'onchange'=>"updateTagLink('".$this->Html->url(array('controller'=>null,'action'=>''))."');",
     'name'=>'tag_select',
     'after' => $this->Html->link(
-  'Update tag selection', array('controller'=>null,'action'=>$tagstring), array('id'=>'tag_link')),
+      'Update tag selection', array('controller'=>null,'action'=>$tagstring), array('id'=>'tag_link')),
+    'div'=>array('style'=>'display:none','id'=>'tagSelectDiv')
   ));
   //disables the SecurityComponent
   //$this->Form->unlockField('Tag');
@@ -135,7 +136,15 @@ echo $this->Js->link(array(
   //echo $this->Html->link(
   //'Update tag selection', array('controller'=>null,'action'=>$tagstring), array('id'=>'tag_link'));
 ?>
-
+<script>
+<!--
+document.getElementById('tagSelectDiv').style.display = 'block';
+//-->
+</script>
+<noscript>
+<pre>A javascript feature to select tags appears here.</pre>
+<p>See <a href="/conferences/about#tags_about">about subject tags</a> to select tags by hand.</p>
+</noscript>
 </div>
 
 
@@ -199,7 +208,7 @@ if ($new_subsort != $curr_subsort) {
 			       $site_name
                                ),
   array('escape' => false,'class'=>'ics button'));
-
+echo ' ';
 echo
   $this->Html->link('iCalendar .ics',
   array('action'=>'ical', $conference['id']),
