@@ -93,6 +93,7 @@ class EmailTest extends ControllerTestCase {
 	  $this->Conference->id = 3;
 	  //debug(array('id'=>$this->Conference->id));
 	  $this->Conference->read();
+	  debug($this->Conference->data['Conference']['title']);
 	  $result = $this->testAction('/conferences/save_and_send',
 	  			      array('data' => $this->Conference->data));
 	  //test redirect
@@ -136,11 +137,9 @@ class EmailTest extends ControllerTestCase {
 	  echo "<h3>Testing edit with no key</h3>";
 
 	  $controller = $this->stubEmail();
-	  /*
 	  $controller->Session
 	    ->expects($this->once())
 	    ->method('setFlash');
-	  */
 	  $controller
 	    ->expects($this->any())
 	    ->method('_getEmailer')
@@ -173,11 +172,9 @@ class EmailTest extends ControllerTestCase {
 	  echo "<h3>Testing edit with correct key</h3>";
 
 	  $controller = $this->stubEmail();
-	  /*
 	  $controller->Session
 	    ->expects($this->once())
 	    ->method('setFlash');
-	  */
 	  $controller
 	    ->expects($this->any())
 	    ->method('_getEmailer')
