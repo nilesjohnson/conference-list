@@ -45,9 +45,8 @@ http://mathmeetings.net/conferences/view/28
 If you need to edit or delete your announcement, use the unique edit/delete link:
 http://mathmeetings.net/conferences/edit/28/YSZf1X2W
 
-Note that you will receive a new edit/delete link after each update to
-your announcement.  If you have any difficulties, questions, or
-comments, don't hesitate to contact the curators:
+If you have any difficulties, questions, or comments, don't hesitate
+to contact the curators:
 http://mathmeetings.net/conferences/about#curators
 
 

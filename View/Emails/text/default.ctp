@@ -34,11 +34,10 @@ echo $this->Html->url($url=array('action'=>'edit', $conference['Conference']['id
 ?>
 
 
-Note that you will receive a new edit/delete link after each update to 
-your announcement.  If you have any difficulties, questions, or comments, 
-don't hesitate to contact the curators:
-<?php
-echo $this->Html->url($url=array('action'=>'about#curators'), $full=true);
+If you have any difficulties, questions, or comments, don't hesitate
+to contact the curators: 
+<?php echo
+$this->Html->url($url=array('action'=>'about#curators'), $full=true);
 ?>
 
 
