@@ -28,6 +28,21 @@ class EmailTest extends ControllerTestCase {
 	  parent::setUp();
 	  $Controller = new Controller();
 	  $this->Conference = ClassRegistry::init('Conference');
+	  $controller = $this->generate('Conferences', 
+					array('methods' 
+					      => array('_getEmailer',),
+					      'components' 
+					      => array('Session',)
+					      ));
+	  $emailer = new CakeEmail();
+	  $emailer->transport('Debug');  //don't actually send email
+	  $controller->Session
+	    ->expects($this->once())
+	    ->method('setFlash');
+	  $controller
+	    ->expects($this->any())
+	    ->method('_getEmailer')
+	    ->will($this->returnValue($emailer));
 	}
 
 	public function testPrepEmail() {
@@ -71,21 +86,6 @@ class EmailTest extends ControllerTestCase {
 	    ->expects($this->once())
 	    ->method('setFlash');
 	  */
-	  $controller = $this->generate('Conferences', 
-					array('methods' 
-					      => array('_getEmailer',),
-					      'components' 
-					      => array('Session',)
-					      ));
-	  $emailer = new CakeEmail();
-	  $emailer->transport('Debug');  //don't actually send email
-	  $controller->Session
-	    ->expects($this->once())
-	    ->method('setFlash');
-	  $controller
-	    ->expects($this->any())
-	    ->method('_getEmailer')
-	    ->will($this->returnValue($emailer));
 	  $this->Conference->id = 3;
 	  //debug(array('id'=>$this->Conference->id));
 	  $this->Conference->read();
@@ -93,6 +93,48 @@ class EmailTest extends ControllerTestCase {
 				      array('data' => $this->Conference->data));
 	  //test redirect
 	  $this->assertContains('/conferences/index/at-ac', $this->headers['Location']);
+	}
+
+
+/**
+ * testAdd method
+ *
+ * @return void
+ */
+
+	public function testAdd() {
+	  echo "<h3>Testing add (empty)</h3>";
+	  $result = $this->testAction('/conferences/add');
+	  debug($this->contents);
+	  debug($this->view);
+	  //$this->assertRegExp('/<html/', $this->contents);
+	  //$this->assertRegExp('/<form/', $this->view);
+	}
+
+
+/**
+ * testEdit method
+ *
+ * @return void
+ */
+	public function testEdit() {
+	  echo "<h3>Testing edit</h3>";
+	  $this->Conference->id = 4;
+	  //debug(array('id'=>$this->Conference->id));
+	  $this->Conference->read();
+	  debug('BEFORE EDIT');
+	  debug($this->Conference->data);
+	  $this->Conference->data['Tag'] = array('Tag' => array(1,2,3));
+	  $this->Conference->data['Conference']['title'] = 'new title 4';
+	  $result = $this->testAction('/conferences/edit/4',
+	  			      array('data' => $this->Conference->data));
+	  $this->assertContains('/', $this->headers['Location']);
+	  $this->Conference->id = 4;
+	  //debug(array('id'=>$this->Conference->id));
+	  $this->Conference->read();
+	  debug('AFTER EDIT');
+	  debug($this->Conference->data);
+	  $this->assertEqual($this->Conference->data['Conference']['title'],'new title 4');
 	}
 
 

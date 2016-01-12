@@ -138,40 +138,6 @@ END:VCALENDAR';
 
 
 /**
- * testAdd method
- *
- * @return void
- */
-
-	public function testAdd() {
-	  echo "<h3>Testing add (empty)</h3>";
-	  $result = $this->testAction('/conferences/add');
-	  debug($this->contents);
-	  debug($this->view);
-	  //$this->assertRegExp('/<html/', $this->contents);
-	  //$this->assertRegExp('/<form/', $this->view);
-	}
-
-
-/**
- * testEdit method
- *
- * @return void
- */
-	public function testEdit() {
-	  echo "<h3>Testing edit</h3>";
-	  $this->testAction('/conferences/edit/4', 
-			    array('data'
-				  =>array('Conference' =>
-					  array('title' => 'New Announcement'),
-					  'Tag' => array('Tag' => 'mytag')
-					  ),
-				  )
-			    );
-	  $this->assertContains('/', $this->headers['Location']);
-	}
-
-/**
  * testDelete method
  *
  * @return void
