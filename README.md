@@ -5,7 +5,7 @@ https://github.com/nilesjohnson/conference-list
 
 version 2.1
 
-MM YYYY [in development!]
+01 2016
 
 Copyright (C) 2009--2015 Niles Johnson <http://www.nilesjohnson.net>
 
@@ -42,7 +42,7 @@ The application is based on the Cake PHP framework (version 2.4.5):  http://cake
 CHANGELOG
 ---------
 
-### v. 2.1 (development) ###
+### v. 2.1 ###
 
 * Now filter announcements by subject tags
 
@@ -183,7 +183,7 @@ for testing.  This can be done with the following MySQL commands (see `db_create
 		  ('4','20');
 
         ALTER TABLE conferences_tags ADD INDEX (conference_id);
-		ALTER TABLE conferences_tags ADD INDEX (tag_id);
+	ALTER TABLE conferences_tags ADD INDEX (tag_id);
 
 
 ADMINISTRATION
