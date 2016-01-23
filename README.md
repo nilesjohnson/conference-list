@@ -5,7 +5,7 @@ https://github.com/nilesjohnson/conference-list
 
 version 2.1
 
-01 2016
+JAN 2016
 
 Copyright (C) 2009--2015 Niles Johnson <http://www.nilesjohnson.net>
 
@@ -83,12 +83,13 @@ Then there are five basic configuration steps necessary to get the app running:
 1. Point to a copy of cakephp library:  Put a copy (or symbolic link) of 
 'cakephp/lib' at 'conference-list/Lib/cakephp-lib'
 
-    ln -s /path/to/cakephp/lib /path/to/conference-list/Lib/cakephp-lib
+    `ln -s /path/to/cakephp/lib /path/to/conference-list/Lib/cakephp-lib`
 
 1. Create a private configuration file by copying the default one:
 
-    cd conference-list/Config/
-    cp conflistConfigDefault.php conflistConfigPrivate.php
+    `cd conference-list/Config/`
+    
+    `cp conflistConfigDefault.php conflistConfigPrivate.php`
 
 1. Set up a database and put the connection information 
 (user, password, etc.) in the private configuration file from step 2.
@@ -97,7 +98,7 @@ Then there are five basic configuration steps necessary to get the app running:
 from step 2.
 
 1. Create the necessary database tables and (optionally) initial data 
-for testing.  This can be done with the following MySQL commands (see `db_create_2.php`):
+for testing.  This can be done with the following MySQL commands:
 
 
         CREATE TABLE conferences (
@@ -183,7 +184,13 @@ for testing.  This can be done with the following MySQL commands (see `db_create
 		  ('4','20');
 
         ALTER TABLE conferences_tags ADD INDEX (conference_id);
-	ALTER TABLE conferences_tags ADD INDEX (tag_id);
+        ALTER TABLE conferences_tags ADD INDEX (tag_id);
+
+The file `db_create_3` is a mysql script which automates the last step; edit it to work on the correct 
+database, and run it with the following:
+
+    mysql -p -u <USERNAME> <DB_NAME> < db_create_3 
+
 
 
 ADMINISTRATION
