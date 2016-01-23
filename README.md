@@ -3,9 +3,9 @@ Conference List Web App
 
 https://github.com/nilesjohnson/conference-list
 
-version 2.1
+version 2.X [in development]
 
-JAN 2016
+MM YYYY
 
 Copyright (C) 2009--2015 Niles Johnson <http://www.nilesjohnson.net>
 
