@@ -19,17 +19,18 @@ echo "\n\n";
 
 foreach ($conferences as $conference) {
 
-  $bodyText = $conference['Conference']['start_date']." <small>through</small> ".$conference['Conference']['end_date'];
-  $bodyText .= ", ".$conference['Conference']['city']."; ".$conference['Conference']['country'];
+  $bodyText = $conference['start_date']." <small>through</small> ".$conference['end_date'];
+  $bodyText .= ", ".$conference['city']."; ".$conference['country'];
   $bodyText = h(strip_tags($bodyText));
   echo  $this->Rss->item(array(), array(
-				  'title' => $conference['Conference']['title'],
-				  'link' => $conference['Conference']['homepage'],
-				  'guid' => array('url' => $conference['Conference']['homepage'], 'isPermaLink' => 'true'),
+				  'title' => $conference['title'],
+				  'link' => $conference['homepage'],
+				  'guid' => array('url' => $conference['homepage'], 'isPermaLink' => 'true'),
 				  'description' =>  $bodyText,
 				  //'dc:creator' => '',
 				  //'pubDate' => ''
 					))."\n\n";
+/**/
 }
 
 ?>

@@ -13,7 +13,9 @@ class ConferenceTest extends CakeTestCase {
  * @var array
  */
 	public $fixtures = array(
-		'app.conference'
+				 'app.conference',
+				 'app.tag',
+				 'app.conferencesTag',
 	);
 
 /**
@@ -37,6 +39,7 @@ class ConferenceTest extends CakeTestCase {
 	*/
 
 	public function testMultiEmail() {
+	  echo('<h3>Testing multiEmail</h3>');
 	  $check = array('contact_email' => 'em1@host1.com,em2@host2.com, em3@host3.com   em4@host4.com');
 	  $result = $this->Conference->multiEmail($check);
 	  $expected = true;
@@ -46,6 +49,7 @@ class ConferenceTest extends CakeTestCase {
 
 
 	public function testBeforeSave() {
+	  echo('<h3>Testing beforeSave</h3>');
 	  $conferences = $this->Conference->find('all');
 	  //debug($conferences);
 	  foreach ($conferences as $entry) {

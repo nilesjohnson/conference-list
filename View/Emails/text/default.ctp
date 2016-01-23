@@ -17,31 +17,60 @@
  */
 ?>
 
-Thanks for adding your announcement to 
+
 <?php 
-echo Configure::read('site.name');
+echo 'Thanks for adding your announcement to '.Configure::read('site.name').'.';
 ?>
-; it is now available in the main list:
+
+The announcement data is copied below, and is also available at:
 <?php
-echo Configure::read('site.home');
+echo $this->Html->url(array('action'=>'view', $conference['Conference']['id']), $full=true);
 ?>
 
 
 If you need to edit or delete your announcement, use the unique edit/delete link:
-
 <?php
-echo Configure::read('site.home') . '/conferences/edit/' .
-  $conference['Conference']['id'] . '/' . 
-  $conference['Conference']['edit_key'] . "\n\n";
+echo $this->Html->url($url=array('action'=>'edit', $conference['Conference']['id'], $conference['Conference']['edit_key']), $full=true);
 ?>
 
-Note that you will receive a new edit/delete link after each update to your announcement.
-If you have any difficulties, questions, or comments, don't hesitate to contact the curators:
-<?php
-echo Configure::read('site.home') . '/conferences/about#curators';
+
+If you have any difficulties, questions, or comments, don't hesitate
+to contact the curators: 
+<?php echo
+$this->Html->url($url=array('action'=>'about#curators'), $full=true);
 ?>
+
 
 
 best,
-AlgTop-Conf
+The Curators
 
+
+Announcement Data:
+
+<?php 
+echo $conference['Conference']['title']."\n";
+echo $conference['Conference']['start_date']." -- ".$conference['Conference']['end_date']."\n\n";
+
+echo $conference['Conference']['homepage']."\n\n";
+
+echo "Contact: ".$conference['Conference']['contact_name']."\n";
+
+echo "Institution: ".$conference['Conference']['institution']."\n";
+echo "City: ".$conference['Conference']['city']."\n";
+echo "Country: ".$conference['Conference']['country']."\n";
+echo "Meeting type: ".$conference['Conference']['meeting_type']."\n";
+echo "Subject Tags:\n";
+foreach($conference['Tag'] as $tag) {
+  echo '  * '.$tag['name']."\n";
+}
+echo "\n";
+
+echo "Description:\n";
+echo !$conference['Conference']['description'] ? 'none' : strip_tags($conference['Conference']['description']);
+?>
+
+
+<?php
+//echo $this->Display->asText($conference['Conference']);
+?>

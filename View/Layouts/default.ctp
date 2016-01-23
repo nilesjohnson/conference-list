@@ -23,6 +23,7 @@ echo $this->Html->script('//code.jquery.com/jquery-1.10.2.min.js') ."\n";
 echo $this->Html->css('//code.jquery.com/ui/1.11.1/themes/redmond/jquery-ui.css')."\n";
 echo $this->Html->script('//code.jquery.com/ui/1.11.1/jquery-ui.js') ."\n";
 echo $this->Html->script('datepicker') ."\n";  //configuration for conflist app
+echo $this->Html->script('misc') ."\n";  //configuration for conflist app
 
 
 // select2
@@ -38,6 +39,8 @@ echo $this->fetch('css');
 echo $this->fetch('script');
 
 echo Configure::read('site.analytics');
+//debug($tagids);
+//debug($tagstring);
 ?>
 
 </head>
@@ -52,7 +55,7 @@ echo Configure::read('site.analytics');
       'conferences', 'action' => 'index'))?>
       |
       <?php echo $this->Html->link('New Announcement',array('controller' =>
-     'conferences', 'action' => 'add'))?>
+     'conferences', 'action' => 'add', $tagstring))?>
       | 
       <?php echo $this->Html->link('About',array('controller' =>
      'conferences', 'action' => 'about'))?>

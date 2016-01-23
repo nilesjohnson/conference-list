@@ -1,4 +1,5 @@
 <div class="conferences form">
+<?php debug('This form is not used');?>
 <?php echo $this->Form->create('Conference'); ?>
 	<fieldset>
 		<legend><?php echo __('Edit Conference'); ?></legend>
@@ -14,7 +15,8 @@
 		//echo $this->Form->input('region');
 		echo $this->Form->input('country');
 		echo $this->Form->input('meeting_type');
-		echo $this->Form->input('subject_area');
+		//echo $this->Form->input('subject_area');
+		echo $this->Form->input('Tag', array('label'=>'Subject tags'));
 		echo $this->Form->input('homepage');
 		echo $this->Form->input('contact_name');
 		echo $this->Form->input('contact_email');

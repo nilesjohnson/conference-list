@@ -245,18 +245,22 @@ p {
     background-color: #eee8e0;
     color: #333;
     padding: 1ex 3ex;
-    position: fixed;
-    top: 60px;
-    width: 100%;
+    //position: fixed;
+    //top: 60px;
+    //width: 100%;
     border-bottom: 3px solid #fef8f0;
-    z-index: 1;
+    //z-index: 1;
+}
+
+#add-button {
+    font-size: 115%;
 }
 
 /* fixed-position headers cause problems with # anchors */
 /* http://stackoverflow.com/questions/3972082/problem-with-html-anchor-in-absolute-div-300px-from-the-top */
 h2.target {
-    padding-top: 110px;
-    margin-top: -110px; 
+    //padding-top: 110px;
+    //margin-top: -110px; 
 }
 
 
@@ -272,6 +276,10 @@ h2.target {
     float: right;
     margin-right: 3em;
     display: inline-block;
+}
+
+h3.title {
+    margin-bottom: 1ex;
 }
 
 .intro_text {

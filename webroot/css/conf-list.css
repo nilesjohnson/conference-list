@@ -263,16 +263,24 @@ fieldset fieldset div {
 	clear: left;
 	margin: 0 20px;
 }
-form div {
-	clear: both;
-	margin-bottom: 1em;
+#ConferenceIndexForm {
+        padding: .5em 0 0 0;
+	width: 100%;
+}
+#ConferenceIndexForm .input {
+        padding: 0;
+	margin-bottom: 1pc;
+	width: 100%;
+}
+form {
 	padding: .5em;
-	vertical-align: text-top;
 }
 form .input {
 	color: #444;
 	padding-left: 5%;
+	margin-bottom: 2pc;
 	width: 80%;
+	vertical-align: text-top;
 }
 form .required {
 	font-weight: bold;
@@ -558,6 +566,29 @@ p {
     margin-top: 1pc;
 }
 
+dd {
+    margin: 0 0 0 1ex;
+    line-height: normal;
+}
+
+#search_links {
+    float: right;
+    width: 21em;
+    margin-left: .5ex;
+    padding-left: .5ex;
+    border-left: 1px solid #777;
+}
+#search_links form {
+    padding-top:.8em;
+}
+#search_links form .select2-container-multi {
+    max-height: 5pc;
+    overflow: scroll;
+}
+hr.top {
+    clear: both;
+}
+
 #sub_header {
     background-color: #eee8e0;
     color: #333;
@@ -610,6 +641,20 @@ div.subsort0 h2, div.subsort1 h2 {
     background-color: #EFEFF7;
     border-top: 1.5px solid #88a;
 }
+.subject-tags {
+    margin:5px;
+}
+.tag {
+    font-size:80%;
+    background-color:#efe;
+    padding:2px;
+    margin:3px;
+    border: 1px solid #9a9;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
 h3.title {
     margin-bottom: 1ex;
 }
@@ -671,9 +716,8 @@ div.flash_bad {
     font-weight: bold;
 }
 
-div#add-message {
+div#add-message pre{
     font-family: Courier, monospace;
-    background-color: #eee8e0;
     border:2px dotted #A1BDC4;
 }
 

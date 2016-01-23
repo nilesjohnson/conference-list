@@ -1,15 +1,12 @@
-/*
- * This doesn't work at all; not sure why
- */
-
-App::uses('Controller', 'Controller');
+<?php
+App::uses('ConferencesController', 'Controller');
 App::uses('CakeRequest', 'Network');
 App::uses('CakeResponse', 'Network');
 App::uses('ComponentCollection', 'Controller');
 App::uses('MathCaptchaComponent', 'Controller/Component');
 
 
-class TestController extends Controller {
+class TestController extends ConferencesController {
   public $var = null;
 }
 
@@ -29,8 +26,10 @@ class MathCaptchaComponentTest extends CakeTestCase {
   }
 
   public function testGenerateEquation() {
+    $this->MathCaptchaComponent->initialize($this->Controller);
     $result = $this->MathCaptchaComponent->generateEquation();
     debug($result);
+    $this->assertContains(' + ',$result);
   } 
 
   /*
@@ -53,3 +52,5 @@ class MathCaptchaComponentTest extends CakeTestCase {
     unset($this->Controller);
   }
 }
+
+?>

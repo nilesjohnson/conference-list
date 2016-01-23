@@ -5,8 +5,9 @@ class GcalHelper extends AppHelper {
     parent::__construct($view, $settings);
     //debug($settings);
   }
+  
 
-  function gcal_url($id, $start_date, $end_date, $title, $city, $country, $url, $conflist_url,$conflist_name) {
+  public function gcal_url($id, $start_date, $end_date, $title, $city, $country, $url, $conflist_url,$conflist_name) {
     $start_string = str_replace('-','',$start_date);
     $end_string = date('Ymd',strtotime($end_date." +1 day"));
     $location = $city."; ".$country;

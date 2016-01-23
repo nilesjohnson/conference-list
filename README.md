@@ -3,11 +3,11 @@ Conference List Web App
 
 https://github.com/nilesjohnson/conference-list
 
-version 2.0
+version 2.1
 
-March 2014
+MM YYYY [in development!]
 
-Copyright (C) 2009--2014 Niles Johnson <http://www.nilesjohnson.net>
+Copyright (C) 2009--2015 Niles Johnson <http://www.nilesjohnson.net>
 
 Licensed under GNU GPL v.3 or later.  See LICENSE.txt for a copy of
 the license.
@@ -39,12 +39,40 @@ public lists (e.g. math conferences).  Its basic functions are:
 The application is based on the Cake PHP framework (version 2.4.5):  http://cakephp.org/
 
 
+CHANGELOG
+---------
+
+### v. 2.1 (development) ###
+
+* Now filter announcements by subject tags
+
+* Set specific admin email addresses for individual tags
+
+* Form for editing announcements is now the same as that for adding
+  new announcements
+
+* New 'view' page for each announcement, and announcement data in
+  confirmation emails
+
+* Select boxes improved with select2 (jquery)
+
+* Links to sort by country or show past announcements have been
+  removed as these features are rarely used and are incompatible with
+  the subject tags.  If you would like to see these features
+  reimplemented, please let Niles know!
+
+
+
 CONFIGURATION
 -------------
 
 Begin by cloning the git repository, e.g:
 
     git clone https://github.com/nilesjohnson/conference-list.git conference-list
+
+Ensure that you have the files from the 'countries' submodule 
+https://github.com/mledoze/countries.  You can do this with `git submodule init` 
+and `git submodule update`.
 
 If you don't yet have cake available, clone that too:
 

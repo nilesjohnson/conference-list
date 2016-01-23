@@ -15,7 +15,7 @@ if ($valid_admin) {
    echo '  </dd>';
    echo ' <dt>URL</dt>';
    echo '  <dd>';
-   $url = Configure::read('site.host').$this->Html->url('edit/'.$conference['Conference']['id'].'/'.$conference['Conference']['edit_key']);
+   $url = $this->Html->url(array('action'=>'edit', $conference['Conference']['id'],$conference['Conference']['edit_key']), $full=true);
    echo '  <a href="'.$url.'">'.$url.'</a>';
    echo '  </dd>';
    echo '</dl>';   

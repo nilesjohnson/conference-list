@@ -90,6 +90,7 @@ class Conference extends AppModel {
 			//'subject_area' => array(
 			//'rule' => 'notEmpty'
 			//),
+
 			'homepage' => array(
 					    'rule' => array('url',true),
 					    'message' => 'Please supply a valid and complete url.'
@@ -119,7 +120,9 @@ class Conference extends AppModel {
 
   public function beforeSave($options = array()) {
     $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";	
-    $this->data['Conference']['edit_key'] = substr( str_shuffle( $chars ), 0, 8);
+    if (!isset($this->data['Conference']['edit_key'])){
+      $this->data['Conference']['edit_key'] = substr( str_shuffle( $chars ), 0, 8);
+    }
     // zero pad day and month
     try{
       $sdo = new DateTime($this->data['Conference']['start_date']);	
@@ -154,21 +157,24 @@ class Conference extends AppModel {
     }
     return true;
   }
-	public $hasAndBelongsToMany = array(
-		'Tag' => array(
+
+  public $hasAndBelongsToMany = array(
+	 'Tag' => array(
 			'className' => 'Tag',
 			'joinTable' => 'conferences_tags',
 			'foreignKey' => 'conference_id',
 			'associationForeignKey' => 'tag_id',
 			'unique' => 'keepExisting',
+			/*
 			'conditions' => '',
 			'fields' => '',
 			'order' => '',
 			'limit' => '',
 			'offset' => '',
 			'finderQuery' => '',
+			*/
 			'with'=>'ConferencesTag'
-		)
-	);
-
+			)
+				      );
+  
 }
