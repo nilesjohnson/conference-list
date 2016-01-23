@@ -1,0 +1,85 @@
+USE dabasename-goes-here
+
+CREATE TABLE conferences (
+id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+edit_key VARCHAR(10),
+title VARCHAR(200),
+start_date DATE,
+end_date DATE,
+institution VARCHAR(100),
+city VARCHAR(100),
+country VARCHAR(100),
+meeting_type VARCHAR(100),
+subject_area VARCHAR(100),
+homepage VARCHAR(400),
+contact_name VARCHAR(100),
+contact_email VARCHAR(100),
+description TEXT
+);
+
+INSERT INTO conferences (title, edit_key, start_date, end_date, institution, city, country, meeting_type, subject_area, homepage, contact_name, contact_email, description) 
+VALUES 
+  ('Test Conference 1', 'edit key', '2100-06-01', '2100-06-02', 'University', 'City', 'Country', 'conference', 'math', 'http://example.com', 'Name', 'test@example.com', 'This is an example entry.'),
+  ('Test Conference 2', 'edit key', '2200-06-05', '2200-06-06', 'University', 'City', 'Country', 'conference', 'math', 'http://example.com', 'Name', 'test@example.com', 'This is an example entry.'),
+  ('Test Conference 3', 'edit key', '2300-11-03', '2300-11-04', 'University', 'City', 'Country', 'conference', 'math', 'http://example.com', 'Name', 'test@example.com', 'This is an example entry.'),
+  ('Test Conference 4', 'edit key', '2400-02-20', '2400-02-21', 'University', 'City', 'Country', 'conference', 'math', 'http://example.com', 'Name', 'test@example.com', 'This is an example entry.');
+
+CREATE TABLE tags 
+(
+id INT NOT NULL AUTO_INCREMENT, 
+PRIMARY KEY(id),
+name varchar(255)
+);
+
+INSERT INTO tags (name)
+VALUES
+  ('ac.commutative-algebra'),
+  ('ag.algebraic-geometry'),
+  ('ap.analysis-of-pdes'),
+  ('at.algebraic-topology'),
+  ('ca.classical-analysis-and-odes'),
+  ('co.combinatorics'),
+  ('ct.category-theory'),
+  ('cv.complex-variables'),
+  ('dg.differential-geometry'),
+  ('ds.dynamical-systems'),
+  ('fa.functional-analysis'),
+  ('gm.general-mathematics'),
+  ('gn.general-topology'),
+  ('gr.group-theory'),
+  ('gt.geometric-topology'),
+  ('ho.history-and-overview'),
+  ('it.information-theory'),
+  ('kt.k-theory-and-homology'),
+  ('lo.logic'),
+  ('mg.metric-geometry'),
+  ('mp.mathematical-physics'),
+  ('na.numerical-analysis'),
+  ('nt.number-theory'),
+  ('oa.operator-algebras'),
+  ('oc.optimization-and-control'),
+  ('pr.probability'),
+  ('qa.quantum-algebra'),
+  ('ra.rings-and-algebras'),
+  ('rt.representation-theory'),
+  ('sg.symplectic-geometry'),
+  ('sp.spectral-theory'),
+  ('st.statistics-theory');
+
+CREATE TABLE conferences_tags(
+id INT NOT NULL AUTO_INCREMENT,
+PRIMARY KEY(id),
+conference_id INT,
+tag_id INT
+);
+
+INSERT INTO conferences_tags (conference_id, tag_id)
+VALUES
+  ('1','5'),
+  ('2','10'),
+  ('3','15'),
+  ('4','20');
+
+ALTER TABLE conferences_tags ADD INDEX (conference_id);
+ALTER TABLE conferences_tags ADD INDEX (tag_id);
+
