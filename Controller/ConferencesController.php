@@ -373,7 +373,7 @@ class ConferencesController extends AppController {
     }
     //debug(array('cc'=>join($cc_array,',')));
     $Email->cc($cc_array);
-    $Email->subject(Configure::read('site.name') . ": " . $this->data['Conference']['title']);
+    $Email->subject($this->data['Conference']['title']);
     if (!is_null($id)) {
       $this->set('conference',$this->data);
       $this->render('../Emails/text/default','Emails/text/default');
