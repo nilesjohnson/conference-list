@@ -60,10 +60,6 @@ echo Configure::read('site.analytics');
       <?php echo $this->Html->link('About',array('controller' =>
      'conferences', 'action' => 'about'))?>
 
-      <div id="admin_contact">
-	Trouble? Comments? 
-	<?php echo $this->Html->link('Contact ' . Configure::read('site.host_name'),Configure::read('site.host_contact_url'));?>
-      </div>
     </div>
   </div>
 
@@ -78,8 +74,12 @@ echo Configure::read('site.analytics');
   <!-- footer -->
   <div id="footer">
     <!-- footer content -->
-    <div style="text-align: center">
+    <div style="text-align: left">
       <?php echo $this->Html->link(str_replace('http://www.','',Configure::read('site.host')),Configure::read('site.host'));?>
+      <div id="admin_contact">
+	Trouble? Comments? 
+	<?php echo $this->Html->link('Contact ' . Configure::read('site.host_name'),Configure::read('site.host_contact_url'));?>
+      </div>
     </div>
   </div>
 </div>

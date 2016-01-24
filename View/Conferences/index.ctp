@@ -61,15 +61,20 @@ echo $this->Js->link(array(
 
 <div class="intro_text">
 
-  <p>Welcome to the MathMeetings.net list!  This is based on the
-  conference list software developed for conferences in algebraic
-  topology, AlgTop-Conf, now expanded to other mathematics subjects.</p>
+  <p>Welcome MathMeetings.net!  This is a list for research
+  mathematics conferences, workshops, summer schools, etc.</p>
 
   <p>There are a few other conference lists available, but this list
   aims to be more complete by allowing <em>anyone at all</em> to add
   announcements.  Rather than use a wiki, announcement information is
   stored in database format so that useful search functions can be
   added as the list grows.</p>
+
+  <p>This site began as AlgTop-Conf, for meetings in algebraic
+  topology.  It is now expanded to serve other mathematics subjects.
+  Use tag filtering to focus on announcements related to your
+  discipline (see right or below).</p>
+
 
   <div class="new">
     <h2>Know of a meeting not listed here?  Add it now!</h2>
