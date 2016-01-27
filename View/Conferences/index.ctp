@@ -9,6 +9,17 @@
 </div>
 -->
 
+<?php 
+  // link elements for rss feed
+  if ($tagstring) {
+    echo '<link type="application/rss+xml" rel="alternate" href="'.$tagstring.'.rss"/>';
+  }
+  else {
+    echo '<link type="application/rss+xml" rel="alternate" href="'.Configure::read('site.home').'/conferences/index.rss"/>';
+  }
+?>
+
+
 <?php
 /*
 echo $this->Js->link(array(
@@ -117,7 +128,7 @@ echo $this->Js->link(array(
     echo $this->Html->link('RSS',array('controller'=>null,'action'=>$tagstring.'.rss'));
   }
   else {
-    echo $this->Html->link('RSS','index.rss');
+    echo $this->Html->link('RSS',Configure::read('site.home').'/conferences/index.rss');
   }
 ?>
   </div>
