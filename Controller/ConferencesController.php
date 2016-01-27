@@ -144,6 +144,7 @@ class ConferencesController extends AppController {
 	
     $this->set(compact('conferences', 'tags', 'tagstring', 'tagids'));
 
+    $this->set('_serialize', array('conferences')); // variables that need to be serialized
     // process RSS feed      
     if( $this->RequestHandler->isRss() ){
       $this->set(compact('conferences'));
