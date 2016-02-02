@@ -164,9 +164,7 @@ know</a>!</p>
 
 <h3>Topology</h3>
 <ul>
-<li><a href="http://www.pitt.edu/~krk56/">Chris Kapulkin</a>, University of Pittsburgh</li>
-<li>Majid Rasouli</li>
-<li><a href="http://dwhite03.web.wesleyan.edu/">David White</a>, Wesleyan University</li>
+<li><a href="http://personal.denison.edu/~whiteda/" target="curator">David White</a>, Denison University</li>
 </ul>
 
 <h2>Searching</h2>
