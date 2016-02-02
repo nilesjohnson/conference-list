@@ -265,7 +265,6 @@ echo
 
 <div class="conference_minor" id="description_<?php echo $conference['id']?>">
 <p>Meeting Type: <?php echo $conference['meeting_type']?></p>
-<p>Subject Area: <?php echo $conference['subject_area']?></p>
 <p>Contact: <?php echo 
 !$conference['contact_name'] ? 'see conference website' : $conference['contact_name']?></p>
 
