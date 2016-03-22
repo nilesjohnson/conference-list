@@ -61,7 +61,7 @@ echo $this->Js->link(array(
 
 <div class="intro_text">
 
-  <p>Welcome MathMeetings.net!  This is a list for research
+  <p>Welcome to MathMeetings.net!  This is a list for research
   mathematics conferences, workshops, summer schools, etc.</p>
 
   <p>There are a few other conference lists available, but this list
