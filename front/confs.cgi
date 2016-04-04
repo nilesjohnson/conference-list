@@ -1,4 +1,8 @@
 #!/usr/bin/python
+#
+# Front end to MathMeetings.net by Kiran Kedlaya (2016)
+# Note: this front end is currently customized to the context of my web site,
+# and is provided for informational purposes only.
 
 import cgi, sys, urllib, re
 from datetime import date
@@ -74,7 +78,7 @@ for i in l2:
     if y1 in entries.keys():
         entries[y1].append(s)
     else:
-        entries[y1] = []
+        entries[y1] = [s]
 w.close()
 l = entries.keys()
 l.sort()
