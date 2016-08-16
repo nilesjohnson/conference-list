@@ -41,6 +41,9 @@ echo $this->fetch('script');
 echo Configure::read('site.analytics');
 //debug($tagids);
 //debug($tagstring);
+if (!isset($tagstring)) {
+  $tagstring = '';
+}
 ?>
 
 </head>
