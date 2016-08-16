@@ -4,7 +4,7 @@ echo '<div class="conferences form">';
 $addedit='Edit';
 }
  else $addedit='New';
-echo '<h1>'.$addedit.' Meeting Information</h1>';
+echo '<h1>'.$addedit.' Announcement</h1>';
 
 echo $this->Form->create('Conference');
 echo $this->Form->submit('Submit');
@@ -14,22 +14,26 @@ if (isset($edit)){
 	echo $this->Form->input('edit_key', array('type'=>'hidden'));
 }
 
+echo '<h2>Meeting Information</h2>';
 echo $this->Form->input('title');
 echo $this->Form->input('start_date', array('type'=>'text', 'div'=>'input datefield', 'after'=>'yyyy-mm-dd'));
 echo $this->Form->input('end_date', array('type'=>'text', 'div'=>'input datefield', 'after'=>'yyyy-mm-dd'));
 echo $this->Form->input('city', array('label'=>'City and State/Province'));
 
 echo "\n"."<!-- country data from https://github.com/mledoze/countries licensed under Open Database License 1.0 -->\n";
-echo $this->Form->input('country', array( 'type'=>'select', 'options'=>$countries, 'default'=>'country', 'after'=>'Type to narrow options'));
-echo $this->Form->input('homepage', array('label'=>'Conference website'));
-echo $this->Form->input('institution', array('label'=>'Host institution', 'after'=>'University, institute, etc.'));
+echo $this->Form->input('country', array( 'type'=>'select', 'options'=>$countries, 'default'=>'country', 'after'=>'type to narrow options'));
+echo $this->Form->input('homepage', array('label'=>'Website', 'after'=>'must begin with http://'));
+echo $this->Form->input('institution', array('label'=>'Host institution', 'after'=>'University, Institute, etc.'));
 echo $this->Form->input('meeting_type', array('after'=>'e.g. conference, summer school, special session, etc.'));
 echo $this->Form->input('Tag', array('label'=>'Subject tags', 'after'=>'Arxiv subject areas.  Select one or more; type to narrow options', 'multiple'=>true, 'default'=>$tagids));
-echo $this->Form->input('contact_name', array('label'=>'Contact Name(s), comma separated'));
-echo $this->Form->input('contact_email', array('label'=>'Contact Email(s), comma separated', 'after'=>'never displayed publicly; confirmation and edit/delete codes will be sent to these addresses'));
+
 echo $this->Form->input('description', array('label'=>'Description: <br/><span style="font-size:80%;">Enter text, HTML, or <a href="http://daringfireball.net/projects/markdown/">Markdown</a>.</span>', 'rows' => '10'));
 
 echo '<div class="input"><p>Description Preview:</p><div class="wmd-preview"></div></div>';
+
+echo '<h2>Contact information for this announcement</h2>';
+echo $this->Form->input('contact_name', array('label'=>'Contact Name(s), comma separated', 'after'=>'may be left blank for anonymous post'));
+echo $this->Form->input('contact_email', array('label'=>'Contact Email(s), comma separated', 'after'=>'never displayed publicly; confirmation and edit/delete codes will be sent to these addresses'));
 
 if (!isset($edit)) {
 	echo $this->Form->input('captcha', array('label' => 'Please Enter the Sum of ' . $mathCaptcha, 'after'=>'anti-spam'));
