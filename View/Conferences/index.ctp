@@ -61,7 +61,7 @@ echo $this->Js->link(array(
 
 <div class="intro_text">
 
-  <p>Welcome MathMeetings.net!  This is a list for research
+  <p>Welcome to MathMeetings.net!  This is a list for research
   mathematics conferences, workshops, summer schools, etc.</p>
 
   <p>There are a few other conference lists available, but this list
@@ -265,7 +265,6 @@ echo
 
 <div class="conference_minor" id="description_<?php echo $conference['id']?>">
 <p>Meeting Type: <?php echo $conference['meeting_type']?></p>
-<p>Subject Area: <?php echo $conference['subject_area']?></p>
 <p>Contact: <?php echo 
 !$conference['contact_name'] ? 'see conference website' : $conference['contact_name']?></p>
 
