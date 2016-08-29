@@ -166,15 +166,21 @@ know</a>!</p>
 <li><a href="https://www.dpmms.cam.ac.uk/~jar62/" target="curator">Julius Ross</a>, Cambridge</li>
 </ul>
 
+<h3>Algebraic Topology</h3>
+<ul>
+<li><a href="http://personal.denison.edu/~whiteda/" target="curator">David White</a>, Denison University</li>
+</ul>
+
 <h3>Arithmetic Geometry</h3>
 <ul>
 <li><a href="http://www.math.ucsd.edu/~kedlaya/" target="curator">Kiran Kedlaya</a>, UCSD</li>
 </ul>
 
-<h3>Topology</h3>
+<h3>Differential Geometry</h3>
 <ul>
-<li><a href="http://personal.denison.edu/~whiteda/" target="curator">David White</a>, Denison University</li>
+<li><a href="http://www2.math.umd.edu/~yanir/" target="curator">Yanir A. Rubinstein</a>, UMD</li>
 </ul>
+
 </div>
 
 <h2>Searching</h2>
