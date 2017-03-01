@@ -62,8 +62,31 @@ class ConferencesController extends AppController {
   }
 
   public function index($tagstring = null) {
-    $this->set('sort_text','Sort by: ');
     $this->set('view_title','Upcoming Meetings');
+    $this->render_list(array('tagstring' => $tagstring,
+			     'conditions' => array (
+						    "Conference.end_date >" => date('Y-m-d', strtotime("-1 week"))),
+			     ));
+  }
+  public function search($tagstring = null) {
+    $this->set('view_title','Search All Meetings');
+    $this->render_list(array('tagstring' => $tagstring,
+			     'conditions' => array(),
+			     ));
+    $this->render('index'); // use the index view
+  }
+  
+
+  public function render_list($args) {
+    /*
+      This is the function which renders our announcement list.
+      By separating it into a separate function, we keep the 
+      arguments for the main index simple, but allow other functions
+      with more complex arguments to use the same rendering functionality.
+     */
+    $tagstring = $args['tagstring'];
+    $conditions = $args['conditions'];
+    $this->set('sort_text','Sort by: ');
     $this->set('months', $this->months);
     $this->set('sort_condition',null);
     // default sort conditions
@@ -72,9 +95,6 @@ class ConferencesController extends AppController {
 			  'Conference.title',
 			  'Tag.name',
 			  );
-    $conditions = array (
-			 "Conference.end_date >" => date('Y-m-d', strtotime("-1 week"))
-			 );
     $display_options = array('conditions' => $conditions, 'order' => $order_array);    
 
     // remove tag validation so tags are not required
@@ -173,7 +193,6 @@ class ConferencesController extends AppController {
     return $tagids;
   }
 
-  
   public function ical($id=null) {
     $this->Conference->id = $id;
     if (empty($this->data)) {
