@@ -1,4 +1,5 @@
 Lib/cakephp-lib
+Lib/vendors
 Config/conflistConfigPrivate.php
 db_migrate.php
 webroot/algtop-conf-dump*
@@ -16,5 +17,7 @@ Console/error_log
 
 webroot/php.ini
 webroot/error_log
+webroot/php_errorlog
+webroot/php_mail.log
 tmp/logs/error.log
 tmp/logs/debug.log
