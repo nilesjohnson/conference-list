@@ -149,8 +149,8 @@ class ConferencesController extends AppController {
     $this->set(compact('conferences', 'tags', 'tagstring', 'tagids'));
 
     $this->set('_serialize', array('conferences')); // variables that need to be serialized (for json or xml)
-    // process RSS feed      
-    if( $this->RequestHandler->isRss() ){
+    // process requests for RSS, JSON, XML, and anything else with extenson
+    if( isset($this->request->params['ext'])) {
       $this->set(compact('conferences'));
     }
   }
