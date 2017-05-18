@@ -16,14 +16,14 @@ class CcData extends AppModel {
 
   var $validate = array(
 			'from' => array(
-					'rule'=>'notEmpty', 
+					'rule'=>'notBlank', 
 					'message'=>'Please supply a valid from address.' ),
 			'to' => array(
 				      'rule'=>'multiEmail', 
 				      'message'=>'Please supply a comma-separated list of valid email addresses.'
 				      ),
 			'subject' => array(
-					 'rule'=>'notEmpty', 
+					 'rule'=>'notBlank', 
 					 'message'=>'Please supply a subject.' ),
 			'body' => array(
 					   'rule'=>array('minLength', 1), 
@@ -56,7 +56,7 @@ class Conference extends AppModel {
 
   public $validate = array(
 			   'title' => array(
-			  		    'rule' => 'notEmpty'
+			  		    'rule' => 'notBlank'
 					   ),
 			'start_date' => array(
 					      'rule' => 'date',
@@ -67,11 +67,11 @@ class Conference extends AppModel {
 					    'message' => 'Please supply a valid date in yyyy-mm-dd format.'
 					    ),
 			//'institution' => array(
-			//'rule' => 'notEmpty',
+			//'rule' => 'notBlank',
 			//'message' => 'testing institution'
 			//),
 			'city' => array(
-					'rule' => 'notEmpty',
+					'rule' => 'notBlank',
 					'message' => 'Please supply a city (or closest city).'
 					),
 			'country' => array(
@@ -80,15 +80,15 @@ class Conference extends AppModel {
 							     'message' => 'Please select a country. (1)'
 							     ),
 					   'rule-2' => array(
-							     'rule' => 'notEmpty',
+							     'rule' => 'notBlank',
 							     'message' => 'Please select a country. (2)'
 							     )
 					   ),
 			//'meeting_type' => array(
-			//'rule' => 'notEmpty'
+			//'rule' => 'notBlank'
 			//),
 			//'subject_area' => array(
-			//'rule' => 'notEmpty'
+			//'rule' => 'notBlank'
 			//),
 
 			'homepage' => array(
@@ -104,13 +104,13 @@ class Conference extends AppModel {
 						 'message' => 'Please supply a comma-separated list of valid email address; these will never be displayed publicly.'
 						 ),
 			//'description' => array(
-			//'rule' => 'notEmpty'
+			//'rule' => 'notBlank'
 			//),
 			'captcha' => array(
-					   'rule' => 'notEmpty',
+					   'rule' => 'notBlank',
 			//'message' => 'This value must be the string "hopf".'
 					   ),
-			'report_comment' => array('rule' => 'notEmpty'),
+			'report_comment' => array('rule' => 'notBlank'),
 			);
 
   public function notEqualTo($input,$value) {

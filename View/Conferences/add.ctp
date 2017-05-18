@@ -65,4 +65,4 @@ echo '</div>';
   };
 </script>
 
-<script type="text/javascript" src="/js/wmd/wmd.js"></script>
+<script type="text/javascript" src="<?echo Configure::read('site.home');?>/js/wmd/wmd.js"></script>

@@ -93,11 +93,15 @@ database.  The subject tags are taken from the <a
 href="http://arxiv.org/archive/math">arXiv.org math
 categories</a>.</p>
 
-<p>The link to update tags on the home page is generated automatically by javascript.  If you prefer not to use javascript, you can easily create the appropriate URL by hand.  Simply use the 2-letter codes for each subject, separated by dashes.  For example, to choose <span class="tag">at.algebraic-topology</span> and <span class="tag">ct.category-theory</span>, use the following URL:
+<p>The link to update tags on the home page is generated automatically by 
+javascript.  If you prefer not to use javascript, you can easily create the 
+appropriate URL by hand.  Simply use the 2-letter codes for each subject, 
+separated by dashes.  For example, to choose 
+<span class="tag">at.algebraic-topology</span> and 
+<span class="tag">ct.category-theory</span>, use the following URL:</p>
 <pre>
 http://mathmeetings.net/at-ct
 </pre>
-</p>
 
 <p>Note: Multiple tags are combined with an OR condition, meaning that
 you will see announcements which are tagged with any of the tags you
@@ -156,16 +160,28 @@ trouble posting or updating your announcements.  </p>
 href="http://nilesjohnson.net/contact.html" target="blank">let Niles
 know</a>!</p>
 
+
+<h3>Algebraic Geometry, Complex Variables</h3>
+<ul>
+<li><a href="https://www.dpmms.cam.ac.uk/~jar62/" target="curator">Julius Ross</a>, Cambridge</li>
+</ul>
+
+<h3>Algebraic Topology</h3>
+<ul>
+<li><a href="http://personal.denison.edu/~whiteda/" target="curator">David White</a>, Denison University</li>
+</ul>
+
 <h3>Arithmetic Geometry</h3>
 <ul>
 <li><a href="http://www.math.ucsd.edu/~kedlaya/" target="curator">Kiran Kedlaya</a>, UCSD</li>
 </ul>
-</div>
 
-<h3>Topology</h3>
+<h3>Differential Geometry</h3>
 <ul>
-<li><a href="http://personal.denison.edu/~whiteda/" target="curator">David White</a>, Denison University</li>
+<li><a href="http://www2.math.umd.edu/~yanir/" target="curator">Yanir A. Rubinstein</a>, UMD</li>
 </ul>
+
+</div>
 
 <h2>Searching</h2>
 <div>

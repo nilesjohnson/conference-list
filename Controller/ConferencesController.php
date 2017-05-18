@@ -480,7 +480,7 @@ class ConferencesController extends AppController {
       $data0 = fgetcsv($handle, 1000, ";");
       while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {
         $num = count($data);
-	$name = split(',',$data[0])[0];
+	$name = preg_split('/,/',$data[0])[0];
 	if (!array_key_exists($data[10],$tmpCountries)) {
 	  $tmpCountries[$data[10]] = array();
 	}
