@@ -137,6 +137,10 @@ class ConferencesController extends AppController {
       }
     }
 
+    //remove edit_key and contact_email in all index views
+    $conferences = $this->unset_sensitive($conferences);
+
+
     $this->set('conferences', $conferences);
     $this->set('conferencesTags',$conferencesTags);
 
@@ -151,6 +155,15 @@ class ConferencesController extends AppController {
     }
   }
 
+  public function unset_sensitive($confarray) {
+    $outarray = array();
+    foreach ($confarray as $c) {
+      unset($c['edit_key']);
+      unset($c['contact_email']);
+      array_push($outarray,$c);
+    }
+    return $outarray;
+  }
 
   public function tag_name_from_id($tagid) {
     $t = $this->Tag->find('first',array('conditions'=>array('Tag.id'=>$tagid)));
