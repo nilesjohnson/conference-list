@@ -21,3 +21,5 @@ webroot/php_errorlog
 webroot/php_mail.log
 tmp/logs/error.log
 tmp/logs/debug.log
+
+.ftpquota
