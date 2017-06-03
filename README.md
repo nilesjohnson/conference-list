@@ -202,3 +202,13 @@ ADMINISTRATION
 
 Site administrators receive a copy of every confirmation email.  If this is lost or the edit keys there are invalid for some reason, you can get the edit/delete url for conference number `N` as follows:  Navigate to `conferences/admin/N` and use the admin key from your private config file.  You can also use conference-specific edit key there.
 
+
+HISTORY
+-------
+
+This project began as `cakephp-conference-list` available at
+  * https://bitbucket.org/nilesjohnson/cakephp-conference-list/
+  * https://code.google.com/archive/p/cakephp-conference-list/
+
+
+
