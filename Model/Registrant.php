@@ -31,10 +31,10 @@ class Registrant extends AppModel {
 				);
   public $validate = array(
 			   'name' => array(
-					   'rule' => 'notEmpty'
+					   'rule' => 'notBlank'
 						 ),
 			   //'institution' => array(
-			   //'rule' => 'notEmpty',
+			   //'rule' => 'notBlank',
 			   //'message' => 'testing institution'
 			   //),
 			   'webpage' => array(
@@ -46,7 +46,7 @@ class Registrant extends AppModel {
 					    'message' => 'Please supply a valid email address; this will never be displayed publicly.'
 					    ),
 			   'captcha' => array(
-					      'rule' => 'notEmpty',
+					      'rule' => 'notBlank',
 					      ),
 			   );
 

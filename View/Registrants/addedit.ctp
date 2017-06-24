@@ -12,6 +12,12 @@ if (isset($edit)){
    echo $this->Form->input('edit_key', array('type'=>'hidden'));
 }
 
+echo '<div id="conference-info" class="addedit-box">';
+echo $this->Form->input('confid', array('label'=>'Conference ID', 
+'after'=>'Conference id number', 'default'=>$confid));
+echo '</div>';
+
+
 echo '<h2>Basic Information</h2>';
 echo '<div id="basic-info" class="addedit-box">';
 echo $this->Form->input('date', array('type'=>'hidden'));

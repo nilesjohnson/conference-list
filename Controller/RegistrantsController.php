@@ -31,6 +31,7 @@ class RegistrantsController extends AppController {
 
 
   public function beforeFilter() {
+    $this->loadModel('Conference');
     $this->Security->blackHoleCallback = 'blackhole';
   }
 
@@ -73,7 +74,7 @@ class RegistrantsController extends AppController {
     $this->set('view_title','organizers');
   }
 
-  public function all($sort_condition=Null) {
+  public function all($confid=Null) {
     // show all registrants
     $this->set('view_title','current registrants');
     $this->Paginator->settings = $this->paginate;
@@ -122,13 +123,15 @@ class RegistrantsController extends AppController {
   }
 
 
-  public function add() {
+  public function add($confid = null) {
     $this->set('noRegButton',1);
     $this->set('view_title', 'Add');
+    $this->set('confid', $confid);
     if (!empty($this->data)) {
       // set model data
-      //debug($this->data);  //displays array info
+      debug($this->data);  //displays array info
       $this->Registrant->set($this->data);
+      $this->Conference->set($this->data['Registrant']['confid']);
       // continue on with validation
       if ($this->doValidation()) {
 	$this->saveAndSend();
@@ -221,12 +224,12 @@ class RegistrantsController extends AppController {
       $Email = $this->prepEmail();
       $Email->send();
       $this->Session->setFlash('Your registration information has been saved.  An email with edit/delete links has been sent to the contact address.', 'FlashGood');
-      $this->redirect(array('action' => 'index'));
+      $this->redirect(array('action' => 'all'));
     } 
     // else: don't know
     else {
       $this->Session->setFlash('There was an error saving your data.  Please retry or contact the organizers.', 'FlashBad');
-      $this->redirect(array('action' => 'index'));  
+      $this->redirect(array('action' => 'all'));  
     }
   }
 
@@ -244,7 +247,7 @@ class RegistrantsController extends AppController {
       ->emailFormat('text');
     $Email->from(array(Configure::read('site.host_email') => Configure::read('site.name')));
     $Email->to($this->data['Registrant']['email']);
-    $Email->bcc(Configure::read('site.admin_email'));
+    //$Email->bcc(Configure::read('site.admin_email'));
     $Email->subject("Registration for " . $this->data['Registrant']['name']);
     if (!is_null($id)) {
       $this->set('registrant',$this->data);
