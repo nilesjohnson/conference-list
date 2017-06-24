@@ -190,6 +190,34 @@ for testing.  This can be done with the following MySQL commands:
         ALTER TABLE conferences_tags ADD INDEX (conference_id);
         ALTER TABLE conferences_tags ADD INDEX (tag_id);
 
+
+
+        CREATE TABLE registrants (
+        id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+        date DATE,
+        edit_key VARCHAR(10),
+        first_name VARCHAR(200),
+        last_name VARCHAR(200),
+        email VARCHAR(200),
+        affiliation VARCHAR(200),
+        webpage VARCHAR(400),
+        request_pub TINYINT(1),
+        request_fund TINYINT(1),
+        request_a TINYINT(1),
+        request_b TINYINT(1),
+        request_c TINYINT(1),
+        comment TEXT
+        );
+
+        CREATE TABLE conferences_registrants(
+        id INT NOT NULL AUTO_INCREMENT,
+        PRIMARY KEY(id),
+        conference_id INT,
+        registrant_id INT
+        );
+
+
+**todo: update db_create_3**
 The file `db_create_3` is a mysql script which automates the last step; edit it to work on the correct 
 database, and run it with the following:
 
