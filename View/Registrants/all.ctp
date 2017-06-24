@@ -7,7 +7,16 @@
 $site_url = Configure::read('site.home');
 $site_name = Configure::read('site.name');
 //debug($registrants[0]);
+
+if(isset($conference_id)) {
+  echo
+  $this->Html->link('Conference Info',
+  array('controller'=>'conferences', 'action'=>'view', $conference_id),
+  array('escape' => false,'class'=>'ics button'));
+}
+
 ?>
+
 
 <table>
     <tr>

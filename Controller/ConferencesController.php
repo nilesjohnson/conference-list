@@ -31,6 +31,7 @@ class ConferencesController extends AppController {
 
   public function beforeFilter() {
     parent::beforeFilter(); //you're supposed to always have this, don't ask me why
+    $this->loadModel('ConferencesRegistrant');
     $this->loadModel('Tag');
     $this->Tag->recursive=0;
     $this->set('tagstring','');
@@ -345,11 +346,10 @@ class ConferencesController extends AppController {
 	array_push($tagnames,$t);
       }
       $tagstring = implode('-',$tagnames);
-      //debug($tagstring);
       $Email = $this->prepEmail();
       $Email->send();
       $this->Session->setFlash('Your conference information has been saved.  An email with edit/delete links has been sent to the contact address.', 'FlashGood');
-      return $this->redirect(array('action' => 'index',$tagstring));
+      $this->redirect(array('action'=>'index',$tagstring));
     } 
     else {
       $this->Session->setFlash('There was an error saving the data','FlashBad');
@@ -371,8 +371,7 @@ class ConferencesController extends AppController {
       $this->data = $this->Conference->read();
     }
     $Email->viewVars(array('conference' => $this->data));
-    $Email->template('default','default')
-      ->emailFormat('text');
+    $Email->template('default','default')->emailFormat('text');
     $Email->from(array(Configure::read('site.host_email') => Configure::read('site.name')));
     $to_array = preg_split("/[\s,]+/",$this->data['Conference']['contact_email']);
     $Email->to($to_array);

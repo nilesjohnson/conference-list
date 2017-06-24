@@ -63,6 +63,21 @@ echo
 ?>
 </div>
 
+<h2>Registrants</h2>
+<div class="calendars" style="margin: 1ex;">
+<?php
+echo
+  $this->Html->link('Register',
+  array('controller'=>'registrants', 'action'=>'add', $conference['Conference']['id']),
+  array('escape' => false,'class'=>'ics button'));
+
+echo
+  $this->Html->link('Show Current Registrants',
+  array('controller'=>'registrants', 'action'=>'all', $conference['Conference']['id']),
+  array('escape' => false,'class'=>'ics button'));
+?>
+</div>
+
 <h2>Problems?</h2>
 <p>
 If you notice a problem with this entry, please contact 

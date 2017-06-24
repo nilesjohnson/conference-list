@@ -87,7 +87,7 @@ class RegistrantsController extends AppController {
   public function all($confid=Null) {
     // show all registrants
     $this->set('view_title','current registrants');
-    $active_model = $this->Registrant->RegistrantsConference;
+    $this->set('conference_id', $confid);
 
     // find database entries
     $find_array = array('conditions' => array('Registrant.request_pub' => '1'));    
@@ -252,7 +252,7 @@ class RegistrantsController extends AppController {
       $Email = $this->prepEmail();
       $Email->send();
       $this->Session->setFlash('Your registration information has been saved.  An email with edit/delete links has been sent to the contact address.', 'FlashGood');
-      $this->redirect(array('action' => 'all'));
+      $this->redirect(array('action' => 'all',$this->request->data['Conference'][0]['id']));
     } 
     // else: don't know
     else {
