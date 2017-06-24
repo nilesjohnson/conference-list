@@ -16,6 +16,8 @@ class ConferenceTest extends CakeTestCase {
 				 'app.conference',
 				 'app.tag',
 				 'app.conferencesTag',
+				 'app.registrant',
+				 'app.conferencesRegistrant',
 	);
 
 /**
