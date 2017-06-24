@@ -1,5 +1,5 @@
 <?php
-debug($this->data);
+//debug($this->data);
 debug($conference_id);
 if (isset($edit)){
 echo '<div class="registrants form">';
@@ -15,8 +15,8 @@ if (isset($edit)){
 }
 
 echo '<div id="conference-info" class="addedit-box">';
-echo $this->Form->input('confid', array('label'=>'Conference ID', 
-'after'=>'Conference id number', 'default'=>$conference_id));
+echo $this->Form->input('Conference.id', array('label'=>'Conference ID', 
+'after'=>'Conference id number', 'value'=>$conference_id));
 echo '</div>';
 
 

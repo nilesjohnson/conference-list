@@ -283,7 +283,7 @@ class ConferencesController extends AppController {
 
     if (!empty($this->data)) {
       // set model data
-      //debug($this->data);  //displays array info
+      debug($this->data);  //displays array info
       $this->Conference->set($this->data);
       $this->Tag->set($this->data['Tag']);
 	  

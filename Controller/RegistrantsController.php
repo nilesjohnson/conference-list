@@ -88,16 +88,18 @@ class RegistrantsController extends AppController {
     // show all registrants
     $this->set('view_title','current registrants');
     $active_model = $this->Registrant->RegistrantsConference;
-    $this->Paginator->settings = $this->paginate;
 
     // find database entries
-    $find_array = array('conditions' => array('Registrant.request_pub' => '1'), 'order' => $order_array);    
+    $find_array = array('conditions' => array('Registrant.request_pub' => '1'));    
     if (!is_null($confid)) {
        $find_array['conditions']['Conference.id'] = $confid;
     }
     //debug($find_array);
-    $this->set('regCount', count($this->Registrant->find('all')));
-    $this->set('registrants', $this->Registrant->find('all'));
+    $this->Paginator->settings = $find_array;
+    $regs = $this->Registrant->ConferencesRegistrant->find('all',$find_array);
+    $this->set('regCount', count($regs));
+    //$this->set('registrants', $regs);
+    $this->set('registrants', $this->Paginator->paginate('ConferencesRegistrant'));
 
     // process RSS feed      
     if( $this->RequestHandler->isRss() ){
@@ -153,14 +155,15 @@ class RegistrantsController extends AppController {
     if (!empty($this->data)) {
       // set model data
       $this->Registrant->set($this->data);
-      $confModel->set('conference_id',$this->data['Registrant']['confid']);
+      $confRegModel->set('conference_id',$this->data['Registrant']['conference_id']);
       debug($this->data);  //displays array info
-      debug($confModel->data);
+      debug($confRegModel->data);
+	debug($this->request->data);
       // continue on with validation
       if ($this->doValidation()) {
 	//$this->saveAndSend();
 	debug('true');
-	$this->Registrant->saveAssociated($this->data);
+	debug($this->Registrant->saveAssociated($this->request->data));
       }
       else {
 	$this->set('mathCaptcha', $this->MathCaptcha->generateEquation());
