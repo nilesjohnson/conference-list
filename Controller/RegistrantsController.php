@@ -90,13 +90,15 @@ class RegistrantsController extends AppController {
     $this->set('conference_id', $confid);
 
     // find database entries
-    $find_array = array('conditions' => array('Registrant.request_pub' => '1'));    
+    $find_all = array('conditions' => array());    
+    $find_pub = array('conditions' => array('Registrant.request_pub' => '1'));    
     if (!is_null($confid)) {
-       $find_array['conditions']['Conference.id'] = $confid;
+       $find_all['conditions']['Conference.id'] = $confid;
+       $find_pub['conditions']['Conference.id'] = $confid;
     }
     //debug($find_array);
-    $this->Paginator->settings = $find_array;
-    $regs = $this->Registrant->ConferencesRegistrant->find('all',$find_array);
+    $this->Paginator->settings = $find_pub;
+    $regs = $this->Registrant->ConferencesRegistrant->find('all',$find_all);
     $this->set('regCount', count($regs));
     //$this->set('registrants', $regs);
     $this->set('registrants', $this->Paginator->paginate('ConferencesRegistrant'));
