@@ -144,26 +144,25 @@ class RegistrantsController extends AppController {
     $this->set('noRegButton',1);
     $this->set('view_title', 'Add');
     $this->set('conference_id', $confid);
-    $confModel = $this->Registrant->ConferencesRegistrant->Conference;
-    $confRegModel = $this->Registrant->ConferencesRegistrant;
+    //$confModel = $this->Registrant->ConferencesRegistrant->Conference;
+    //$confRegModel = $this->Registrant->ConferencesRegistrant;
     if (!is_null($confid)) {
-      $confModel->id = $confid;
-      $confData = $confModel->read();
+      //$confModel->id = $confid;
+      //$confData = $confModel->read();
       //debug($confData);  //displays array info
       //$this->Conference->set($confModel->data['Conference']);
     }
     if (!empty($this->data)) {
       // set model data
       $this->Registrant->set($this->data);
-      $confRegModel->set('conference_id',$this->data['Registrant']['conference_id']);
-      debug($this->data);  //displays array info
-      debug($confRegModel->data);
-	debug($this->request->data);
+      //$confRegModel->set('conference_id',$this->data['Registrant']['conference_id']);
+      //debug($this->data);  //displays array info
+      //debug($confRegModel->data);
+      //debug($this->request->data);
       // continue on with validation
       if ($this->doValidation()) {
-	//$this->saveAndSend();
-	debug('true');
-	debug($this->Registrant->saveAssociated($this->request->data));
+	$this->saveAndSend();
+	//debug('true');
       }
       else {
 	$this->set('mathCaptcha', $this->MathCaptcha->generateEquation());
@@ -248,10 +247,10 @@ class RegistrantsController extends AppController {
      */
     
     // verify that all data saves, and send email(s)
-    if ($this->Registrant->save($this->data)) {
-      //$this->request->data = $this->Registrant->read();
-      //$Email = $this->prepEmail();
-      //$Email->send();
+    if ($this->Registrant->saveAssociated($this->request->data)) {
+      $this->request->data = $this->Registrant->read();
+      $Email = $this->prepEmail();
+      $Email->send();
       $this->Session->setFlash('Your registration information has been saved.  An email with edit/delete links has been sent to the contact address.', 'FlashGood');
       $this->redirect(array('action' => 'all'));
     } 
@@ -272,8 +271,7 @@ class RegistrantsController extends AppController {
       $this->data = $this->Registrant->read();
     }
     $Email->viewVars(array('registrant' => $this->data));
-    $Email->template('default','default')
-      ->emailFormat('text');
+    $Email->template('registration_default','default')->emailFormat('text');
     $Email->from(array(Configure::read('site.host_email') => Configure::read('site.name')));
     $Email->to($this->data['Registrant']['email']);
     //$Email->bcc(Configure::read('site.admin_email'));

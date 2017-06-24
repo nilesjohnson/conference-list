@@ -29,14 +29,13 @@ $site_name = Configure::read('site.name');
 
 <?php
 // prints X of Y, where X is current page and Y is number of pages
-//echo "<p>Page ".$this->Paginator->counter()."</p>";
+echo "<p>Page ".$this->Paginator->counter()."</p>";
 ?>
 
 
 <table class="paginator-controls">
 <tr>
 <?php
-/*
 echo "<td>".$this->Paginator->prev(
   '« Previous',
   null,
@@ -52,7 +51,6 @@ echo "<td>".$this->Paginator->next(
   null,
   array('class' => 'disabled')
 )."</td>";
-*/
 ?>
 </tr>
 </table>
