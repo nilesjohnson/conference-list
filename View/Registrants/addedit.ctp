@@ -1,6 +1,6 @@
 <?php
 //debug($this->data);
-debug($conference_id);
+//debug($conference_id);
 if (isset($edit)){
 echo '<div class="registrants form">';
 $addedit='Edit';
@@ -14,11 +14,10 @@ if (isset($edit)){
    echo $this->Form->input('edit_key', array('type'=>'hidden'));
 }
 
-echo '<div id="conference-info" class="addedit-box">';
+if (isset($conference_id)) {
 echo $this->Form->input('Conference.id', array('label'=>'Conference ID', 
 'after'=>'Conference id number', 'value'=>$conference_id));
-echo '</div>';
-
+}
 
 echo '<h2>Basic Information</h2>';
 echo '<div id="basic-info" class="addedit-box">';
