@@ -39,7 +39,9 @@ class RegistrantsController extends AppController {
 
 
   public function beforeFilter() {
+    parent::beforeFilter();
     $this->loadModel('Conference');
+    $this->Conference->recursive=0;
     $this->Security->blackHoleCallback = 'blackhole';
   }
 
@@ -139,15 +141,26 @@ class RegistrantsController extends AppController {
   public function add($confid = null) {
     $this->set('noRegButton',1);
     $this->set('view_title', 'Add');
-    $this->set('confid', $confid);
+    $this->set('conference_id', $confid);
+    $confModel = $this->Registrant->ConferencesRegistrant->Conference;
+    $confRegModel = $this->Registrant->ConferencesRegistrant;
+    if (!is_null($confid)) {
+      $confModel->id = $confid;
+      $confData = $confModel->read();
+      //debug($confData);  //displays array info
+      //$this->Conference->set($confModel->data['Conference']);
+    }
     if (!empty($this->data)) {
       // set model data
-      debug($this->data);  //displays array info
       $this->Registrant->set($this->data);
-      $this->Conference->set($this->data['Registrant']['confid']);
+      $confModel->set('conference_id',$this->data['Registrant']['confid']);
+      debug($this->data);  //displays array info
+      debug($confModel->data);
       // continue on with validation
       if ($this->doValidation()) {
-	$this->saveAndSend();
+	//$this->saveAndSend();
+	debug('true');
+	$this->Registrant->saveAssociated($this->data);
       }
       else {
 	$this->set('mathCaptcha', $this->MathCaptcha->generateEquation());
@@ -233,9 +246,9 @@ class RegistrantsController extends AppController {
     
     // verify that all data saves, and send email(s)
     if ($this->Registrant->save($this->data)) {
-      $this->request->data = $this->Registrant->read();
-      $Email = $this->prepEmail();
-      $Email->send();
+      //$this->request->data = $this->Registrant->read();
+      //$Email = $this->prepEmail();
+      //$Email->send();
       $this->Session->setFlash('Your registration information has been saved.  An email with edit/delete links has been sent to the contact address.', 'FlashGood');
       $this->redirect(array('action' => 'all'));
     } 

@@ -176,7 +176,7 @@ class Conference extends AppModel {
 			'with'=>'ConferencesTag'
 			),
          'Registrant' => array(
-                        'className' => 'registrant',
+                        'className' => 'Registrant',
                         'joinTable' => 'conferences_registrants',
                        	'foreignKey' => 'conference_id',
                         'associationForeignKey' => 'registrant_id',
