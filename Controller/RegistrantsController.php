@@ -21,12 +21,20 @@ class RegistrantsController extends AppController {
   public $components = array('Email', 'RequestHandler', 'Session', 'MathCaptcha', 'Security', 'Paginator');
 
   public $paginate = array(
+			   'recursive' => -1,
 			   'limit' => 100,
-			   'order' => array(
+			   'joins' => array(
+                               'table' => 'conferences',
+                               'alias' => 'Conference',
+                               'type' => 'left',
+                               'order' => array(
 					    'Registrant.last_name' => 'asc',
 					    'Registrant.first_name' => 'asc'
 					    ),
-			   'conditions' => array('Registrant.request_pub' => '1')
+			       'conditions' => array('Registrant.request_pub' => '1'
+                                            ),
+                               //'fields' => array('Registrant.id','Conference.id')
+                            )
 			   );
 
 
@@ -77,12 +85,17 @@ class RegistrantsController extends AppController {
   public function all($confid=Null) {
     // show all registrants
     $this->set('view_title','current registrants');
+    $active_model = $this->Registrant->RegistrantsConference;
     $this->Paginator->settings = $this->paginate;
 
     // find database entries
-    //$find_array = array('conditions' => $conditions, 'order' => $order_array);    
+    $find_array = array('conditions' => array('Registrant.request_pub' => '1'), 'order' => $order_array);    
+    if (!is_null($confid)) {
+       $find_array['conditions']['Conference.id'] = $confid;
+    }
+    //debug($find_array);
     $this->set('regCount', count($this->Registrant->find('all')));
-    $this->set('registrants', $this->Paginator->paginate('Registrant'));
+    $this->set('registrants', $this->Registrant->find('all'));
 
     // process RSS feed      
     if( $this->RequestHandler->isRss() ){
