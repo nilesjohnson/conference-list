@@ -174,7 +174,24 @@ class Conference extends AppModel {
 			'finderQuery' => '',
 			*/
 			'with'=>'ConferencesTag'
-			)
+			),
+         'Registrant' => array(
+                        'className' => 'registrant',
+                        'joinTable' => 'conferences_registrants',
+                       	'foreignKey' => 'conference_id',
+                        'associationForeignKey' => 'registrant_id',
+                        'unique' => 'keepExisting',
+                       	/*
+                        'conditions' => '',
+                        'fields' => '',
+                       	'order' => '',
+                        'limit' => '',
+                        'offset' => '',
+                        'finderQuery' => '',
+                       	*/
+                       	'with'=>'ConferencesRegistrant'
+                       	)
+
 				      );
   
 }
