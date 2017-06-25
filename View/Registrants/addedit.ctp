@@ -6,6 +6,7 @@ echo '<div class="registrants form">';
 $addedit='Edit';
 }
  else $addedit='Add';
+echo '<h1>'.$conference['Conference']['title'].'</h1>';
 echo '<h1>'.$addedit.' Registration Information</h1>';
 
 echo $this->Form->create('Registrant');
@@ -14,10 +15,7 @@ if (isset($edit)){
    echo $this->Form->input('edit_key', array('type'=>'hidden'));
 }
 
-if (isset($conference_id)) {
-echo $this->Form->input('Conference.id', array('label'=>'Conference ID', 
-'after'=>'Conference id number', 'value'=>$conference_id));
-}
+echo $this->Form->input('Conference.id', array('value'=>$conference['Conference']['id']));
 
 echo '<h2>Basic Information</h2>';
 echo '<div id="basic-info" class="addedit-box">';

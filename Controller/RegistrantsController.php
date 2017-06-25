@@ -19,7 +19,6 @@ class RegistrantsController extends AppController {
   public $helpers = array('Js', 'Html', 'Gcal', 'Text');
 
   public $components = array('Email', 'RequestHandler', 'Session', 'MathCaptcha', 'Security', 'Paginator');
-
   public $paginate_pub = array('conditions' => array('Registrant.request_pub' => '1'));
   public $paginate_all = array('conditions' => array());  
   public $paginate_broken = array(
@@ -89,7 +88,8 @@ class RegistrantsController extends AppController {
   public function all($confid=Null) {
     // show all registrants
     $this->set('view_title','current registrants');
-    $this->set('conference_id', $confid);
+    $this->Conference->id=$confid;
+    $this->set('conference',$this->Conference->read(array('id','title')));
 
     //find database entries
     if (!is_null($confid)) {
@@ -113,6 +113,8 @@ class RegistrantsController extends AppController {
       throw new NotFoundException(__('Invalid conference'));
     }
     $this->Conference->id=$confid;
+    $this->set('conference',$this->Conference->read(array('id','title')));
+
     $edit_key = $this->Conference->read('edit_key')['Conference']['edit_key'];
     if ($key != $edit_key) {
       $this->Session->SetFlash('Invalid admin key.','FlashBad');
@@ -151,7 +153,8 @@ class RegistrantsController extends AppController {
   public function add($confid = null) {
     $this->set('noRegButton',1);
     $this->set('view_title', 'Add');
-    $this->set('conference_id', $confid);
+    $this->Conference->id=$confid;
+    $this->set('conference',$this->Conference->read(array('id','title')));
     //$confModel = $this->Registrant->ConferencesRegistrant->Conference;
     //$confRegModel = $this->Registrant->ConferencesRegistrant;
     if (!is_null($confid)) {
