@@ -14,7 +14,9 @@ if (isset($edit)){
    echo $this->Form->input('edit_key', array('type'=>'hidden'));
 }
 
-echo $this->Form->input('Conference.id', array('value'=>$conference['Conference']['id']));
+if (isset($conference)) {
+   echo $this->Form->input('Conference.id', array('value'=>$conference['Conference']['id']));
+}
 
 echo '<h2>Basic Information</h2>';
 echo '<div id="basic-info" class="addedit-box">';

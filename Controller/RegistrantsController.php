@@ -89,6 +89,9 @@ class RegistrantsController extends AppController {
     // show all registrants
     $this->layout = 'registration_default';
     $this->set('view_title','current registrants');
+    if (!$this->Conference->exists($confid)) {
+      throw new NotFoundException(__('Invalid conference'));
+    }
     $this->Conference->id=$confid;
     $this->set('conference',$this->Conference->read(array('id','title')));
 
@@ -120,7 +123,7 @@ class RegistrantsController extends AppController {
     $edit_key = $this->Conference->read('edit_key')['Conference']['edit_key'];
     if ($key != $edit_key) {
       $this->Session->SetFlash('Invalid admin key.','FlashBad');
-      $this->redirect(array('controller' => 'conferences', 'action' => 'index'));
+      $this->redirect(array('controller' => 'conferences', 'action' => 'view', $confid));
     }
     $this->set('view_title','administrator\'s list');
     $this->set('conference_id', $confid);
@@ -156,6 +159,9 @@ class RegistrantsController extends AppController {
     $this->layout = 'registration_default';
     $this->set('noRegButton',1);
     $this->set('view_title', 'Add');
+    if (!$this->Conference->exists($confid)) {
+      throw new NotFoundException(__('Invalid conference'));
+    }
     $this->Conference->id=$confid;
     $this->set('conference',$this->Conference->read(array('id','title')));
     //$confModel = $this->Registrant->ConferencesRegistrant->Conference;
@@ -189,7 +195,7 @@ class RegistrantsController extends AppController {
   }
 
   public function edit($id = null, $key = null) {
-    $this->layout = 'registration_default';
+    $this->layout = 'default';
     $this->set('noRegButton',1);
     if (!$this->Registrant->exists($id)) {
       throw new NotFoundException(__('Invalid registrant'));
@@ -207,7 +213,7 @@ class RegistrantsController extends AppController {
 
       if ($key != $this->data['Registrant']['edit_key']) {
 	$this->Session->SetFlash('Invalid edit key. (2)','FlashBad');
-	$this->redirect(array('action' => 'index'));
+        $this->redirect(array('controller'=>'conferences','action' => 'index'));
       }
       $this->set('mathCaptcha', $this->MathCaptcha->generateEquation());
       $this->render('addedit');
@@ -220,7 +226,7 @@ class RegistrantsController extends AppController {
       ));
       if ($key != $prev['Registrant']['edit_key'] && $key != Configure::read('site.admin_key')) {
         $this->Session->SetFlash('Invalid edit key. (1)','FlashBad');
-        $this->redirect(array('action' => 'index'));
+        $this->redirect(array('controller'=>'conferences','action' => 'index'));
       }
       // continue on with validation
       if ($this->doValidation()) {
@@ -272,7 +278,7 @@ class RegistrantsController extends AppController {
     // else: don't know
     else {
       $this->Session->setFlash('There was an error saving your data.  Please retry or contact the organizers.', 'FlashBad');
-      $this->redirect(array('action' => 'all'));  
+      return $this->redirect(array('controller'=>'conferences','action' => 'index'));
     }
   }
 
@@ -312,8 +318,7 @@ class RegistrantsController extends AppController {
     else {
       $this->Session->setFlash(__('The registrant could not be deleted. Please, try again.'));
     }
-    return $this->redirect(array('controller'=>'conferences','action' => 
-'index'));
+    return $this->redirect(array('controller'=>'conferences','action' => 'index'));
   }
 
 
