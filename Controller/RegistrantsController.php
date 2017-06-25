@@ -20,7 +20,9 @@ class RegistrantsController extends AppController {
 
   public $components = array('Email', 'RequestHandler', 'Session', 'MathCaptcha', 'Security', 'Paginator');
 
-  public $paginate = array(
+  public $paginate_pub = array('conditions' => array('Registrant.request_pub' => '1'));
+  public $paginate_all = array('conditions' => array());  
+  public $paginate_broken = array(
 			   'recursive' => -1,
 			   'limit' => 100,
 			   'joins' => array(
@@ -89,18 +91,14 @@ class RegistrantsController extends AppController {
     $this->set('view_title','current registrants');
     $this->set('conference_id', $confid);
 
-    // find database entries
-    $find_all = array('conditions' => array());    
-    $find_pub = array('conditions' => array('Registrant.request_pub' => '1'));    
+    //find database entries
     if (!is_null($confid)) {
-       $find_all['conditions']['Conference.id'] = $confid;
-       $find_pub['conditions']['Conference.id'] = $confid;
+       $this->paginate_pub['conditions']['Conference.id'] = $confid;
+       $this->paginate_all['conditions']['Conference.id'] = $confid;
     }
     //debug($find_array);
-    $this->Paginator->settings = $find_pub;
-    $regs = $this->Registrant->ConferencesRegistrant->find('all',$find_all);
-    $this->set('regCount', count($regs));
-    //$this->set('registrants', $regs);
+    $this->Paginator->settings = $this->paginate_pub;
+    $this->set('regCount', count($this->Registrant->ConferencesRegistrant->find('all',$this->paginate_all)));
     $this->set('registrants', $this->Paginator->paginate('ConferencesRegistrant'));
 
     // process RSS feed      
@@ -109,21 +107,29 @@ class RegistrantsController extends AppController {
     }
   }
 
-  public function adminall($key = Null) {
+  public function adminall($confid = Null, $key = Null) {
     // show all registrants
-    if ($key != Configure::read('site.admin_key')) {
+    if (!$this->Conference->exists($confid)) {
+      throw new NotFoundException(__('Invalid conference'));
+    }
+    $this->Conference->id=$confid;
+    $edit_key = $this->Conference->read('edit_key')['Conference']['edit_key'];
+    if ($key != $edit_key) {
       $this->Session->SetFlash('Invalid admin key.','FlashBad');
-      $this->redirect(array('action' => 'index'));
+      $this->redirect(array('controller' => 'conferences', 'action' => 'index'));
     }
     $this->set('view_title','administrator\'s list');
-    $this->Paginator->settings = $this->paginate;
-    $this->Paginator->settings['conditions'] = array();
+    $this->set('conference_id', $confid);
 
-    // find database entries
-    //$find_array = array('conditions' => $conditions, 'order' => $order_array);    
-    $this->set('regCount', count($this->Registrant->find('all')));
-    $this->set('registrants', $this->Paginator->paginate('Registrant'));
-
+    //find database entries
+    if (!is_null($confid)) {
+       $this->paginate_all['conditions']['Conference.id'] = $confid;
+    }
+    //debug($find_array);
+    $this->Paginator->settings = $this->paginate_all;
+    $this->set('regCount', count($this->Registrant->ConferencesRegistrant->find('all',$this->paginate_all)));
+    $this->set('registrants', $this->Paginator->paginate('ConferencesRegistrant'));
+    
     // process RSS feed      
     if( $this->RequestHandler->isRss() ){
       $this->set(compact('registrants'));

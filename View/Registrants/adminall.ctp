@@ -7,7 +7,16 @@
 <?php 
 $site_url = Configure::read('site.home');
 $site_name = Configure::read('site.name');
+
+
+if(isset($conference_id)) {
+  echo
+  $this->Html->link('Conference Info',
+  array('controller'=>'conferences', 'action'=>'view', $conference_id),
+  array('escape' => false,'class'=>'ics button'));
+}
 ?>
+
 <table>
     <tr>
         <th><?php echo $this->Paginator->sort('id', 'ID/Edit'); ?></th>
