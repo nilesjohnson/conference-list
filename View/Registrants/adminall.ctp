@@ -4,13 +4,7 @@
 $site_url = Configure::read('site.home');
 $site_name = Configure::read('site.name');
 
-echo '<h1>'.$conference['Conference']['title'].'</h1>';
 echo "<h1>Administrator's List</h1>";
-
-echo
-$this->Html->link('Conference Info',
-array('controller'=>'conferences', 'action'=>'view', $conference['Conference']['id']),
-array('escape' => false,'class'=>'ics button'));
 ?>
 
 

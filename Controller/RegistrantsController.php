@@ -87,6 +87,7 @@ class RegistrantsController extends AppController {
 
   public function all($confid=Null) {
     // show all registrants
+    $this->layout = 'registration_default';
     $this->set('view_title','current registrants');
     $this->Conference->id=$confid;
     $this->set('conference',$this->Conference->read(array('id','title')));
@@ -109,6 +110,7 @@ class RegistrantsController extends AppController {
 
   public function adminall($confid = Null, $key = Null) {
     // show all registrants
+    $this->layout = 'registration_default';
     if (!$this->Conference->exists($confid)) {
       throw new NotFoundException(__('Invalid conference'));
     }
@@ -151,6 +153,7 @@ class RegistrantsController extends AppController {
 
 
   public function add($confid = null) {
+    $this->layout = 'registration_default';
     $this->set('noRegButton',1);
     $this->set('view_title', 'Add');
     $this->Conference->id=$confid;
@@ -186,6 +189,7 @@ class RegistrantsController extends AppController {
   }
 
   public function edit($id = null, $key = null) {
+    $this->layout = 'registration_default';
     $this->set('noRegButton',1);
     if (!$this->Registrant->exists($id)) {
       throw new NotFoundException(__('Invalid registrant'));

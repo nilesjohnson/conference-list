@@ -6,7 +6,6 @@ echo '<div class="registrants form">';
 $addedit='Edit';
 }
  else $addedit='Add';
-echo '<h1>'.$conference['Conference']['title'].'</h1>';
 echo '<h1>'.$addedit.' Registration Information</h1>';
 
 echo $this->Form->create('Registrant');
