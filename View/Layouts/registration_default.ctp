@@ -37,7 +37,6 @@ echo Configure::read('site.analytics');
       |
       <?php echo $this->Html->link('Current Registrants',array('controller' =>
      'registrants', 'action' => 'all', $conference['Conference']['id']))?>
-      | 
       &nbsp;&nbsp;
       <?php if (empty($noRegButton)) {echo $this->Html->link('Register&nbsp;Now!', 
 array('action' => 'add', $conference['Conference']['id']), array('class' => 
