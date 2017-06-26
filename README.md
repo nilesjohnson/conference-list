@@ -190,11 +190,14 @@ for testing.  This can be done with the following MySQL commands:
         ALTER TABLE conferences_tags ADD INDEX (conference_id);
         ALTER TABLE conferences_tags ADD INDEX (tag_id);
 
+ADDITIONAL NOTES
+----------------
 The file `db_create_3` is a mysql script which automates the last step; edit it to work on the correct 
 database, and run it with the following:
 
     mysql -p -u <USERNAME> <DB_NAME> < db_create_3 
 
+Incorrect ownership permissions for the `tmp` directory can cause cake apps to fail without explanation. To fix, use something like `chown -R www-data tmp`.
 
 
 ADMINISTRATION
