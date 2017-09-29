@@ -7,7 +7,7 @@ version 2.1.1
 
 MAY 2017
 
-Copyright (C) 2009 Niles Johnson <http://www.nilesjohnson.net>
+Copyright (C) 2009 Niles Johnson <https://nilesjohnson.net>
 
 Licensed under GNU GPL v.3 or later.  See LICENSE.txt for a copy of
 the license.
@@ -23,7 +23,7 @@ the license.
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
 DESCRIPTION
@@ -36,7 +36,8 @@ public lists (e.g. math conferences).  Its basic functions are:
 * An interface for viewing announcements, sorted by date or location.
 * Interfaces to update and delete announcements.
 
-The application is based on the Cake PHP framework (version 2.4.5):  http://cakephp.org/
+The application is based on the Cake PHP framework (version 2.4.5):  
+https://cakephp.org/
 
 
 CHANGELOG
