@@ -191,15 +191,28 @@ for testing.  This can be done with the following MySQL commands:
         ALTER TABLE conferences_tags ADD INDEX (conference_id);
         ALTER TABLE conferences_tags ADD INDEX (tag_id);
 
+ADDITIONAL NOTES
+----------------
 The file `db_create_3` is a mysql script which automates the last step; edit it to work on the correct 
 database, and run it with the following:
 
     mysql -p -u <USERNAME> <DB_NAME> < db_create_3 
 
+Incorrect ownership permissions for the `tmp` directory can cause cake apps to fail without explanation. To fix, use something like `chown -R www-data tmp`.
 
 
 ADMINISTRATION
 --------------
 
 Site administrators receive a copy of every confirmation email.  If this is lost or the edit keys there are invalid for some reason, you can get the edit/delete url for conference number `N` as follows:  Navigate to `conferences/admin/N` and use the admin key from your private config file.  You can also use conference-specific edit key there.
+
+
+HISTORY
+-------
+
+This project began as `cakephp-conference-list` available at
+  * https://bitbucket.org/nilesjohnson/cakephp-conference-list/
+  * https://code.google.com/archive/p/cakephp-conference-list/
+
+
 
