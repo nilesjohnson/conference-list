@@ -35,6 +35,7 @@ class ConferencesController extends AppController {
     $this->Tag->recursive=0;
     $this->set('tagstring','');
     $this->set('tagids',array());
+    $this->Security->csrfCheck = false;
     $this->Security->blackHoleCallback = 'blackhole';
   }
 
