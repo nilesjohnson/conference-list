@@ -47,6 +47,11 @@ $config = array(
 
 Configure::write('debug', 2);
 Configure::write('Security.salt', 'qwewrtyuiop123');
-Configure::write('Security.cipherSeed', '987654321')
+Configure::write('Security.cipherSeed', '987654321');
+
+// Recaptcha keys
+Configure::write('Recaptcha.publicKey', 'your-public-api-key');
+Configure::write('Recaptcha.privateKey', 'your-private-api-key');
+
 
 ?>

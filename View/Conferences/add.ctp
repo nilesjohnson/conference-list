@@ -32,7 +32,7 @@ echo $this->Form->input('description', array('label'=>'Description: <br/><span s
 echo '<div class="input"><p>Description Preview:</p><div class="wmd-preview"></div></div>';
 
 if (!isset($edit)) {
-	echo $this->Form->input('captcha', array('label' => 'Please Enter the Sum of ' . $mathCaptcha, 'after'=>'anti-spam'));
+  echo $this->Recaptcha->display();
 }
 echo $this->Form->end('Submit');
 if (isset($edit)) {
