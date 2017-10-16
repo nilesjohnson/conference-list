@@ -306,10 +306,10 @@ class ConferencesController extends AppController {
       }
       // else: something invalid
       else {
-	//$this->Conference->invalidate('recaptcha','Please perform the indicated arithmetic.');
+	$this->Conference->invalidate('recaptcha');
 	//$this->Session->setFlash('Please complete captcha task.', 'FlashBad');
 	//$this->Session->setFlash($this->Recaptcha->error);
-	$this->Session->setFlash('Please check for errors below.  Please complete captcha task.', 'FlashBad');
+	$this->Session->setFlash('Please check for errors below.', 'FlashBad');
       }
     }
 
