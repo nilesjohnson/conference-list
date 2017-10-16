@@ -71,19 +71,25 @@ CHANGELOG
 CONFIGURATION
 -------------
 
-Begin by cloning the git repository, e.g:
+### Begin by cloning the git repository ###
 
-    git clone https://github.com/nilesjohnson/conference-list.git conference-list
+    git clone --recursive https://github.com/nilesjohnson/conference-list.git conference-list
 
-Ensure that you have the files from the 'countries' submodule 
-https://github.com/mledoze/countries.  You can do this with `git submodule init` 
-and `git submodule update`.
+The `--recursive` flag automatically clones the two necessary submodules:
 
-If you don't yet have cake available, clone that too:
+- "countries" submodule: https://github.com/mledoze/countries
+- "Recaptcha" submodule: https://github.com/CakeDC/recaptcha
+
+You can also use this command: `git submodule update --init --recursive`
+
+### Clone the cakephp repository ###
+If you don't already have it:
 
     git clone https://github.com/cakephp/cakephp.git cakephp
 
-Then there are five basic configuration steps necessary to get the app running:
+
+### Set up the app ###
+There are five basic configuration steps necessary to get the app running:
 
 1. Point to a copy of cakephp library:  Put a copy (or symbolic link) of 
 'cakephp/lib' at 'conference-list/Lib/cakephp-lib'
@@ -193,18 +199,27 @@ for testing.  This can be done with the following MySQL commands:
 
 ADDITIONAL NOTES
 ----------------
-The file `db_create_3` is a mysql script which automates the last step; edit it to work on the correct 
-database, and run it with the following:
 
-    mysql -p -u <USERNAME> <DB_NAME> < db_create_3 
+- The file `db_create_3` is a mysql script which automates the last
+  step; edit it to work on the correct database, and run it with the
+  following:
 
-Incorrect ownership permissions for the `tmp` directory can cause cake apps to fail without explanation. To fix, use something like `chown -R www-data tmp`.
+      mysql -p -u <USERNAME> <DB_NAME> < db_create_3 
+
+- Incorrect ownership permissions for the `tmp` directory can cause
+  cake apps to fail without explanation. To fix, use something like
+  `chown -R www-data tmp`.
 
 
 ADMINISTRATION
 --------------
 
-Site administrators receive a copy of every confirmation email.  If this is lost or the edit keys there are invalid for some reason, you can get the edit/delete url for conference number `N` as follows:  Navigate to `conferences/admin/N` and use the admin key from your private config file.  You can also use conference-specific edit key there.
+Site administrators receive a copy of every confirmation email.  If
+this is lost or the edit keys there are invalid for some reason, you
+can get the edit/delete url for conference number `N` as follows:
+Navigate to `conferences/admin/N` and use the admin key from your
+private config file.  You can also use conference-specific edit key
+there.
 
 
 HISTORY
