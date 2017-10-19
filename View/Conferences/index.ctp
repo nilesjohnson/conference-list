@@ -93,6 +93,12 @@ echo $this->Js->link(array(
     <?php echo $this->Html->link('New Announcement', array('action' => 'add',$tagstring), array('class' => 'button', 'id' => 'add-button'));?>
     </p>
   </div>
+  <h4>Updates 2017-10</h4>
+  <ul>
+    <li>Spam protection now provided by Google <a href="https://www.google.com/recaptcha">reCaptcha</a>.</li>
+    <li>New json and xml interfaces.</li>
+  </ul>
+<!--
   <h4>Updates 2016-01</h4>
   <ul>
     <li>Now filter announcements by subject tags</li>
@@ -101,7 +107,6 @@ echo $this->Js->link(array(
     <li>Select boxes improved with select2 (jquery)</li>    
   </ul>	  
 
-<!--
   <h4>Updates 2014-02-16</h4>
 
   <p>We've upgraded the AlgTop-Conf software to <a
