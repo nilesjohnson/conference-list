@@ -3,9 +3,9 @@ Conference List Web App
 
 https://github.com/nilesjohnson/conference-list
 
-version 2.1.1 
+version 2.1.2
 
-MAY 2017
+OCTOBER 2017
 
 Copyright (C) 2009 Niles Johnson <https://nilesjohnson.net>
 
@@ -42,6 +42,11 @@ https://cakephp.org/
 
 CHANGELOG
 ---------
+
+### v. 2.1.2 ###
+
+* SSL support
+* Google reCaptcha
 
 ### v. 2.1.1 ###
 

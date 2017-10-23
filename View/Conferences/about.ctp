@@ -127,7 +127,16 @@ list.</p>
 <p>The <a
 href="https://mathmeetings.net/conferences/index.rss">RSS
 feed for this site</a> gives a list of conference titles, sorted by
-date, and direct links to their homepages.  You can read more about
+date, and direct links to their homepages.  You can also get an RSS feed 
+for your subject(s) of choice by appending '.rss' after your tag names.  For example
+<?php echo $this->Html->link(
+  'at-gt.rss', array('controller'=>null, 'action'=>'at-gt.rss'));?> 
+ or
+<?php echo $this->Html->link(
+  'ag-nt.rss', array('controller'=>null, 'action'=>'ag-nt.rss'));?>.
+</p>
+<p>
+You can read more about
 RSS feeds at the <a href="http://en.wikipedia.org/wiki/RSS"
 target="blank">Wikipedia page</a>.  One example of a feed reader is <a
 href="http://www.feedly.com" target="blank">Feedly</a>.  There are <a href="http://www.google.com/search?q=rss+aggregator" target="blank">many
@@ -140,7 +149,16 @@ others</a>. </p>
 <div>
 
 <p>JSON and XML are two structured data formats which can be easily
-parsed by third-party software.  You can use these, for instance, to
+parsed by third-party software.  Access the interfaces similarly to the RSS feed:
+use the extension '.json' or '.xml' after your subject tags.  For example:
+<?php echo $this->Html->link(
+  'at-gt.json', array('controller'=>null, 'action'=>'at-gt.json'));?> 
+ or
+<?php echo $this->Html->link(
+  'ag-nt.xml', array('controller'=>null, 'action'=>'ag-nt.xml'));?>.
+</p>
+<p>
+You can use these, for instance, to
 set up an alternate front for the announements on this site.  A crude
 demo can be found <a
 href="https://nilesjohnson.net/mathmeetings-front.html">here</a>.
