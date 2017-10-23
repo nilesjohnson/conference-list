@@ -309,7 +309,7 @@ class ConferencesController extends AppController {
 	$this->Conference->invalidate('recaptcha');
 	//$this->Session->setFlash('Please complete captcha task.', 'FlashBad');
 	//$this->Session->setFlash($this->Recaptcha->error);
-	$this->Session->setFlash('Please check for errors below.', 'FlashBad');
+	$this->Session->setFlash('Submission error.  Please check entries and verify captcha.', 'FlashBad');
       }
     }
 
