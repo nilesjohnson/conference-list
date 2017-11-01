@@ -18,7 +18,7 @@ class ConferencesController extends AppController {
 
   //public $uses = array('Conferences');
 
-  public $helpers = array('Js', 'Html', 'Text', 'Gcal', 'Display');
+  public $helpers = array('Js', 'Html', 'Text', 'Gcal', 'Ical', 'Display');
 
   public $components = array('Email', 'RequestHandler', 'Session', 'Paginator', 'Recaptcha.Recaptcha', 'Security', 'Checker');
   
@@ -191,6 +191,7 @@ class ConferencesController extends AppController {
 
   
   public function ical($id=null) {
+    //not used?? (replaced by helper/view)
     $this->Conference->id = $id;
     if (empty($this->data)) {
       $this->set('conference', $this->Conference->read());
@@ -212,6 +213,7 @@ class ConferencesController extends AppController {
   }
 
   public function vcal_string($id, $start_date, $end_date, $title, $city, $country, $url) {
+    //not used?? (replaced by helper/view)
     $start_string = str_replace('-','',$start_date);
     $end_string = date('Ymd',strtotime($end_date." +1 day"));
     $location = $city."; ".$country;

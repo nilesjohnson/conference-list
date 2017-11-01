@@ -22,18 +22,16 @@ echo "\n\n";
 */
 
 echo $this->Ical->vcal_begin();
-foreach ($conferences as $conference) {
-  echo $this->Ical->vcal_event($conference['id'], 
-                               $conference['start_date'], 
-                               $conference['end_date'],
-                               $conference['title'],
-                               $conference['city'],
-                               $conference['country'],
-                               $conference['homepage'],
+  echo $this->Ical->vcal_event($conference['Conference']['id'], 
+                               $conference['Conference']['start_date'], 
+                               $conference['Conference']['end_date'],
+                               $conference['Conference']['title'],
+                               $conference['Conference']['city'],
+                               $conference['Conference']['country'],
+                               $conference['Conference']['homepage'],
 			       $site_url,
 			       $site_name
                                );
-}
 echo $this->Ical->vcal_end();
 
 ?>

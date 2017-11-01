@@ -225,7 +225,7 @@ if ($new_subsort != $curr_subsort) {
 echo ' ';
 echo
   $this->Html->link('iCalendar .ics',
-  array('action'=>'ical', $conference['id']),
+  array('action'=>'view/'.$conference['id'].'.ics'),
   array('escape' => false,'class'=>'ics button'));
 ?>
 </div>
