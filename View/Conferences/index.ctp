@@ -211,16 +211,7 @@ if ($new_subsort != $curr_subsort) {
 <div class="calendars">
 <?php  echo
   $this->Html->link('Google calendar',
-  $this->Gcal->gcal_url($conference['id'], 
-                               $conference['start_date'], 
-                               $conference['end_date'],
-                               $conference['title'],
-                               $conference['city'],
-                               $conference['country'],
-                               $conference['homepage'],
-			       $site_url,
-			       $site_name
-                               ),
+  $this->Gcal->gcal($conference),
   array('escape' => false,'class'=>'ics button'));
 echo ' ';
 echo

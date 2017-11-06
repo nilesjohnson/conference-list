@@ -27,7 +27,7 @@ foreach ($conferences as $conference) {
 				  'link' => $conference['homepage'],
 				  'guid' => array('url' => $conference['homepage'], 'isPermaLink' => 'true'),
 				  'description' =>  $bodyText,
-				  'enclosure' => array('url'=>$this->Html->url(array('action'=>'ical', $conference['id']), true),'length'=>"", 'type'=>"text/calendar"),
+				  'enclosure' => array('url'=>$this->Html->url(array('action'=>'view/'.$conference['id'].'.ics'), true),'length'=>"", 'type'=>"text/calendar"),
 				  //'dc:creator' => '',
 				  //'pubDate' => ''
 					))."\n\n";

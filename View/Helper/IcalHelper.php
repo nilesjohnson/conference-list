@@ -1,9 +1,13 @@
 <?php
 /* /app/views/helpers/ical.php */
+
 class IcalHelper extends AppHelper {
   public function __construct(View $view, $settings = array()) {
     parent::__construct($view, $settings);
     //debug($settings);
+    $site_url = Configure::read('site.home');
+    $site_name = Configure::read('site.name');
+
   }
   
 
@@ -30,7 +34,23 @@ class IcalHelper extends AppHelper {
     return $vcal;  
   }
 
-
-
+  public function vcal($conferences) {
+    // takes an array of conferences and outputs a vcalendar
+    $vcal = $this->vcal_begin();
+    foreach ($conferences as $conference) {
+      $vcal .= $this->vcal_event($conference['id'], 
+				       $conference['start_date'], 
+				       $conference['end_date'],
+				       $conference['title'],
+				       $conference['city'],
+				       $conference['country'],
+				       $conference['homepage'],
+				       $this->site_url,
+				       $this->site_name
+				       );
+    }
+    $vcal .= $this->vcal_end();
+    return $vcal;
+  }
 }
 ?>

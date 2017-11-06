@@ -24,25 +24,14 @@ echo $this->Html->link($conference['Conference']['title'], $conference['Conferen
 
 <div class="calendars" style="margin: 1ex;">
 <?php  
-$site_url = Configure::read('site.home');
-$site_name = Configure::read('site.name');
 echo
   $this->Html->link('Google calendar',
-  $this->Gcal->gcal_url($conference['Conference']['id'], 
-                               $conference['Conference']['start_date'], 
-                               $conference['Conference']['end_date'],
-                               $conference['Conference']['title'],
-                               $conference['Conference']['city'],
-                               $conference['Conference']['country'],
-                               $conference['Conference']['homepage'],
-			       $site_url,
-			       $site_name
-                               ),
+  $this->Gcal->gcal($conference['Conference']),
   array('escape' => false,'class'=>'ics button'));
 
 echo
   $this->Html->link('iCalendar .ics',
-  array('action'=>'ical', $conference['Conference']['id']),
+  array('action'=>'view/'.$conference['Conference']['id'].'.ics'),
   array('escape' => false,'class'=>'ics button'));
 ?>
 </div>
