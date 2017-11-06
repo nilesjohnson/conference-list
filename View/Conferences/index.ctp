@@ -124,9 +124,13 @@ echo $this->Js->link(array(
 <?php 
   if ($tagstring) {
     echo $this->Html->link('RSS',array('controller'=>null,'action'=>$tagstring.'.rss'));
+    echo "&nbsp;&nbsp;";
+    echo $this->Html->link('ICS',array('controller'=>null,'action'=>$tagstring.'.ics'));
   }
   else {
     echo $this->Html->link('RSS',Configure::read('site.home').'/conferences/index.rss');
+    echo "&nbsp;&nbsp;";
+    echo $this->Html->link('ICS',Configure::read('site.home').'/conferences/index.ics');
   }
 ?>
   </div>
