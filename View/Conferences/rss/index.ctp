@@ -18,20 +18,21 @@ $this->set('channelData', array(
 echo "\n\n";
 
 foreach ($conferences as $conference) {
-
   $bodyText = $conference['start_date']." <small>through</small> ".$conference['end_date'];
   $bodyText .= ", ".$conference['city']."; ".$conference['country'];
   $bodyText = h(strip_tags($bodyText));
-  echo  $this->Rss->item(array(), array(
-				  'title' => $conference['title'],
-				  'link' => $conference['homepage'],
-				  'guid' => array('url' => $conference['homepage'], 'isPermaLink' => 'true'),
-				  'description' =>  $bodyText,
-				  'enclosure' => array('url'=>$this->Html->url(array('action'=>'view/'.$conference['id'].'.ics'), true),'length'=>"", 'type'=>"text/calendar"),
+  echo  $this->Rss->item(array(),
+			 array(
+			       'title' => $conference['title'],
+			       'link' => $conference['homepage'],
+			       'guid' => array('url' => $conference['homepage'], 'isPermaLink' => 'true'),
+			       'description' =>  $bodyText,
+			       'enclosure' => array('url'=>$this->Html->url(array('action'=>'view/'.$conference['id'].'.ics'), true),
+						    'length'=>strlen($this->Ical->vcal(array($conference))),
+						    'type'=>"text/calendar"),
 				  //'dc:creator' => '',
 				  //'pubDate' => ''
-					))."\n\n";
-/**/
+			       ))."\n\n";
 }
 
 ?>
