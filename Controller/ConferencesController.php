@@ -72,19 +72,44 @@ class ConferencesController extends AppController {
   }
   public function search($tagstring=null) {
     $this->set('view_title','Search All Meetings');
-    $conditions = $this->request->query;
-    if (isset($conditions['before'])) {
-      $conditions['start_date <'] = $conditions['before'];
+    $this->set('countries',$this->loadCountries());
+    $this->set('view_title', 'Add');
+    if (isset($tagstring)) {
+      //debug($tagstring);
+      $this->set('tagstring',$tagstring);
+      $tagids=$this->tag_ids_from_names(explode('-', $tagstring));
+      $this->set('tagids',$tagids);
+    } 
+    else {
+      $this->set('tagstring','');
+      $this->set('tagids',array());
+    }
+
+    if (!empty($this->data)) {
+      $conditions = $this->data['Search'];
+      if ($conditions['before'] != '') {
+	$conditions['start_date <'] = $conditions['before'];
+      }
       unset($conditions['before']);
-    }
-    if (isset($conditions['after'])) {
-      $conditions['start_date >'] = $conditions['after'];
+
+      if ($conditions['after'] != '') {
+	$conditions['start_date >'] = $conditions['after'];
+      }
       unset($conditions['after']);
+
+      if ($conditions['title'] != '') {
+	$conditions['title LIKE'] = '%'.$conditions['title'].'%';
+      }
+      unset($conditions['title']);
+
+      $this->render_list(array('tagstring' => $tagstring,
+			       'conditions' => $conditions,
+			       ));
+      $this->render('index'); // use the index view
     }
-    $this->render_list(array('tagstring' => $tagstring,
-			     'conditions' => $conditions,
-			     ));
-    $this->render('index'); // use the index view
+    //else: no data; render search form
+    else {
+    }
   }
   
 
