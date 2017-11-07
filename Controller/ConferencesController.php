@@ -71,9 +71,9 @@ class ConferencesController extends AppController {
 			     ));
   }
   public function search($tagstring=null) {
+    $this->set('search',1);
     $this->set('view_title','Search All Meetings');
     $this->set('countries',$this->loadCountries());
-    $this->set('view_title', 'Add');
     if (isset($tagstring)) {
       //debug($tagstring);
       $this->set('tagstring',$tagstring);
@@ -86,30 +86,30 @@ class ConferencesController extends AppController {
     }
 
     if (!empty($this->data)) {
-      $conditions = $this->data['Search'];
-      if ($conditions['before'] != '') {
-	$conditions['start_date <'] = $conditions['before'];
+      $conditions = array();
+      foreach ($this->data['Search'] as $field => $value) {
+	if ($value != '') {
+	  if ($field == 'before') {
+	    $conditions['start_date <'] = $value;
+	  }
+	  elseif ($field == 'after') {
+	    $conditions['start_date >'] = $value;
+	  }
+	  else {
+	    $conditions[$field.' LIKE'] = '%'.$value.'%';
+	  }
+	}
       }
-      unset($conditions['before']);
-
-      if ($conditions['after'] != '') {
-	$conditions['start_date >'] = $conditions['after'];
-      }
-      unset($conditions['after']);
-
-      if ($conditions['title'] != '') {
-	$conditions['title LIKE'] = '%'.$conditions['title'].'%';
-      }
-      unset($conditions['title']);
-
+      
       $this->render_list(array('tagstring' => $tagstring,
 			       'conditions' => $conditions,
 			       ));
-      $this->render('index'); // use the index view
     }
     //else: no data; render search form
     else {
+      $this->set('conferences', array());
     }
+    $this->render('index'); // use the index view
   }
   
 
@@ -120,7 +120,7 @@ class ConferencesController extends AppController {
       arguments for the main index simple, but allow other functions
       with more complex arguments to use the same rendering functionality.
      */
-    debug($args);
+    //debug($args);
     $tagstring = $args['tagstring'];
     $conditions = $args['conditions'];
     $this->set('sort_text','Sort by: ');

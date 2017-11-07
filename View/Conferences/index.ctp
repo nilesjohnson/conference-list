@@ -28,6 +28,41 @@ echo $this->Js->link(array(
 ), false);
 */
 
+// display search if requested
+if (isset($search) && $search) {
+echo '<h1>Search Announcements</h1>';
+echo $this->Form->create('Search');
+echo "<br />";
+
+echo $this->Form->input('title', array('label' => 'Title contains'));
+echo $this->Form->input('before', array('label'=>'Begins before', 'type'=>'text', 'div'=>'input datefield', 'after'=>'yyyy-mm-dd'));
+echo $this->Form->input('after', array('label'=>'Begins after', 'type'=>'text', 'div'=>'input datefield', 'after'=>'yyyy-mm-dd'));
+//echo $this->Form->input('city', array('label'=>'City and State/Province'));
+
+echo $this->Form->input('country', array('label'=>'Country contains', 'type'=>'text'));
+//echo $this->Form->input('homepage', array('label'=>'Conference website'));
+echo $this->Form->input('institution', array('label'=>'Host institution contains'));
+echo $this->Form->input('meeting_type', array('label'=>'Meeting type contains'));
+//echo $this->Form->input('Tag', array('label'=>'Subject tags', 'after'=>'Arxiv subject areas.  Select one or more; type to narrow options', 'multiple'=>true, 'default'=>$tagids));
+//echo $this->Form->input('contact_name', array('label'=>'Contact Name(s), comma separated'));
+echo $this->Form->input('description', array('label'=>'Description contains'));
+
+//echo '<div class="input"><p>Description Preview:</p><div class="wmd-preview"></div></div>';
+
+/*
+if (!isset($edit)) {
+  echo '<div id="ConferenceRecaptcha" class="required">';
+  echo $this->Form->label('recaptcha','Captcha task.');
+  echo $this->Recaptcha->display();
+  echo '</div>';
+}
+*/
+echo $this->Form->end('Submit');
+}
+
+
+// else: default display
+else {
 ?>
 
 <div id="search_links">
@@ -115,7 +150,6 @@ echo $this->Js->link(array(
 </div>
 
 
-
 <hr class="top"/>
 <h1 style="float:left;"><?php echo $view_title; ?></h1>
 
@@ -165,6 +199,7 @@ document.getElementById('tagSelectDiv').style.display = 'block';
 </noscript>
 </div>
 
+<?php } ?>
 
 <?php $curr_subsort = Null; $new_subsort = Null; $subsort_counter = 0; echo '<div id="subsort_start">'; ?>
 <?php 
