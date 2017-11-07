@@ -3,11 +3,11 @@ Conference List Web App
 
 https://github.com/nilesjohnson/conference-list
 
-version 2.1
+version 2.1.2
 
-JAN 2016
+OCTOBER 2017
 
-Copyright (C) 2009--2015 Niles Johnson <http://www.nilesjohnson.net>
+Copyright (C) 2009 Niles Johnson <https://nilesjohnson.net>
 
 Licensed under GNU GPL v.3 or later.  See LICENSE.txt for a copy of
 the license.
@@ -23,7 +23,7 @@ the license.
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
 DESCRIPTION
@@ -36,11 +36,21 @@ public lists (e.g. math conferences).  Its basic functions are:
 * An interface for viewing announcements, sorted by date or location.
 * Interfaces to update and delete announcements.
 
-The application is based on the Cake PHP framework (version 2.4.5):  http://cakephp.org/
+The application is based on the Cake PHP framework (version 2.4.5):  
+https://cakephp.org/
 
 
 CHANGELOG
 ---------
+
+### v. 2.1.2 ###
+
+* SSL support
+* Google reCaptcha
+
+### v. 2.1.1 ###
+
+* support json and xml views
 
 ### v. 2.1 ###
 
@@ -66,19 +76,25 @@ CHANGELOG
 CONFIGURATION
 -------------
 
-Begin by cloning the git repository, e.g:
+### Begin by cloning the git repository ###
 
-    git clone https://github.com/nilesjohnson/conference-list.git conference-list
+    git clone --recursive https://github.com/nilesjohnson/conference-list.git conference-list
 
-Ensure that you have the files from the 'countries' submodule 
-https://github.com/mledoze/countries.  You can do this with `git submodule init` 
-and `git submodule update`.
+The `--recursive` flag automatically clones the two necessary submodules:
 
-If you don't yet have cake available, clone that too:
+- "countries" submodule: https://github.com/mledoze/countries
+- "Recaptcha" submodule: https://github.com/CakeDC/recaptcha
+
+You can also use this command: `git submodule update --init --recursive`
+
+### Clone the cakephp repository ###
+If you don't already have it:
 
     git clone https://github.com/cakephp/cakephp.git cakephp
 
-Then there are five basic configuration steps necessary to get the app running:
+
+### Set up the app ###
+There are five basic configuration steps necessary to get the app running:
 
 1. Point to a copy of cakephp library:  Put a copy (or symbolic link) of 
 'cakephp/lib' at 'conference-list/Lib/cakephp-lib'
@@ -186,15 +202,37 @@ for testing.  This can be done with the following MySQL commands:
         ALTER TABLE conferences_tags ADD INDEX (conference_id);
         ALTER TABLE conferences_tags ADD INDEX (tag_id);
 
-The file `db_create_3` is a mysql script which automates the last step; edit it to work on the correct 
-database, and run it with the following:
+ADDITIONAL NOTES
+----------------
 
-    mysql -p -u <USERNAME> <DB_NAME> < db_create_3 
+- The file `db_create_3` is a mysql script which automates the last
+  step; edit it to work on the correct database, and run it with the
+  following:
 
+      mysql -p -u <USERNAME> <DB_NAME> < db_create_3 
+
+- Incorrect ownership permissions for the `tmp` directory can cause
+  cake apps to fail without explanation. To fix, use something like
+  `chown -R www-data tmp`.
 
 
 ADMINISTRATION
 --------------
 
-Site administrators receive a copy of every confirmation email.  If this is lost or the edit keys there are invalid for some reason, you can get the edit/delete url for conference number `N` as follows:  Navigate to `conferences/admin/N` and use the admin key from your private config file.  You can also use conference-specific edit key there.
+Site administrators receive a copy of every confirmation email.  If
+this is lost or the edit keys there are invalid for some reason, you
+can get the edit/delete url for conference number `N` as follows:
+Navigate to `conferences/admin/N` and use the admin key from your
+private config file.  You can also use conference-specific edit key
+there.
+
+
+HISTORY
+-------
+
+This project began as `cakephp-conference-list` available at
+  * https://bitbucket.org/nilesjohnson/cakephp-conference-list/
+  * https://code.google.com/archive/p/cakephp-conference-list/
+
+
 

@@ -9,6 +9,17 @@
 </div>
 -->
 
+<?php 
+  // link elements for rss feed
+  if ($tagstring) {
+    echo '<link type="application/rss+xml" rel="alternate" href="'.$tagstring.'.rss"/>';
+  }
+  else {
+    echo '<link type="application/rss+xml" rel="alternate" href="'.Configure::read('site.home').'/conferences/index.rss"/>';
+  }
+?>
+
+
 <?php
 /*
 echo $this->Js->link(array(
@@ -62,18 +73,9 @@ echo $this->Js->link(array(
 <div class="intro_text">
 
   <p>Welcome to MathMeetings.net!  This is a list for research
-  mathematics conferences, workshops, summer schools, etc.</p>
+  mathematics conferences, workshops, summer schools, etc.  Anyone
+  at all is welcome to add announcements.</p>
 
-  <p>There are a few other conference lists available, but this list
-  aims to be more complete by allowing <em>anyone at all</em> to add
-  announcements.  Rather than use a wiki, announcement information is
-  stored in database format so that useful search functions can be
-  added as the list grows.</p>
-
-  <p>This site began as AlgTop-Conf, for meetings in algebraic
-  topology.  It is now expanded to serve other mathematics subjects.
-  Use tag filtering to focus on announcements related to your
-  discipline (see right or below).</p>
 
 
   <div class="new">
@@ -82,6 +84,14 @@ echo $this->Js->link(array(
     <?php echo $this->Html->link('New Announcement', array('action' => 'add',$tagstring), array('class' => 'button', 'id' => 'add-button'));?>
     </p>
   </div>
+  <h4>Updates 2017-10</h4>
+  <ul>
+    <li>Secure connections (https) now activated and all traffic is automatically redirected to use https.  Thanks to <a href='https://letsencrypt.org/' target='le'>Let's Encrypt</a> for providing the certificate!</li>
+    <li>Spam protection now provided by Google <a href="https://www.google.com/recaptcha" target='gr'>reCaptcha</a>.</li>
+    <li>New <?php echo $this->Html->link(
+  'json and xml interfaces', array('action'=>'about#xml_json_about'));?> for access by other software.</li>
+  </ul>
+<!--
   <h4>Updates 2016-01</h4>
   <ul>
     <li>Now filter announcements by subject tags</li>
@@ -90,7 +100,6 @@ echo $this->Js->link(array(
     <li>Select boxes improved with select2 (jquery)</li>    
   </ul>	  
 
-<!--
   <h4>Updates 2014-02-16</h4>
 
   <p>We've upgraded the AlgTop-Conf software to <a
@@ -115,9 +124,13 @@ echo $this->Js->link(array(
 <?php 
   if ($tagstring) {
     echo $this->Html->link('RSS',array('controller'=>null,'action'=>$tagstring.'.rss'));
+    echo "&nbsp;&nbsp;";
+    echo $this->Html->link('ICS',array('controller'=>null,'action'=>$tagstring.'.ics'));
   }
   else {
-    echo $this->Html->link('RSS','index.rss');
+    echo $this->Html->link('RSS',Configure::read('site.home').'/conferences/index.rss');
+    echo "&nbsp;&nbsp;";
+    echo $this->Html->link('ICS',Configure::read('site.home').'/conferences/index.ics');
   }
 ?>
   </div>
@@ -202,21 +215,12 @@ if ($new_subsort != $curr_subsort) {
 <div class="calendars">
 <?php  echo
   $this->Html->link('Google calendar',
-  $this->Gcal->gcal_url($conference['id'], 
-                               $conference['start_date'], 
-                               $conference['end_date'],
-                               $conference['title'],
-                               $conference['city'],
-                               $conference['country'],
-                               $conference['homepage'],
-			       $site_url,
-			       $site_name
-                               ),
+  $this->Gcal->gcal($conference),
   array('escape' => false,'class'=>'ics button'));
 echo ' ';
 echo
   $this->Html->link('iCalendar .ics',
-  array('action'=>'ical', $conference['id']),
+  array('action'=>'view/'.$conference['id'].'.ics'),
   array('escape' => false,'class'=>'ics button'));
 ?>
 </div>

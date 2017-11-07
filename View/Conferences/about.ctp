@@ -100,7 +100,7 @@ separated by dashes.  For example, to choose
 <span class="tag">at.algebraic-topology</span> and 
 <span class="tag">ct.category-theory</span>, use the following URL:</p>
 <pre>
-http://mathmeetings.net/at-ct
+https://mathmeetings.net/at-ct
 </pre>
 
 <p>Note: Multiple tags are combined with an OR condition, meaning that
@@ -125,15 +125,48 @@ external software to develop an alternative front end for the
 list.</p>
 
 <p>The <a
-href="http://www.nilesjohnson.net/algtop-conf/conferences/index.rss">RSS
+href="https://mathmeetings.net/conferences/index.rss">RSS
 feed for this site</a> gives a list of conference titles, sorted by
-date, and direct links to their homepages.  You can read more about
+date, and direct links to their homepages.  You can also get an RSS feed 
+for your subject(s) of choice by appending '.rss' after your tag names.  For example
+<?php echo $this->Html->link(
+  'at-gt.rss', array('controller'=>null, 'action'=>'at-gt.rss'));?> 
+ or
+<?php echo $this->Html->link(
+  'ag-nt.rss', array('controller'=>null, 'action'=>'ag-nt.rss'));?>.
+</p>
+<p>
+You can read more about
 RSS feeds at the <a href="http://en.wikipedia.org/wiki/RSS"
 target="blank">Wikipedia page</a>.  One example of a feed reader is <a
 href="http://www.feedly.com" target="blank">Feedly</a>.  There are <a href="http://www.google.com/search?q=rss+aggregator" target="blank">many
 others</a>. </p>
 
 </div>
+
+
+<h2 class="target" id="xml_json_about">JSON and XML interfaces</h2>
+<div>
+
+<p>JSON and XML are two structured data formats which can be easily
+parsed by third-party software.  Access the interfaces similarly to the RSS feed:
+use the extension '.json' or '.xml' after your subject tags.  For example:
+<?php echo $this->Html->link(
+  'at-gt.json', array('controller'=>null, 'action'=>'at-gt.json'));?> 
+ or
+<?php echo $this->Html->link(
+  'ag-nt.xml', array('controller'=>null, 'action'=>'ag-nt.xml'));?>.
+</p>
+<p>
+You can use these, for instance, to
+set up an alternate front for the announements on this site.  A crude
+demo can be found <a
+href="https://nilesjohnson.net/mathmeetings-front.html">here</a>.
+Contact Niles if you are interested in additional features.</p>
+
+</div>
+
+
 
 <h2 class="target" id="cal_about">Calendar Links</h2>
 <div>

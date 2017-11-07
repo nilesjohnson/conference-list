@@ -88,6 +88,32 @@ class ConferencesControllerTest extends ControllerTestCase {
 	  //debug($this->vars);
 	}
 
+
+	public function testIndexJson() {
+          $this->testIndex('conferences/index.json',5,'Json');
+          //debug($this->headers);
+          //debug($this->vars);
+        }
+
+	public function testIndexJsonTags() {
+          $this->testIndex('ag-ap.json',2,'Json Tags');
+          //debug($this->headers);
+          //debug($this->vars);
+        }
+	public function testIndexXML() {
+          $this->testIndex('conferences/index.xml',5,'XML');
+          //debug($this->headers);
+          //debug($this->vars);
+        }
+
+	public function testIndexXMLTags() {
+          $this->testIndex('ag-ap.xml',2,'XML Tags');
+          //debug($this->headers);
+          //debug($this->vars);
+        }
+
+
+
 /**
  * testAbout method
  *

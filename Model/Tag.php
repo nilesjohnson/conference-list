@@ -9,7 +9,7 @@ class Tag extends AppModel {
 					  // required on the add form
 					  // but the rule is not used.
 					  //
-					  //'rule' => 'notEmpty',
+					  //'rule' => 'notBlank',
 					  'message' => 'Please supply at least one subject tag.'
 					  ),
 			   );

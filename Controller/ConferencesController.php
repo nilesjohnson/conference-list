@@ -1,5 +1,6 @@
 <?php
 App::uses('AppController', 'Controller');
+CakePlugin::load('Recaptcha');
 /**
  * Conferences Controller
  *
@@ -17,9 +18,9 @@ class ConferencesController extends AppController {
 
   //public $uses = array('Conferences');
 
-  public $helpers = array('Js', 'Html', 'Text', 'Gcal', 'Display');
+  public $helpers = array('Js', 'Html', 'Text', 'Gcal', 'Ical', 'Display');
 
-  public $components = array('Email', 'RequestHandler', 'Session', 'Paginator', 'MathCaptcha', 'Security', 'Checker');
+  public $components = array('Email', 'RequestHandler', 'Session', 'Paginator', 'Recaptcha.Recaptcha', 'Security', 'Checker');
   
   //Regular ol' $this->paginate() ceases to function when this is declared, but this allows for pagination of different Models within same Controller
 
@@ -35,6 +36,7 @@ class ConferencesController extends AppController {
     $this->Tag->recursive=0;
     $this->set('tagstring','');
     $this->set('tagids',array());
+    $this->Security->csrfCheck = false;
     $this->Security->blackHoleCallback = 'blackhole';
   }
 
@@ -157,6 +159,10 @@ class ConferencesController extends AppController {
       }
     }
 
+    //remove edit_key and contact_email in all index views
+    $conferences = $this->unset_sensitive($conferences);
+
+
     $this->set('conferences', $conferences);
     $this->set('conferencesTags',$conferencesTags);
 
@@ -164,12 +170,22 @@ class ConferencesController extends AppController {
 	
     $this->set(compact('conferences', 'tags', 'tagstring', 'tagids'));
 
-    // process RSS feed      
-    if( $this->RequestHandler->isRss() ){
+    $this->set('_serialize', array('conferences')); // variables that need to be serialized (for json or xml)
+    // process requests for RSS, JSON, XML, and anything else with extenson
+    if( isset($this->request->params['ext'])) {
       $this->set(compact('conferences'));
     }
   }
 
+  public function unset_sensitive($confarray) {
+    $outarray = array();
+    foreach ($confarray as $c) {
+      unset($c['edit_key']);
+      unset($c['contact_email']);
+      array_push($outarray,$c);
+    }
+    return $outarray;
+  }
 
   public function tag_name_from_id($tagid) {
     $t = $this->Tag->find('first',array('conditions'=>array('Tag.id'=>$tagid)));
@@ -194,6 +210,8 @@ class ConferencesController extends AppController {
   }
 
   public function ical($id=null) {
+    //not used?? (replaced by helper/view)
+    return false;
     $this->Conference->id = $id;
     if (empty($this->data)) {
       $this->set('conference', $this->Conference->read());
@@ -215,6 +233,8 @@ class ConferencesController extends AppController {
   }
 
   public function vcal_string($id, $start_date, $end_date, $title, $city, $country, $url) {
+    //not used?? (replaced by helper/view)
+    return false;
     $start_string = str_replace('-','',$start_date);
     $end_string = date('Ymd',strtotime($end_date." +1 day"));
     $location = $city."; ".$country;
@@ -303,14 +323,16 @@ class ConferencesController extends AppController {
 
       // if conference and tag data validates, check for valid captcha
       if ($validtag && $validconf &&
-	  $this->MathCaptcha->validates($this->data['Conference']['captcha'])) {
+	  $this->Recaptcha->verify()) {
 	// all good !
 	$this->save_and_send();
       }
       // else: something invalid
       else {
-	$this->Conference->invalidate('captcha','Please perform the indicated arithmetic.');
-	$this->Session->setFlash('Please check for errors below.', 'FlashBad');
+	$this->Conference->invalidate('recaptcha');
+	//$this->Session->setFlash('Please complete captcha task.', 'FlashBad');
+	//$this->Session->setFlash($this->Recaptcha->error);
+	$this->Session->setFlash('Submission error.  Please check entries and verify captcha.', 'FlashBad');
       }
     }
 
@@ -323,7 +345,6 @@ class ConferencesController extends AppController {
 	$this->request->data['Conference'][$key] = $value;
       }
     }
-    $this->set('mathCaptcha', $this->MathCaptcha->generateEquation());
     $tags=$this->Conference->ConferencesTag->Tag->find('list');
     $this->set(compact('tags'));
   }
@@ -498,7 +519,7 @@ class ConferencesController extends AppController {
       $data0 = fgetcsv($handle, 1000, ";");
       while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {
         $num = count($data);
-	$name = split(',',$data[0])[0];
+	$name = preg_split('/,/',$data[0])[0];
 	if (!array_key_exists($data[10],$tmpCountries)) {
 	  $tmpCountries[$data[10]] = array();
 	}

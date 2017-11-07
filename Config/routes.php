@@ -53,7 +53,7 @@
 
 
 /**
- * activate rss
+ * activate rss,ics,json,xml
  */
 
-	Router::parseExtensions('rss','ics');
+Router::parseExtensions('rss','ics','json','xml');

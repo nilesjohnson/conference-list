@@ -103,6 +103,25 @@ if (!empty($failed)) {
 
 
 
+// for development, deactivate ssl redirect in 
+// ssl_redirect.php
+include ('ssl_redirect.php');
+function isSSL(){
+    if( !empty( $_SERVER['https'] ) )
+        return true;
+    if( !empty( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) && 
+        $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https' )
+        return true;
+    return false;
+}
+
+if (!isset($deactivate_ssl_redirect) || !$deactivate_ssl_redirect){
+  if( !isSSL()){
+    header("Location: https://" . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"]);
+    exit();
+  }
+}
+
 
 App::uses('Dispatcher', 'Routing');
 

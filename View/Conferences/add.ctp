@@ -32,7 +32,10 @@ echo $this->Form->input('description', array('label'=>'Description: <br/><span s
 echo '<div class="input"><p>Description Preview:</p><div class="wmd-preview"></div></div>';
 
 if (!isset($edit)) {
-	echo $this->Form->input('captcha', array('label' => 'Please Enter the Sum of ' . $mathCaptcha, 'after'=>'anti-spam'));
+  echo '<div id="ConferenceRecaptcha" class="required">';
+  echo $this->Form->label('recaptcha','Captcha task.');
+  echo $this->Recaptcha->display();
+  echo '</div>';
 }
 echo $this->Form->end('Submit');
 if (isset($edit)) {
@@ -65,4 +68,4 @@ echo '</div>';
   };
 </script>
 
-<script type="text/javascript" src="/js/wmd/wmd.js"></script>
+<script type="text/javascript" src="<?echo Configure::read('site.home');?>/js/wmd/wmd.js"></script>
