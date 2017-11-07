@@ -74,13 +74,13 @@ class ConferencesController extends AppController {
     $this->set('view_title','Search All Meetings');
     $conditions = $this->request->query;
     if (isset($conditions['before'])) {
-	$conditions['start_date <'] = $conditions['before'];
-	unset($conditions['before']);
-      }
+      $conditions['start_date <'] = $conditions['before'];
+      unset($conditions['before']);
+    }
     if (isset($conditions['after'])) {
-	$conditions['start_date >'] = $conditions['after'];
-	unset($conditions['after']);
-      }
+      $conditions['start_date >'] = $conditions['after'];
+      unset($conditions['after']);
+    }
     $this->render_list(array('tagstring' => $tagstring,
 			     'conditions' => $conditions,
 			     ));
