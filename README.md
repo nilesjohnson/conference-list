@@ -3,7 +3,7 @@ Conference List Web App
 
 https://github.com/nilesjohnson/conference-list
 
-version 2.1.2
+version 2.1.3
 
 OCTOBER 2017
 
@@ -42,6 +42,12 @@ https://cakephp.org/
 
 CHANGELOG
 ---------
+
+
+### v. 2.1.3 ###
+
+* ICS feed
+* Rudimentary search
 
 ### v. 2.1.2 ###
 

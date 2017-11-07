@@ -142,6 +142,9 @@ target="blank">Wikipedia page</a>.  One example of a feed reader is <a
 href="http://www.feedly.com" target="blank">Feedly</a>.  There are <a href="http://www.google.com/search?q=rss+aggregator" target="blank">many
 others</a>. </p>
 
+<p>New in version 2.1.3: calendar event links are now included with
+the 'enclosure' tag.</p>
+
 </div>
 
 
@@ -177,6 +180,11 @@ href="http://en.wikipedia.org/wiki/Calendaring_software">calendaring
 software</a>.  We have a direct link for Google Calendar, and an <a
 href="http://en.wikipedia.org/wiki/ICalendar">iCalendar (.ics)</a>
 formatted file for importing into other software.</p>
+
+<p>New in version 2.1.3: An ICS feed is available, giving calendar
+events for all announcements matching the given tag string.  A link to
+the ICS feed is printed on the main index page, next to the RSS link.
+</p>
 
 </div>
 
@@ -219,8 +227,21 @@ know</a>!</p>
 <h2>Searching</h2>
 <div>
 <p>
-The data for each announcement is stored in a database, so search functionality can be easily added.  This will be done in the happy case that the list becomes too large to skim quickly.  
+A very rudimentary search form is now available.  For tag-filtered search,
+use a URL such as
+<?php echo $this->Html->link(
+  'conferences/search/at-gt', array('controller'=>'conferences', 'action'=>'search/at-gt'));?>.
+To search without subject tags, use
+<?php echo $this->Html->link(
+  'conferences/search', array('controller'=>'conferences', 'action'=>'search'));?>.
 </p>
+
+<p>Currently the search only performs simple date comparison and basic
+string matching in certain fields.  As time permits, we will work on a
+more flexible and full-featured search.  Please <a
+href="http://nilesjohnson.net/contact.html" target="blank">let Niles
+know</a> if you have any specific fuctionality requests!</p>
+
 </div>
 
 <h2>Countries List</h2>
