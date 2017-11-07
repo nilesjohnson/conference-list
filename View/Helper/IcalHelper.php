@@ -20,7 +20,7 @@ class IcalHelper extends AppHelper {
     return "END:VCALENDAR";
   }
 
-  public function vcal_event($id, $start_date, $end_date, $title, $city, $country, $homepage, $conflist_url, $conflist_name) {
+  public function vcal_event($id, $start_date, $end_date, $title, $city, $country, $homepage) {
     $start_string = str_replace('-','',$start_date);
     $end_string = date('Ymd',strtotime($end_date." +1 day"));
     $location = $city."; ".$country;
@@ -44,9 +44,7 @@ class IcalHelper extends AppHelper {
 				       $conference['title'],
 				       $conference['city'],
 				       $conference['country'],
-				       $conference['homepage'],
-				       $this->site_url,
-				       $this->site_name
+				       $conference['homepage']
 				       );
     }
     $vcal .= $this->vcal_end();
