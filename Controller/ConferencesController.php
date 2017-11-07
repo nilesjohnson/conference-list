@@ -70,10 +70,19 @@ class ConferencesController extends AppController {
 						    "Conference.end_date >" => date('Y-m-d', strtotime("-1 week"))),
 			     ));
   }
-  public function search($tagstring = null) {
+  public function search($tagstring=null) {
     $this->set('view_title','Search All Meetings');
+    $conditions = $this->request->query;
+    if (isset($conditions['before'])) {
+	$conditions['start_date <'] = $conditions['before'];
+	unset($conditions['before']);
+      }
+    if (isset($conditions['after'])) {
+	$conditions['start_date >'] = $conditions['after'];
+	unset($conditions['after']);
+      }
     $this->render_list(array('tagstring' => $tagstring,
-			     'conditions' => array(),
+			     'conditions' => $conditions,
 			     ));
     $this->render('index'); // use the index view
   }
@@ -86,6 +95,7 @@ class ConferencesController extends AppController {
       arguments for the main index simple, but allow other functions
       with more complex arguments to use the same rendering functionality.
      */
+    debug($args);
     $tagstring = $args['tagstring'];
     $conditions = $args['conditions'];
     $this->set('sort_text','Sort by: ');
