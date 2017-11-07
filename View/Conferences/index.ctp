@@ -30,7 +30,7 @@ echo $this->Js->link(array(
 
 // display search if requested
 if (isset($search) && $search) {
-echo '<h1>Search Announcements</h1>';
+echo '<h1>'.$view_title.'</h1>';
 echo $this->Form->create('Search');
 echo "<br />";
 

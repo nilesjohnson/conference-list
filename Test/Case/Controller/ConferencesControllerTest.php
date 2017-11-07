@@ -124,6 +124,18 @@ class ConferencesControllerTest extends ControllerTestCase {
         }
 
 
+	public function testSearch() {
+	  echo "<h3>Testing Search</h3>";
+	  echo "<p>no test</p>";
+	  $result =$this->testAction('conferences/search/at',array('method'=>'get'));
+	  //debug($this->vars);
+	  //$this->assertEqual($this->vars['view_title'],'Search Announcements');
+	  debug(array('number of conferences' => count($this->vars['conferences']),
+		      'view title' => $this->vars['view_title']
+		      ));
+	  //$this->assertEqual(count($this->vars['conferences']),3);
+	}
+
 
 /**
  * testAbout method

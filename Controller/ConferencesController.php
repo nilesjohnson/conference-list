@@ -72,7 +72,7 @@ class ConferencesController extends AppController {
   }
   public function search($tagstring=null) {
     $this->set('search',1);
-    $this->set('view_title','Search All Meetings');
+    $this->set('view_title','Search Announcements');
     $this->set('countries',$this->loadCountries());
     if (isset($tagstring)) {
       //debug($tagstring);
