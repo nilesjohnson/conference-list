@@ -1,5 +1,6 @@
 <?php
 App::uses('AppController', 'Controller');
+CakePlugin::load('Recaptcha');
 /**
  * Conferences Controller
  *
@@ -19,7 +20,7 @@ class ConferencesController extends AppController {
 
   public $helpers = array('Js', 'Html', 'Text', 'Gcal', 'Display');
 
-  public $components = array('Email', 'RequestHandler', 'Session', 'Paginator', 'MathCaptcha', 'Security', 'Checker');
+  public $components = array('Email', 'RequestHandler', 'Session', 'Paginator', 'Recaptcha.Recaptcha', 'Security', 'Checker');
   
   //Regular ol' $this->paginate() ceases to function when this is declared, but this allows for pagination of different Models within same Controller
 
@@ -36,6 +37,7 @@ class ConferencesController extends AppController {
     $this->Tag->recursive=0;
     $this->set('tagstring','');
     $this->set('tagids',array());
+    $this->Security->csrfCheck = false;
     $this->Security->blackHoleCallback = 'blackhole';
   }
 
@@ -299,14 +301,16 @@ class ConferencesController extends AppController {
 
       // if conference and tag data validates, check for valid captcha
       if ($validtag && $validconf &&
-	  $this->MathCaptcha->validates($this->data['Conference']['captcha'])) {
+	  $this->Recaptcha->verify()) {
 	// all good !
 	$this->save_and_send();
       }
       // else: something invalid
       else {
-	$this->Conference->invalidate('captcha','Please perform the indicated arithmetic.');
-	$this->Session->setFlash('Please check for errors below.', 'FlashBad');
+	$this->Conference->invalidate('recaptcha');
+	//$this->Session->setFlash('Please complete captcha task.', 'FlashBad');
+	//$this->Session->setFlash($this->Recaptcha->error);
+	$this->Session->setFlash('Submission error.  Please check entries and verify captcha.', 'FlashBad');
       }
     }
 
@@ -319,7 +323,6 @@ class ConferencesController extends AppController {
 	$this->request->data['Conference'][$key] = $value;
       }
     }
-    $this->set('mathCaptcha', $this->MathCaptcha->generateEquation());
     $tags=$this->Conference->ConferencesTag->Tag->find('list');
     $this->set(compact('tags'));
   }

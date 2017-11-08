@@ -1,3 +1,6 @@
 [submodule "webroot/files/countries"]
 	path = webroot/files/countries
 	url = git@github.com:mledoze/countries.git
+[submodule "Plugin/Recaptcha"]
+	path = Plugin/Recaptcha
+	url = git@github.com:CakeDC/recaptcha.git

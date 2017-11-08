@@ -73,18 +73,9 @@ echo $this->Js->link(array(
 <div class="intro_text">
 
   <p>Welcome to MathMeetings.net!  This is a list for research
-  mathematics conferences, workshops, summer schools, etc.</p>
+  mathematics conferences, workshops, summer schools, etc.  Anyone
+  at all is welcome to add announcements.</p>
 
-  <p>There are a few other conference lists available, but this list
-  aims to be more complete by allowing <em>anyone at all</em> to add
-  announcements.  Rather than use a wiki, announcement information is
-  stored in database format so that useful search functions can be
-  added as the list grows.</p>
-
-  <p>This site began as AlgTop-Conf, for meetings in algebraic
-  topology.  It is now expanded to serve other mathematics subjects.
-  Use tag filtering to focus on announcements related to your
-  discipline (see right or below).</p>
 
 
   <div class="new">
@@ -93,6 +84,14 @@ echo $this->Js->link(array(
     <?php echo $this->Html->link('New Announcement', array('action' => 'add',$tagstring), array('class' => 'button', 'id' => 'add-button'));?>
     </p>
   </div>
+  <h4>Updates 2017-10</h4>
+  <ul>
+    <li>Secure connections (https) now activated and all traffic is automatically redirected to use https.  Thanks to <a href='https://letsencrypt.org/' target='le'>Let's Encrypt</a> for providing the certificate!</li>
+    <li>Spam protection now provided by Google <a href="https://www.google.com/recaptcha" target='gr'>reCaptcha</a>.</li>
+    <li>New <?php echo $this->Html->link(
+  'json and xml interfaces', array('action'=>'about#xml_json_about'));?> for access by other software.</li>
+  </ul>
+<!--
   <h4>Updates 2016-01</h4>
   <ul>
     <li>Now filter announcements by subject tags</li>
@@ -101,7 +100,6 @@ echo $this->Js->link(array(
     <li>Select boxes improved with select2 (jquery)</li>    
   </ul>	  
 
-<!--
   <h4>Updates 2014-02-16</h4>
 
   <p>We've upgraded the AlgTop-Conf software to <a
