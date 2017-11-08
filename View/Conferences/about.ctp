@@ -227,13 +227,10 @@ know</a>!</p>
 <h2>Searching</h2>
 <div>
 <p>
-A very rudimentary search form is now available.  For tag-filtered search,
-use a URL such as
-<?php echo $this->Html->link(
-  'conferences/search/at-gt', array('controller'=>'conferences', 'action'=>'search/at-gt'));?>.
-To search without subject tags, use
-<?php echo $this->Html->link(
+A very rudimentary search form is now available at <?php echo $this->Html->link(
   'conferences/search', array('controller'=>'conferences', 'action'=>'search'));?>.
+You can also set the tags by default with an extra parameter such as <?php echo $this->Html->link(
+  'conferences/search/at-gt', array('controller'=>'conferences', 'action'=>'search/at-gt'));?>.
 </p>
 
 <p>Currently the search only performs simple date comparison and basic

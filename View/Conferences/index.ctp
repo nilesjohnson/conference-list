@@ -34,16 +34,16 @@ echo '<h1>'.$view_title.'</h1>';
 echo $this->Form->create('Search');
 echo "<br />";
 
-echo $this->Form->input('title', array('label' => 'Title contains'));
+echo $this->Form->input('Tag', array('label'=>'Subject tags', 'after'=>'Arxiv subject areas.  Select one or more; type to narrow options', 'multiple'=>true, 'default'=>$tagids));
 echo $this->Form->input('before', array('label'=>'Begins before', 'type'=>'text', 'div'=>'input datefield', 'after'=>'yyyy-mm-dd'));
 echo $this->Form->input('after', array('label'=>'Begins after', 'type'=>'text', 'div'=>'input datefield', 'after'=>'yyyy-mm-dd'));
-//echo $this->Form->input('city', array('label'=>'City and State/Province'));
 
+echo $this->Form->input('title', array('label' => 'Title contains'));
+//echo $this->Form->input('city', array('label'=>'City and State/Province'));
 echo $this->Form->input('country', array('label'=>'Country contains', 'type'=>'text'));
 //echo $this->Form->input('homepage', array('label'=>'Conference website'));
 echo $this->Form->input('institution', array('label'=>'Host institution contains'));
 echo $this->Form->input('meeting_type', array('label'=>'Meeting type contains'));
-//echo $this->Form->input('Tag', array('label'=>'Subject tags', 'after'=>'Arxiv subject areas.  Select one or more; type to narrow options', 'multiple'=>true, 'default'=>$tagids));
 //echo $this->Form->input('contact_name', array('label'=>'Contact Name(s), comma separated'));
 echo $this->Form->input('description', array('label'=>'Description contains'));
 
@@ -58,6 +58,10 @@ if (!isset($edit)) {
 }
 */
 echo $this->Form->end('Submit');
+if ($results) {
+  echo "<hr/>";
+  echo "<h2>Results: ".count($conferences)." Announcement" . (count($conferences) != 1 ? 's' : '') . "</h2>";
+  }
 }
 
 

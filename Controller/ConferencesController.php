@@ -70,10 +70,43 @@ class ConferencesController extends AppController {
 						    "Conference.end_date >" => date('Y-m-d', strtotime("-1 week"))),
 			     ));
   }
-  public function search($tagstring=null) {
+  public function search($tagstring = null) {
     $this->set('search',1);
+    $this->set('results',0);
     $this->set('view_title','Search Announcements');
     $this->set('countries',$this->loadCountries());
+
+    $conditions = array();
+    if (!empty($this->data)) {
+      $this->set('results',1);
+      foreach ($this->data['Search'] as $field => $value) {
+	if ($value != '') {
+	  if ($field == 'before') {
+	    $conditions['start_date <'] = $value;
+	  }
+	  elseif ($field == 'after') {
+	    $conditions['start_date >'] = $value;
+	  }
+	  elseif ($field == 'Tag') {
+	    $tagarray = array();
+	    foreach ($this->data['Search']['Tag'] as $t) {
+	      array_push($tagarray,explode('.',$this->tag_name_from_id($t))[0]);
+	    }
+	    $tagstring = implode('-',$tagarray);
+	  }
+	  else {
+	    $conditions[$field.' LIKE'] = '%'.$value.'%';
+	  }
+	}
+      }  
+    }
+    //else: no data; render search form
+    else {
+      $conditions = array('start_date <' => '0');
+      //$tagstring = null;
+    }
+
+
     if (isset($tagstring)) {
       //debug($tagstring);
       $this->set('tagstring',$tagstring);
@@ -85,30 +118,10 @@ class ConferencesController extends AppController {
       $this->set('tagids',array());
     }
 
-    if (!empty($this->data)) {
-      $conditions = array();
-      foreach ($this->data['Search'] as $field => $value) {
-	if ($value != '') {
-	  if ($field == 'before') {
-	    $conditions['start_date <'] = $value;
-	  }
-	  elseif ($field == 'after') {
-	    $conditions['start_date >'] = $value;
-	  }
-	  else {
-	    $conditions[$field.' LIKE'] = '%'.$value.'%';
-	  }
-	}
-      }
-      
-      $this->render_list(array('tagstring' => $tagstring,
-			       'conditions' => $conditions,
-			       ));
-    }
-    //else: no data; render search form
-    else {
-      $this->set('conferences', array());
-    }
+
+    $this->render_list(array('tagstring' => $tagstring,
+			     'conditions' => $conditions,
+			     ));
     $this->render('index'); // use the index view
   }
   
