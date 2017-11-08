@@ -18,7 +18,7 @@ class ConferencesController extends AppController {
 
   //public $uses = array('Conferences');
 
-  public $helpers = array('Js', 'Html', 'Text', 'Gcal', 'Display');
+  public $helpers = array('Js', 'Html', 'Text', 'Gcal', 'Ical', 'Display');
 
   public $components = array('Email', 'RequestHandler', 'Session', 'Paginator', 'Recaptcha.Recaptcha', 'Security', 'Checker');
   
@@ -65,8 +65,79 @@ class ConferencesController extends AppController {
   }
 
   public function index($tagstring = null) {
-    $this->set('sort_text','Sort by: ');
     $this->set('view_title','Upcoming Meetings');
+    $this->render_list(array('tagstring' => $tagstring,
+			     'conditions' => array (
+						    "Conference.end_date >" => date('Y-m-d', strtotime("-1 week"))),
+			     ));
+  }
+  public function search($tagstring = null) {
+    $this->set('search',1);
+    $this->set('results',0);
+    $this->set('view_title','Search Announcements');
+    $this->set('countries',$this->loadCountries());
+
+    $conditions = array();
+    if (!empty($this->data)) {
+      $this->set('results',1);
+      foreach ($this->data['Search'] as $field => $value) {
+	if ($value != '') {
+	  if ($field == 'before') {
+	    $conditions['start_date <'] = $value;
+	  }
+	  elseif ($field == 'after') {
+	    $conditions['start_date >'] = $value;
+	  }
+	  elseif ($field == 'Tag') {
+	    $tagarray = array();
+	    foreach ($this->data['Search']['Tag'] as $t) {
+	      array_push($tagarray,explode('.',$this->tag_name_from_id($t))[0]);
+	    }
+	    $tagstring = implode('-',$tagarray);
+	  }
+	  else {
+	    $conditions[$field.' LIKE'] = '%'.$value.'%';
+	  }
+	}
+      }  
+    }
+    //else: no data; render search form
+    else {
+      $conditions = array('start_date <' => '0');
+      //$tagstring = null;
+    }
+
+
+    if (isset($tagstring)) {
+      //debug($tagstring);
+      $this->set('tagstring',$tagstring);
+      $tagids=$this->tag_ids_from_names(explode('-', $tagstring));
+      $this->set('tagids',$tagids);
+    } 
+    else {
+      $this->set('tagstring','');
+      $this->set('tagids',array());
+    }
+
+
+    $this->render_list(array('tagstring' => $tagstring,
+			     'conditions' => $conditions,
+			     ));
+    $this->render('index'); // use the index view
+  }
+  
+
+  public function render_list($args) {
+    /*
+      This is the function which renders our announcement list.
+      By separating it into a separate function, we keep the 
+      arguments for the main index simple, but allow other functions
+      with more complex arguments to use the same rendering functionality.
+     */
+    //debug($args);
+    $tagstring = $args['tagstring'];
+    $conditions = $args['conditions'];
+    $this->set('sort_text','Sort by: ');
     $this->set('months', $this->months);
     $this->set('sort_condition',null);
     // default sort conditions
@@ -75,9 +146,6 @@ class ConferencesController extends AppController {
 			  'Conference.title',
 			  'Tag.name',
 			  );
-    $conditions = array (
-			 "Conference.end_date >" => date('Y-m-d', strtotime("-1 week"))
-			 );
     $display_options = array('conditions' => $conditions, 'order' => $order_array);    
 
     // remove tag validation so tags are not required
@@ -190,8 +258,9 @@ class ConferencesController extends AppController {
     return $tagids;
   }
 
-  
   public function ical($id=null) {
+    //not used?? (replaced by helper/view)
+    return false;
     $this->Conference->id = $id;
     if (empty($this->data)) {
       $this->set('conference', $this->Conference->read());
@@ -213,6 +282,8 @@ class ConferencesController extends AppController {
   }
 
   public function vcal_string($id, $start_date, $end_date, $title, $city, $country, $url) {
+    //not used?? (replaced by helper/view)
+    return false;
     $start_string = str_replace('-','',$start_date);
     $end_string = date('Ymd',strtotime($end_date." +1 day"));
     $location = $city."; ".$country;

@@ -28,6 +28,45 @@ echo $this->Js->link(array(
 ), false);
 */
 
+// display search if requested
+if (isset($search) && $search) {
+echo '<h1>'.$view_title.'</h1>';
+echo $this->Form->create('Search');
+echo "<br />";
+
+echo $this->Form->input('Tag', array('label'=>'Subject tags', 'after'=>'Arxiv subject areas.  Select one or more; type to narrow options', 'multiple'=>true, 'default'=>$tagids));
+echo $this->Form->input('before', array('label'=>'Begins before', 'type'=>'text', 'div'=>'input datefield', 'after'=>'yyyy-mm-dd'));
+echo $this->Form->input('after', array('label'=>'Begins after', 'type'=>'text', 'div'=>'input datefield', 'after'=>'yyyy-mm-dd'));
+
+echo $this->Form->input('title', array('label' => 'Title contains'));
+//echo $this->Form->input('city', array('label'=>'City and State/Province'));
+echo $this->Form->input('country', array('label'=>'Country contains', 'type'=>'text'));
+//echo $this->Form->input('homepage', array('label'=>'Conference website'));
+echo $this->Form->input('institution', array('label'=>'Host institution contains'));
+echo $this->Form->input('meeting_type', array('label'=>'Meeting type contains'));
+//echo $this->Form->input('contact_name', array('label'=>'Contact Name(s), comma separated'));
+echo $this->Form->input('description', array('label'=>'Description contains'));
+
+//echo '<div class="input"><p>Description Preview:</p><div class="wmd-preview"></div></div>';
+
+/*
+if (!isset($edit)) {
+  echo '<div id="ConferenceRecaptcha" class="required">';
+  echo $this->Form->label('recaptcha','Captcha task.');
+  echo $this->Recaptcha->display();
+  echo '</div>';
+}
+*/
+echo $this->Form->end('Submit');
+if ($results) {
+  echo "<hr/>";
+  echo "<h2>Results: ".count($conferences)." Announcement" . (count($conferences) != 1 ? 's' : '') . "</h2>";
+  }
+}
+
+
+// else: default display
+else {
 ?>
 
 <div id="search_links">
@@ -115,7 +154,6 @@ echo $this->Js->link(array(
 </div>
 
 
-
 <hr class="top"/>
 <h1 style="float:left;"><?php echo $view_title; ?></h1>
 
@@ -124,9 +162,13 @@ echo $this->Js->link(array(
 <?php 
   if ($tagstring) {
     echo $this->Html->link('RSS',array('controller'=>null,'action'=>$tagstring.'.rss'));
+    echo "&nbsp;&nbsp;";
+    echo $this->Html->link('ICS',array('controller'=>null,'action'=>$tagstring.'.ics'));
   }
   else {
     echo $this->Html->link('RSS',Configure::read('site.home').'/conferences/index.rss');
+    echo "&nbsp;&nbsp;";
+    echo $this->Html->link('ICS',Configure::read('site.home').'/conferences/index.ics');
   }
 ?>
   </div>
@@ -161,6 +203,7 @@ document.getElementById('tagSelectDiv').style.display = 'block';
 </noscript>
 </div>
 
+<?php } ?>
 
 <?php $curr_subsort = Null; $new_subsort = Null; $subsort_counter = 0; echo '<div id="subsort_start">'; ?>
 <?php 
@@ -211,21 +254,12 @@ if ($new_subsort != $curr_subsort) {
 <div class="calendars">
 <?php  echo
   $this->Html->link('Google calendar',
-  $this->Gcal->gcal_url($conference['id'], 
-                               $conference['start_date'], 
-                               $conference['end_date'],
-                               $conference['title'],
-                               $conference['city'],
-                               $conference['country'],
-                               $conference['homepage'],
-			       $site_url,
-			       $site_name
-                               ),
+  $this->Gcal->gcal($conference),
   array('escape' => false,'class'=>'ics button'));
 echo ' ';
 echo
   $this->Html->link('iCalendar .ics',
-  array('action'=>'ical', $conference['id']),
+  array('action'=>'view/'.$conference['id'].'.ics'),
   array('escape' => false,'class'=>'ics button'));
 ?>
 </div>
