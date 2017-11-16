@@ -41,8 +41,8 @@ echo $this->Form->create('Search');
 echo "<br />";
 
 echo $this->Form->input('Tag', array('label'=>'Subject tags', 'after'=>'Arxiv subject areas.  Select one or more; type to narrow options', 'multiple'=>true, 'default'=>$tagids));
-echo $this->Form->input('before', array('label'=>'Begins before', 'type'=>'text', 'div'=>'input datefield', 'after'=>'yyyy-mm-dd'));
 echo $this->Form->input('after', array('label'=>'Begins after', 'type'=>'text', 'div'=>'input datefield', 'after'=>'yyyy-mm-dd'));
+echo $this->Form->input('before', array('label'=>'Begins before', 'type'=>'text', 'div'=>'input datefield', 'after'=>'yyyy-mm-dd'));
 
 echo $this->Form->input('title', array('label' => 'Title contains'));
 //echo $this->Form->input('city', array('label'=>'City and State/Province'));
