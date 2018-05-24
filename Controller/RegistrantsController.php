@@ -1,5 +1,6 @@
 <?php
 App::uses('AppController', 'Controller');
+CakePlugin::load('Recaptcha');
 /**
  * Registrants Controller
  *
@@ -18,7 +19,7 @@ class RegistrantsController extends AppController {
 
   public $helpers = array('Js', 'Html', 'Gcal', 'Text');
 
-  public $components = array('Email', 'RequestHandler', 'Session', 'MathCaptcha', 'Security', 'Paginator');
+  public $components = array('Email', 'RequestHandler', 'Session', 'Security', 'Paginator', 'Recaptcha.Recaptcha');
   public $paginate_pub = array('conditions' => array('Registrant.request_pub' => '1'));
   public $paginate_all = array('conditions' => array());  
   public $paginate_broken = array(
@@ -185,12 +186,10 @@ class RegistrantsController extends AppController {
 	//debug('true');
       }
       else {
-	$this->set('mathCaptcha', $this->MathCaptcha->generateEquation());
 	$this->render('addedit');
       }
     }
     // if there is no data: generate a fresh form
-    $this->set('mathCaptcha', $this->MathCaptcha->generateEquation());
     $this->render('addedit');
   }
 
@@ -215,7 +214,6 @@ class RegistrantsController extends AppController {
 	$this->Session->SetFlash('Invalid edit key. (2)','FlashBad');
         $this->redirect(array('controller'=>'conferences','action' => 'index'));
       }
-      $this->set('mathCaptcha', $this->MathCaptcha->generateEquation());
       $this->render('addedit');
     } 
     else {
@@ -233,7 +231,6 @@ class RegistrantsController extends AppController {
 	$this->saveAndSend();
       }
       else {
-	$this->set('mathCaptcha', $this->MathCaptcha->generateEquation());
 	$this->render('addedit');
       }
     }
@@ -249,15 +246,15 @@ class RegistrantsController extends AppController {
     }      
 
     // also check for valid captcha
-    if ($valid_data && $this->MathCaptcha->validates($this->data['Registrant']['captcha'])) {
+    if ($valid_data && $this->Recaptcha->verify()) {
       return true;
     }
 
     foreach (Set::flatten($this->Registrant->validationErrors) as $field => $message) {
       $this->Registrant->invalidate($field,$message);
     }
-    $this->Session->setFlash('Please check for errors below.', 'FlashBad');
-    $this->Registrant->invalidate('captcha','Please perform the indicated arithmetic.');
+    $this->Session->setFlash('Please check for errors below.  Please complete the captcha task.', 'FlashBad');
+    //$this->Registrant->invalidate('captcha','Please perform the indicated arithmetic.');
     return false;
   }
 

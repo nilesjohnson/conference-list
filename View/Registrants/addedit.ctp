@@ -37,7 +37,7 @@ echo '<div class="input"><p>If you request funding, please include the following
 echo '<ul><li>Position (student, postdoc, faculty, etc.)</li><li>Funding estimate (travel and lodging)</li></ul>';
 echo '</div>';
 echo $this->Form->input('comment', array('rows' => '10'));
-echo $this->Form->input('captcha', array('label' => 'Please Enter the Sum of ' . $mathCaptcha, 'after'=>'anti-spam'));
+echo $this->Recaptcha->display();
 echo '</div>';
 ?>
 
