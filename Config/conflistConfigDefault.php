@@ -35,6 +35,7 @@ $config = array(
                                          'ap2@example.com'),
                            ),
     'admin_key' => '146c07ef2479cedcd54c7c2af5cf3a80',
+    'admin_cookie' => 'd394815482bc9c54be38168cfa67e04f',
     'name' => 'ConfList',
     'analytics' => "
 <script type=\"text/javascript\">

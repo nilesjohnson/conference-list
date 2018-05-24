@@ -20,7 +20,7 @@ class ConferencesController extends AppController {
 
   public $helpers = array('Js', 'Html', 'Text', 'Gcal', 'Ical', 'Display');
 
-  public $components = array('Email', 'RequestHandler', 'Session', 'Paginator', 'Recaptcha.Recaptcha', 'Security', 'Checker');
+  public $components = array('Email', 'RequestHandler', 'Session', 'Paginator', 'Recaptcha.Recaptcha', 'Security', 'Checker','Cookie');
   
   //Regular ol' $this->paginate() ceases to function when this is declared, but this allows for pagination of different Models within same Controller
 
@@ -255,6 +255,23 @@ class ConferencesController extends AppController {
       }    
     }
     return $tagids;
+  }
+
+  public function admincookie($key=null) {
+    //set cookie for admin usage
+    $this->Cookie->name = 'admin_id';
+    $this->Cookie->path = '/admins/preferences/';
+    $this->Cookie->domain = 'mathmeetings.net';
+    $this->Cookie->secure = true;  // i.e. only sent if using secure HTTPS
+    $this->Cookie->httpOnly = true; // i.e. not accessible to javascript
+    $this->Cookie->type('aes');
+    if (!empty($this->data)) {
+      //write cookie
+      if ($this->data['Admin']['admin_key'] == Configure::read('site.admin_key')) {
+        $this->Cookie->write('admincookie', Configure::read('site.admin_cookie'));
+      }
+    }
+    
   }
 
   public function ical($id=null) {
