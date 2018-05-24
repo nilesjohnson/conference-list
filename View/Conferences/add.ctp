@@ -31,7 +31,7 @@ echo $this->Form->input('description', array('label'=>'Description: <br/><span s
 
 echo '<div class="input"><p>Description Preview:</p><div class="wmd-preview"></div></div>';
 
-if (!isset($edit)) {
+if (!(isset($edit) || $validAdmincookie)) {
   echo '<div id="ConferenceRecaptcha" class="required">';
   echo $this->Form->label('recaptcha','Captcha task.');
   echo $this->Recaptcha->display();

@@ -364,6 +364,8 @@ class ConferencesController extends AppController {
   public function add($tagstring = null) {
     $this->set('countries',$this->loadCountries());
     $this->set('view_title', 'Add');
+    $validAdmincookie = $this->Cookie->read('admin_id') == Configure::read('site.admin_cookie'); // check for valid admincookie
+    $this->set('validAdmincookie', $validAdmincookie); 
     if (isset($tagstring)) {
       //debug($tagstring);
       $this->set('tagstring',$tagstring);
@@ -390,9 +392,10 @@ class ConferencesController extends AppController {
 
       // check for invalid conference data
 
-      // if conference and tag data validates, check for valid captcha
+      // if conference and tag data validates, check for 
+      // valid captcha OR valid admincookie
       if ($validtag && $validconf &&
-	  $this->Recaptcha->verify()) {
+	  ($validAdmincookie || $this->Recaptcha->verify())) {
 	// all good !
 	$this->save_and_send();
       }
