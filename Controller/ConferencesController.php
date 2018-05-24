@@ -258,17 +258,21 @@ class ConferencesController extends AppController {
   }
 
   public function admincookie($key=null) {
-    //set cookie for admin usage
-    $this->Cookie->name = 'admin_id';
-    $this->Cookie->path = '/admins/preferences/';
-    $this->Cookie->domain = 'mathmeetings.net';
-    $this->Cookie->secure = true;  // i.e. only sent if using secure HTTPS
-    $this->Cookie->httpOnly = true; // i.e. not accessible to javascript
-    $this->Cookie->type('aes');
+    $this->set('readCookie', $this->Cookie->read('admin_id'));
     if (!empty($this->data)) {
-      //write cookie
       if ($this->data['Admin']['admin_key'] == Configure::read('site.admin_key')) {
-        $this->Cookie->write('admincookie', Configure::read('site.admin_cookie'));
+        //set cookie for admin usage
+        //$this->Cookie->name = 'admin_id';
+        //$this->Cookie->path = '/admins/preferences/';
+        //$this->Cookie->domain = 'mathmeetings.net';
+        $this->Cookie->secure = true;  // i.e. only sent if using secure HTTPS
+        $this->Cookie->httpOnly = true; // i.e. not accessible to javascript
+        //$this->Cookie->type('aes');
+        $this->Cookie->write('admin_id', Configure::read('site.admin_cookie'));
+        $this->set('readCookie', $this->Cookie->read('admin_id'));
+        
+        $this->Session->setFlash('Admin cookie set!', 'FlashGood');
+        return $this->redirect(array('action' => 'index',$tagstring));
       }
     }
     

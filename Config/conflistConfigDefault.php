@@ -47,7 +47,8 @@ $config = array(
 
 
 Configure::write('debug', 2);
-Configure::write('Security.salt', 'qwewrtyuiop123');
+// Security.salt needs to be 256 bits minimum (32 character string)
+Configure::write('Security.salt', '0123456789abcdef0123456789abcdef');
 Configure::write('Security.cipherSeed', '987654321');
 
 // Recaptcha keys
