@@ -28,15 +28,21 @@ echo $this->Js->link(array(
 ), false);
 */
 
-// display search if requested
-if (isset($search) && $search) {
-echo '<h1>'.$view_title.'</h1>';
+// display search if requested 
+if (isset($search) && $search) { 
+echo '<h1>'.$view_title.'</h1>'; 
+
+echo '<p>Currently the search only performs simple date comparison and basic 
+string matching in the indicated fields.  If you have more sophisticated search 
+needs, please <a href="http://nilesjohnson.net/contact.html" target="blank">let 
+Niles know</a>.</p>';
+
 echo $this->Form->create('Search');
 echo "<br />";
 
 echo $this->Form->input('Tag', array('label'=>'Subject tags', 'after'=>'Arxiv subject areas.  Select one or more; type to narrow options', 'multiple'=>true, 'default'=>$tagids));
-echo $this->Form->input('before', array('label'=>'Begins before', 'type'=>'text', 'div'=>'input datefield', 'after'=>'yyyy-mm-dd'));
 echo $this->Form->input('after', array('label'=>'Begins after', 'type'=>'text', 'div'=>'input datefield', 'after'=>'yyyy-mm-dd'));
+echo $this->Form->input('before', array('label'=>'Begins before', 'type'=>'text', 'div'=>'input datefield', 'after'=>'yyyy-mm-dd'));
 
 echo $this->Form->input('title', array('label' => 'Title contains'));
 //echo $this->Form->input('city', array('label'=>'City and State/Province'));
