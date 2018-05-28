@@ -3,7 +3,7 @@ Conference List Web App
 
 https://github.com/nilesjohnson/conference-list
 
-version 2.1.3
+version 2.1.4
 
 OCTOBER 2017
 
@@ -43,6 +43,9 @@ https://cakephp.org/
 CHANGELOG
 ---------
 
+### v. 2.1.4 ###
+
+* Rudimentary login for curators
 
 ### v. 2.1.3 ###
 
@@ -112,6 +115,17 @@ There are five basic configuration steps necessary to get the app running:
     `cd conference-list/Config/`
     
     `cp conflistConfigDefault.php conflistConfigPrivate.php`
+
+1. Edit config file with appropriate values:
+
+* database names and passwords
+* site info (name, admin email, etc.)
+* new values (random strings) for:
+  * admin_key
+  * admin_cookie
+  * Security.salt
+  * Security.cipherSeed
+* Recaptcha keys 
 
 1. Set up a database and put the connection information 
 (user, password, etc.) in the private configuration file from step 2.
