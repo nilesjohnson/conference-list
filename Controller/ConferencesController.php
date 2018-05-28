@@ -257,21 +257,19 @@ class ConferencesController extends AppController {
     return $tagids;
   }
 
-  public function admincookie($key=null) {
-    $this->set('readCookie', $this->Cookie->read('admin_id'));
+  public function curator_cookie($key=null) {
+    $this->set('readCookie', $this->Cookie->read('curator_cookie'));
+    //debug($readCookie);
     if (!empty($this->data)) {
       if ($this->data['Admin']['admin_key'] == Configure::read('site.admin_key')) {
-        //set cookie for admin usage
-        //$this->Cookie->name = 'admin_id';
-        //$this->Cookie->path = '/admins/preferences/';
+        //set cookie for curator usage
         //$this->Cookie->domain = 'mathmeetings.net';
         $this->Cookie->secure = true;  // i.e. only sent if using secure HTTPS
         $this->Cookie->httpOnly = true; // i.e. not accessible to javascript
-        //$this->Cookie->type('aes');
-        $this->Cookie->write('admin_id', Configure::read('site.admin_cookie'));
-        $this->set('readCookie', $this->Cookie->read('admin_id'));
+        $this->Cookie->write('curator_cookie', Configure::read('site.curator_cookie'));
+        $this->set('readCookie', $this->Cookie->read('curator_cookie'));
         
-        $this->Session->setFlash('Admin cookie set!', 'FlashGood');
+        $this->Session->setFlash('Curator cookie set!', 'FlashGood');
         return $this->redirect(array('action' => 'index',$tagstring));
       }
     }
@@ -364,8 +362,8 @@ class ConferencesController extends AppController {
   public function add($tagstring = null) {
     $this->set('countries',$this->loadCountries());
     $this->set('view_title', 'Add');
-    $validAdmincookie = $this->Cookie->read('admin_id') == Configure::read('site.admin_cookie'); // check for valid admincookie
-    $this->set('validAdmincookie', $validAdmincookie); 
+    $validCuratorcookie = $this->Cookie->read('curator_cookie') == Configure::read('site.curator_cookie'); // check for valid curator cookie
+    $this->set('validCuratorcookie', $validCuratorcookie); 
     if (isset($tagstring)) {
       //debug($tagstring);
       $this->set('tagstring',$tagstring);
@@ -393,9 +391,9 @@ class ConferencesController extends AppController {
       // check for invalid conference data
 
       // if conference and tag data validates, check for 
-      // valid captcha OR valid admincookie
+      // valid captcha OR valid curatorcookie
       if ($validtag && $validconf &&
-	  ($validAdmincookie || $this->Recaptcha->verify())) {
+	  ($validCuratorcookie || $this->Recaptcha->verify())) {
 	// all good !
 	$this->save_and_send();
       }

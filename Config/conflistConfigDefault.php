@@ -34,8 +34,8 @@ $config = array(
                            'ap' => array('conflist-admin-ap@example.com',
                                          'ap2@example.com'),
                            ),
-    'admin_key' => '146c07ef2479cedcd54c7c2af5cf3a80',
-    'admin_cookie' => 'd394815482bc9c54be38168cfa67e04f',
+    'admin_key' => '146c07ef2479cedcd54c7c2af5cf3a80', // curator login
+    'admin_cookie' => 'd394815482bc9c54be38168cfa67e04f', // cookie value
     'name' => 'ConfList',
     'analytics' => "
 <script type=\"text/javascript\">
@@ -47,7 +47,6 @@ $config = array(
 
 
 Configure::write('debug', 2);
-// Security.salt needs to be 256 bits minimum (32 character string)
 Configure::write('Security.salt', '0123456789abcdef0123456789abcdef');
 Configure::write('Security.cipherSeed', '987654321');
 
