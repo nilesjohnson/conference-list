@@ -258,10 +258,13 @@ class ConferencesController extends AppController {
   }
 
   public function curator_cookie($key=null) {
+    CakeLog::write('debug','curator_cookie page accessed');
     $this->set('readCookie', $this->Cookie->read('curator_cookie'));
     //debug($readCookie);
     if (!empty($this->data)) {
+      CakeLog::write('debug','curator_cookie data submitted');
       if ($this->data['Admin']['admin_key'] == Configure::read('site.admin_key')) {
+        CakeLog::write('debug','curator_cookie data matches!');
         //set cookie for curator usage
         //$this->Cookie->domain = 'mathmeetings.net';
         $this->Cookie->secure = true;  // i.e. only sent if using secure HTTPS
@@ -270,7 +273,7 @@ class ConferencesController extends AppController {
         $this->set('readCookie', $this->Cookie->read('curator_cookie'));
         
         $this->Session->setFlash('Curator cookie set!', 'FlashGood');
-        return $this->redirect(array('action' => 'index',$tagstring));
+        return $this->redirect(array('action' => 'index'));
       }
     }
     
