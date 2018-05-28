@@ -116,22 +116,19 @@ There are five basic configuration steps necessary to get the app running:
     
     `cp conflistConfigDefault.php conflistConfigPrivate.php`
 
-1. Edit config file with appropriate values:
-
-* database names and passwords
-* site info (name, admin email, etc.)
-* new values (random strings) for:
-  * admin_key
-  * admin_cookie
-  * Security.salt
-  * Security.cipherSeed
-* Recaptcha keys 
-
 1. Set up a database and put the connection information 
 (user, password, etc.) in the private configuration file from step 2.
 
 1. Update the rest of the settings in the private configuration file 
 from step 2.
+
+  * site info (name, admin email, etc.)
+  * new values (random strings) for:
+    * admin_key
+    * admin_cookie
+    * Security.salt
+    * Security.cipherSeed
+  * Recaptcha keys 
 
 1. Create the necessary database tables and (optionally) initial data 
 for testing.  This can be done with the following MySQL commands:
