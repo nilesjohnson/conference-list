@@ -28,7 +28,7 @@ Niles</a> if you have further quesitons or comments!</p>
 <p>
 To add an announcement, use the link at the top of the page.  An email
 address is required so that announcements you post can be edited or
-deleted.  To prevent spam, some simple arithmetic is also required.
+deleted.  To prevent spam, a <a href="https://www.google.com/recaptcha/intro/index.html">Google ReCAPTCHA</a> is also required.
 In addition, a security token is stored as a browser cookie.
 </p>
 
@@ -237,7 +237,7 @@ You can also set the tags by default with an extra parameter such as <?php echo 
 string matching in certain fields.  As time permits, we will work on a
 more flexible and full-featured search.  Please <a
 href="http://nilesjohnson.net/contact.html" target="blank">let Niles
-know</a> if you have any specific fuctionality requests!</p>
+know</a> if you have any specific functionality requests!</p>
 
 </div>
 
