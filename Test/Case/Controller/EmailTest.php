@@ -37,6 +37,7 @@ class EmailTest extends ControllerTestCase {
 					      => array('Session',)
 					      ));
 	  $this->emailer = new CakeEmail();
+      $this->emailer->from('testing-conflist@none.com');
 	  $this->emailer->transport('Debug');  //don't actually send email
 	  return $controller;
 	}

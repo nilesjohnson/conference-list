@@ -457,11 +457,12 @@ class ConferencesController extends AppController {
 
   public function _getEmailer() {
     // function to return emailer, so we can replace it during automated tests
-    return new CakeEmail();
+    return new CakeEmail(Configure::read('smtp.gmail'));
   }
 
   public function prepEmail($id = null) {
     $Email = $this->_getEmailer();
+    //$Email->config(Configure::read('smtp.gmail'));
     if (!is_null($id)) {
       $this->Conference->id = $id;
       if (!$this->Conference->exists($id)) {
@@ -472,7 +473,8 @@ class ConferencesController extends AppController {
     $Email->viewVars(array('conference' => $this->data));
     $Email->template('default','default')
       ->emailFormat('text');
-    $Email->from(array(Configure::read('site.host_email') => Configure::read('site.name')));
+    //from is set in config
+    //$Email->from(array(Configure::read('site.host_email') => Configure::read('site.name')));
     $to_array = preg_split("/[\s,]+/",$this->data['Conference']['contact_email']);
     $Email->to($to_array);
     $admin_email = Configure::read('site.admin_email');

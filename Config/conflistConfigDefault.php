@@ -43,6 +43,19 @@ $config = array(
 </script>
 ",
   ),
+  'smtp' => array(
+    'gmail' => array(
+      'from' => 'example@address.org',
+      'transport' => 'Smtp',
+      'host' => 'smtp.gmail.com',
+      'port' => 587, // or 465
+      'username' => 'example@address.org', 
+      'password' => '***',
+      'client' => null,
+      'log' => true,
+      'tls' => true,
+    ),
+  ),
 );
 
 
