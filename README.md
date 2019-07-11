@@ -45,7 +45,7 @@ CHANGELOG
 
 ### v. 2.1.5 ###
 
-* Enable configuration for sending email through external servers (gmail)
+* Enable configuration for sending email through external servers 
 
 ### v. 2.1.4 ###
 

@@ -457,12 +457,12 @@ class ConferencesController extends AppController {
 
   public function _getEmailer() {
     // function to return emailer, so we can replace it during automated tests
-    return new CakeEmail(Configure::read('smtp.gmail'));
+    return new CakeEmail(Configure::read('smtp.mmnet'));
   }
 
   public function prepEmail($id = null) {
     $Email = $this->_getEmailer();
-    //$Email->config(Configure::read('smtp.gmail'));
+    //$Email->config(Configure::read('smtp.mmnet'));
     if (!is_null($id)) {
       $this->Conference->id = $id;
       if (!$this->Conference->exists($id)) {

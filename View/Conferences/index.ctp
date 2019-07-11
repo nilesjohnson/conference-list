@@ -131,7 +131,7 @@ else {
   </div>
   <h4>Updates 2019-07</h4>
   <ul>
-    <li>We're now authenticating email by sending through gmail; this should decrease the chance that confirmation emails land in Spam or Junk folders.</li>
+    <li>We're now authenticating email; this should decrease the chance that confirmation emails land in Spam or Junk folders.</li>
   </ul>
 <!--
   <h4>Updates 2017-10</h4>
