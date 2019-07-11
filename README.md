@@ -3,9 +3,9 @@ Conference List Web App
 
 https://github.com/nilesjohnson/conference-list
 
-version 2.1.4
+version 2.1.5
 
-OCTOBER 2017
+JULY 2019
 
 Copyright (C) 2009 Niles Johnson <https://nilesjohnson.net>
 
@@ -42,6 +42,10 @@ https://cakephp.org/
 
 CHANGELOG
 ---------
+
+### v. 2.1.5 ###
+
+* Enable configuration for sending email through external servers (gmail)
 
 ### v. 2.1.4 ###
 
