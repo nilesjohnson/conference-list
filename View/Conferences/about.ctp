@@ -204,7 +204,7 @@ know</a>!</p>
 
 <h3>Algebraic Geometry, Complex Variables</h3>
 <ul>
-<li><a href="https://www.dpmms.cam.ac.uk/~jar62/" target="curator">Julius Ross</a>, Cambridge</li>
+<li><a href="https://juliusro.people.uic.edu/wordpress/" target="curator">Julius Ross</a>, UIC</li>
 </ul>
 
 <h3>Algebraic Topology</h3>
