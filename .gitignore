@@ -10,6 +10,7 @@ tmp/cache/models/myapp*
 tmp/cache/persistent/myapp*
 tmp/cache/group_b/*
 tmp/tests*
+tmp/logs*
 
 *~
 
@@ -19,7 +20,9 @@ webroot/php.ini
 webroot/error_log
 webroot/php_errorlog
 webroot/php_mail.log
+webroot/core*
 tmp/logs/error.log
 tmp/logs/debug.log
 
 .ftpquota
+.well-known
