@@ -21,6 +21,13 @@ $(document).ready(function() {
         sortResults: $sortByMatchIndex
  }); 
  
+ $("#SearchTag").select2({
+	placeholder: "Select subject tags",
+	allowClear: true,
+        width: "100%",
+        sortResults: $sortByMatchIndex
+ }); 
+ 
  $("#ConferenceCountry").select2({
         placeholder: "Country...",
         //allowClear: true,

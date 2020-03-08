@@ -28,7 +28,7 @@ Niles</a> if you have further quesitons or comments!</p>
 <p>
 To add an announcement, use the link at the top of the page.  An email
 address is required so that announcements you post can be edited or
-deleted.  To prevent spam, some simple arithmetic is also required.
+deleted.  To prevent spam, a <a href="https://www.google.com/recaptcha/intro/index.html">Google ReCAPTCHA</a> is also required.
 In addition, a security token is stored as a browser cookie.
 </p>
 
@@ -93,11 +93,15 @@ database.  The subject tags are taken from the <a
 href="http://arxiv.org/archive/math">arXiv.org math
 categories</a>.</p>
 
-<p>The link to update tags on the home page is generated automatically by javascript.  If you prefer not to use javascript, you can easily create the appropriate URL by hand.  Simply use the 2-letter codes for each subject, separated by dashes.  For example, to choose <span class="tag">at.algebraic-topology</span> and <span class="tag">ct.category-theory</span>, use the following URL:
+<p>The link to update tags on the home page is generated automatically by 
+javascript.  If you prefer not to use javascript, you can easily create the 
+appropriate URL by hand.  Simply use the 2-letter codes for each subject, 
+separated by dashes.  For example, to choose 
+<span class="tag">at.algebraic-topology</span> and 
+<span class="tag">ct.category-theory</span>, use the following URL:</p>
 <pre>
-http://mathmeetings.net/at-ct
+https://mathmeetings.net/at-ct
 </pre>
-</p>
 
 <p>Note: Multiple tags are combined with an OR condition, meaning that
 you will see announcements which are tagged with any of the tags you
@@ -121,15 +125,51 @@ external software to develop an alternative front end for the
 list.</p>
 
 <p>The <a
-href="http://www.nilesjohnson.net/algtop-conf/conferences/index.rss">RSS
+href="https://mathmeetings.net/conferences/index.rss">RSS
 feed for this site</a> gives a list of conference titles, sorted by
-date, and direct links to their homepages.  You can read more about
+date, and direct links to their homepages.  You can also get an RSS feed 
+for your subject(s) of choice by appending '.rss' after your tag names.  For example
+<?php echo $this->Html->link(
+  'at-gt.rss', array('controller'=>null, 'action'=>'at-gt.rss'));?> 
+ or
+<?php echo $this->Html->link(
+  'ag-nt.rss', array('controller'=>null, 'action'=>'ag-nt.rss'));?>.
+</p>
+<p>
+You can read more about
 RSS feeds at the <a href="http://en.wikipedia.org/wiki/RSS"
 target="blank">Wikipedia page</a>.  One example of a feed reader is <a
 href="http://www.feedly.com" target="blank">Feedly</a>.  There are <a href="http://www.google.com/search?q=rss+aggregator" target="blank">many
 others</a>. </p>
 
+<p>New in version 2.1.3: calendar event links are now included with
+the 'enclosure' tag.</p>
+
 </div>
+
+
+<h2 class="target" id="xml_json_about">JSON and XML interfaces</h2>
+<div>
+
+<p>JSON and XML are two structured data formats which can be easily
+parsed by third-party software.  Access the interfaces similarly to the RSS feed:
+use the extension '.json' or '.xml' after your subject tags.  For example:
+<?php echo $this->Html->link(
+  'at-gt.json', array('controller'=>null, 'action'=>'at-gt.json'));?> 
+ or
+<?php echo $this->Html->link(
+  'ag-nt.xml', array('controller'=>null, 'action'=>'ag-nt.xml'));?>.
+</p>
+<p>
+You can use these, for instance, to
+set up an alternate front for the announements on this site.  A crude
+demo can be found <a
+href="https://nilesjohnson.net/mathmeetings-front.html">here</a>.
+Contact Niles if you are interested in additional features.</p>
+
+</div>
+
+
 
 <h2 class="target" id="cal_about">Calendar Links</h2>
 <div>
@@ -140,6 +180,11 @@ href="http://en.wikipedia.org/wiki/Calendaring_software">calendaring
 software</a>.  We have a direct link for Google Calendar, and an <a
 href="http://en.wikipedia.org/wiki/ICalendar">iCalendar (.ics)</a>
 formatted file for importing into other software.</p>
+
+<p>New in version 2.1.3: An ICS feed is available, giving calendar
+events for all announcements matching the given tag string.  A link to
+the ICS feed is printed on the main index page, next to the RSS link.
+</p>
 
 </div>
 
@@ -156,22 +201,44 @@ trouble posting or updating your announcements.  </p>
 href="http://nilesjohnson.net/contact.html" target="blank">let Niles
 know</a>!</p>
 
-<h3>Arithmetic Geometry</h3>
-<ul>
-<li><a href="http://www.math.ucsd.edu/~kedlaya/" target="curator">Kiran Kedlaya</a>, UCSD</li>
-</ul>
-</div>
 
-<h3>Topology</h3>
+<h3>Algebraic Geometry, Complex Variables</h3>
+<ul>
+<li><a href="https://juliusro.people.uic.edu/wordpress/" target="curator">Julius Ross</a>, UIC</li>
+</ul>
+
+<h3>Algebraic Topology</h3>
 <ul>
 <li><a href="http://personal.denison.edu/~whiteda/" target="curator">David White</a>, Denison University</li>
 </ul>
 
+<h3>Arithmetic Geometry</h3>
+<ul>
+<li><a href="http://www.math.ucsd.edu/~kedlaya/" target="curator">Kiran Kedlaya</a>, UCSD</li>
+</ul>
+
+<h3>Differential Geometry</h3>
+<ul>
+<li><a href="http://www2.math.umd.edu/~yanir/" target="curator">Yanir A. Rubinstein</a>, UMD</li>
+</ul>
+
+</div>
+
 <h2>Searching</h2>
 <div>
 <p>
-The data for each announcement is stored in a database, so search functionality can be easily added.  This will be done in the happy case that the list becomes too large to skim quickly.  
+A very rudimentary search form is now available at <?php echo $this->Html->link(
+  'conferences/search', array('controller'=>'conferences', 'action'=>'search'));?>.
+You can also set the tags by default with an extra parameter such as <?php echo $this->Html->link(
+  'conferences/search/at-gt', array('controller'=>'conferences', 'action'=>'search/at-gt'));?>.
 </p>
+
+<p>Currently the search only performs simple date comparison and basic
+string matching in certain fields.  As time permits, we will work on a
+more flexible and full-featured search.  Please <a
+href="http://nilesjohnson.net/contact.html" target="blank">let Niles
+know</a> if you have any specific functionality requests!</p>
+
 </div>
 
 <h2>Countries List</h2>

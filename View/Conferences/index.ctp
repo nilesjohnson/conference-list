@@ -9,6 +9,17 @@
 </div>
 -->
 
+<?php 
+  // link elements for rss feed
+  if ($tagstring) {
+    echo '<link type="application/rss+xml" rel="alternate" href="'.$tagstring.'.rss"/>';
+  }
+  else {
+    echo '<link type="application/rss+xml" rel="alternate" href="'.Configure::read('site.home').'/conferences/index.rss"/>';
+  }
+?>
+
+
 <?php
 /*
 echo $this->Js->link(array(
@@ -17,6 +28,51 @@ echo $this->Js->link(array(
 ), false);
 */
 
+// display search if requested 
+if (isset($search) && $search) { 
+echo '<h1>'.$view_title.'</h1>'; 
+
+echo '<p>Currently the search only performs simple date comparison and basic 
+string matching in the indicated fields.  If you have more sophisticated search 
+needs, please <a href="http://nilesjohnson.net/contact.html" target="blank">let 
+Niles know</a>.</p>';
+
+echo $this->Form->create('Search');
+echo "<br />";
+
+echo $this->Form->input('Tag', array('label'=>'Subject tags', 'after'=>'Arxiv subject areas.  Select one or more; type to narrow options', 'multiple'=>true, 'default'=>$tagids));
+echo $this->Form->input('after', array('label'=>'Begins after', 'type'=>'text', 'div'=>'input datefield', 'after'=>'yyyy-mm-dd'));
+echo $this->Form->input('before', array('label'=>'Begins before', 'type'=>'text', 'div'=>'input datefield', 'after'=>'yyyy-mm-dd'));
+
+echo $this->Form->input('title', array('label' => 'Title contains'));
+//echo $this->Form->input('city', array('label'=>'City and State/Province'));
+echo $this->Form->input('country', array('label'=>'Country contains', 'type'=>'text'));
+//echo $this->Form->input('homepage', array('label'=>'Conference website'));
+echo $this->Form->input('institution', array('label'=>'Host institution contains'));
+echo $this->Form->input('meeting_type', array('label'=>'Meeting type contains'));
+//echo $this->Form->input('contact_name', array('label'=>'Contact Name(s), comma separated'));
+echo $this->Form->input('description', array('label'=>'Description contains'));
+
+//echo '<div class="input"><p>Description Preview:</p><div class="wmd-preview"></div></div>';
+
+/*
+if (!isset($edit)) {
+  echo '<div id="ConferenceRecaptcha" class="required">';
+  echo $this->Form->label('recaptcha','Captcha task.');
+  echo $this->Recaptcha->display();
+  echo '</div>';
+}
+*/
+echo $this->Form->end('Submit');
+if ($results) {
+  echo "<hr/>";
+  echo "<h2>Results: ".count($conferences)." Announcement" . (count($conferences) != 1 ? 's' : '') . "</h2>";
+  }
+}
+
+
+// else: default display
+else {
 ?>
 
 <div id="search_links">
@@ -61,19 +117,10 @@ echo $this->Js->link(array(
 
 <div class="intro_text">
 
-  <p>Welcome MathMeetings.net!  This is a list for research
-  mathematics conferences, workshops, summer schools, etc.</p>
+  <p>Welcome to MathMeetings.net!  This is a list for research
+  mathematics conferences, workshops, summer schools, etc.  Anyone
+  at all is welcome to add announcements.</p>
 
-  <p>There are a few other conference lists available, but this list
-  aims to be more complete by allowing <em>anyone at all</em> to add
-  announcements.  Rather than use a wiki, announcement information is
-  stored in database format so that useful search functions can be
-  added as the list grows.</p>
-
-  <p>This site began as AlgTop-Conf, for meetings in algebraic
-  topology.  It is now expanded to serve other mathematics subjects.
-  Use tag filtering to focus on announcements related to your
-  discipline (see right or below).</p>
 
 
   <div class="new">
@@ -82,6 +129,18 @@ echo $this->Js->link(array(
     <?php echo $this->Html->link('New Announcement', array('action' => 'add',$tagstring), array('class' => 'button', 'id' => 'add-button'));?>
     </p>
   </div>
+  <h4>Updates 2019-07</h4>
+  <ul>
+    <li>We're now authenticating email; this should decrease the chance that confirmation emails land in Spam or Junk folders.</li>
+  </ul>
+<!--
+  <h4>Updates 2017-10</h4>
+  <ul>
+    <li>Secure connections (https) now activated and all traffic is automatically redirected to use https.  Thanks to <a href='https://letsencrypt.org/' target='le'>Let's Encrypt</a> for providing the certificate!</li>
+    <li>Spam protection now provided by Google <a href="https://www.google.com/recaptcha" target='gr'>reCaptcha</a>.</li>
+    <li>New <?php echo $this->Html->link(
+  'json and xml interfaces', array('action'=>'about#xml_json_about'));?> for access by other software.</li>
+  </ul>
   <h4>Updates 2016-01</h4>
   <ul>
     <li>Now filter announcements by subject tags</li>
@@ -90,7 +149,6 @@ echo $this->Js->link(array(
     <li>Select boxes improved with select2 (jquery)</li>    
   </ul>	  
 
-<!--
   <h4>Updates 2014-02-16</h4>
 
   <p>We've upgraded the AlgTop-Conf software to <a
@@ -106,7 +164,6 @@ echo $this->Js->link(array(
 </div>
 
 
-
 <hr class="top"/>
 <h1 style="float:left;"><?php echo $view_title; ?></h1>
 
@@ -115,9 +172,13 @@ echo $this->Js->link(array(
 <?php 
   if ($tagstring) {
     echo $this->Html->link('RSS',array('controller'=>null,'action'=>$tagstring.'.rss'));
+    echo "&nbsp;&nbsp;";
+    echo $this->Html->link('ICS',array('controller'=>null,'action'=>$tagstring.'.ics'));
   }
   else {
-    echo $this->Html->link('RSS','index.rss');
+    echo $this->Html->link('RSS',Configure::read('site.home').'/conferences/index.rss');
+    echo "&nbsp;&nbsp;";
+    echo $this->Html->link('ICS',Configure::read('site.home').'/conferences/index.ics');
   }
 ?>
   </div>
@@ -152,6 +213,7 @@ document.getElementById('tagSelectDiv').style.display = 'block';
 </noscript>
 </div>
 
+<?php } ?>
 
 <?php $curr_subsort = Null; $new_subsort = Null; $subsort_counter = 0; echo '<div id="subsort_start">'; ?>
 <?php 
@@ -202,21 +264,12 @@ if ($new_subsort != $curr_subsort) {
 <div class="calendars">
 <?php  echo
   $this->Html->link('Google calendar',
-  $this->Gcal->gcal_url($conference['id'], 
-                               $conference['start_date'], 
-                               $conference['end_date'],
-                               $conference['title'],
-                               $conference['city'],
-                               $conference['country'],
-                               $conference['homepage'],
-			       $site_url,
-			       $site_name
-                               ),
+  $this->Gcal->gcal($conference),
   array('escape' => false,'class'=>'ics button'));
 echo ' ';
 echo
   $this->Html->link('iCalendar .ics',
-  array('action'=>'ical', $conference['id']),
+  array('action'=>'view/'.$conference['id'].'.ics'),
   array('escape' => false,'class'=>'ics button'));
 ?>
 </div>

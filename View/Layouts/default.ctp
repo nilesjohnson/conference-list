@@ -28,10 +28,10 @@ echo $this->Html->script('misc') ."\n";  //configuration for conflist app
 
 // select2
 //echo $this->Html->css('select2') ."\n";
-echo $this->Html->css('http://cdn.jsdelivr.net/select2/3.4.8/select2.css') ."\n";
+echo $this->Html->css('https://cdn.jsdelivr.net/select2/3.4.8/select2.css') ."\n";
 //echo $this->Html->script('select2');
-//echo $this->Html->script('http://cdn.jsdelivr.net/select2/3.4.8/select2.js') ."\n"; 
-echo $this->Html->script('http://cdn.jsdelivr.net/select2/3.4.8/select2.min.js') ."\n"; 
+//echo $this->Html->script('https://cdn.jsdelivr.net/select2/3.4.8/select2.js') ."\n"; 
+echo $this->Html->script('https://cdn.jsdelivr.net/select2/3.4.8/select2.min.js') ."\n"; 
 echo $this->Html->script('select2_fields') ."\n";  //configuration for conflist app
 
 echo $this->fetch('meta');
@@ -41,6 +41,9 @@ echo $this->fetch('script');
 echo Configure::read('site.analytics');
 //debug($tagids);
 //debug($tagstring);
+if (!isset($tagstring)) {
+  $tagstring = '';
+}
 ?>
 
 </head>

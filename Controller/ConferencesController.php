@@ -1,5 +1,6 @@
 <?php
 App::uses('AppController', 'Controller');
+CakePlugin::load('Recaptcha');
 /**
  * Conferences Controller
  *
@@ -17,9 +18,9 @@ class ConferencesController extends AppController {
 
   //public $uses = array('Conferences');
 
-  public $helpers = array('Js', 'Html', 'Text', 'Gcal', 'Display');
+  public $helpers = array('Js', 'Html', 'Text', 'Gcal', 'Ical', 'Display');
 
-  public $components = array('Email', 'RequestHandler', 'Session', 'Paginator', 'MathCaptcha', 'Security', 'Checker');
+  public $components = array('Email', 'RequestHandler', 'Session', 'Paginator', 'Recaptcha.Recaptcha', 'Security', 'Checker','Cookie');
   
   //Regular ol' $this->paginate() ceases to function when this is declared, but this allows for pagination of different Models within same Controller
 
@@ -35,6 +36,7 @@ class ConferencesController extends AppController {
     $this->Tag->recursive=0;
     $this->set('tagstring','');
     $this->set('tagids',array());
+    $this->Security->csrfCheck = false;
     $this->Security->blackHoleCallback = 'blackhole';
   }
 
@@ -62,8 +64,79 @@ class ConferencesController extends AppController {
   }
 
   public function index($tagstring = null) {
-    $this->set('sort_text','Sort by: ');
     $this->set('view_title','Upcoming Meetings');
+    $this->render_list(array('tagstring' => $tagstring,
+			     'conditions' => array (
+						    "Conference.end_date >" => date('Y-m-d', strtotime("-1 week"))),
+			     ));
+  }
+  public function search($tagstring = null) {
+    $this->set('search',1);
+    $this->set('results',0);
+    $this->set('view_title','Search Announcements');
+    $this->set('countries',$this->loadCountries());
+
+    $conditions = array();
+    if (!empty($this->data)) {
+      $this->set('results',1);
+      foreach ($this->data['Search'] as $field => $value) {
+	if ($value != '') {
+	  if ($field == 'before') {
+	    $conditions['start_date <'] = $value;
+	  }
+	  elseif ($field == 'after') {
+	    $conditions['start_date >'] = $value;
+	  }
+	  elseif ($field == 'Tag') {
+	    $tagarray = array();
+	    foreach ($this->data['Search']['Tag'] as $t) {
+	      array_push($tagarray,explode('.',$this->tag_name_from_id($t))[0]);
+	    }
+	    $tagstring = implode('-',$tagarray);
+	  }
+	  else {
+	    $conditions[$field.' LIKE'] = '%'.$value.'%';
+	  }
+	}
+      }  
+    }
+    //else: no data; render search form
+    else {
+      $conditions = array('start_date <' => '0');
+      //$tagstring = null;
+    }
+
+
+    if (isset($tagstring)) {
+      //debug($tagstring);
+      $this->set('tagstring',$tagstring);
+      $tagids=$this->tag_ids_from_names(explode('-', $tagstring));
+      $this->set('tagids',$tagids);
+    } 
+    else {
+      $this->set('tagstring','');
+      $this->set('tagids',array());
+    }
+
+
+    $this->render_list(array('tagstring' => $tagstring,
+			     'conditions' => $conditions,
+			     ));
+    $this->render('index'); // use the index view
+  }
+  
+
+  public function render_list($args) {
+    /*
+      This is the function which renders our announcement list.
+      By separating it into a separate function, we keep the 
+      arguments for the main index simple, but allow other functions
+      with more complex arguments to use the same rendering functionality.
+     */
+    //debug($args);
+    $tagstring = $args['tagstring'];
+    $conditions = $args['conditions'];
+    $this->set('sort_text','Sort by: ');
     $this->set('months', $this->months);
     $this->set('sort_condition',null);
     // default sort conditions
@@ -72,9 +145,6 @@ class ConferencesController extends AppController {
 			  'Conference.title',
 			  'Tag.name',
 			  );
-    $conditions = array (
-			 "Conference.end_date >" => date('Y-m-d', strtotime("-1 week"))
-			 );
     $display_options = array('conditions' => $conditions, 'order' => $order_array);    
 
     // remove tag validation so tags are not required
@@ -137,6 +207,10 @@ class ConferencesController extends AppController {
       }
     }
 
+    //remove edit_key and contact_email in all index views
+    $conferences = $this->unset_sensitive($conferences);
+
+
     $this->set('conferences', $conferences);
     $this->set('conferencesTags',$conferencesTags);
 
@@ -144,12 +218,22 @@ class ConferencesController extends AppController {
 	
     $this->set(compact('conferences', 'tags', 'tagstring', 'tagids'));
 
-    // process RSS feed      
-    if( $this->RequestHandler->isRss() ){
+    $this->set('_serialize', array('conferences')); // variables that need to be serialized (for json or xml)
+    // process requests for RSS, JSON, XML, and anything else with extenson
+    if( isset($this->request->params['ext'])) {
       $this->set(compact('conferences'));
     }
   }
 
+  public function unset_sensitive($confarray) {
+    $outarray = array();
+    foreach ($confarray as $c) {
+      unset($c['edit_key']);
+      unset($c['contact_email']);
+      array_push($outarray,$c);
+    }
+    return $outarray;
+  }
 
   public function tag_name_from_id($tagid) {
     $t = $this->Tag->find('first',array('conditions'=>array('Tag.id'=>$tagid)));
@@ -173,8 +257,31 @@ class ConferencesController extends AppController {
     return $tagids;
   }
 
-  
+  public function curator_cookie($key=null) {
+    CakeLog::write('debug','curator_cookie page accessed');
+    $this->set('readCookie', $this->Cookie->read('curator_cookie'));
+    //debug($readCookie);
+    if (!empty($this->data)) {
+      CakeLog::write('debug','curator_cookie data submitted');
+      if ($this->data['Admin']['admin_key'] == Configure::read('site.admin_key')) {
+        CakeLog::write('debug','curator_cookie data matches!');
+        //set cookie for curator usage
+        //$this->Cookie->domain = 'mathmeetings.net';
+        $this->Cookie->secure = true;  // i.e. only sent if using secure HTTPS
+        $this->Cookie->httpOnly = true; // i.e. not accessible to javascript
+        $this->Cookie->write('curator_cookie', Configure::read('site.curator_cookie'));
+        $this->set('readCookie', $this->Cookie->read('curator_cookie'));
+        
+        $this->Session->setFlash('Curator cookie set!', 'FlashGood');
+        return $this->redirect(array('action' => 'index'));
+      }
+    }
+    
+  }
+
   public function ical($id=null) {
+    //not used?? (replaced by helper/view)
+    return false;
     $this->Conference->id = $id;
     if (empty($this->data)) {
       $this->set('conference', $this->Conference->read());
@@ -196,6 +303,8 @@ class ConferencesController extends AppController {
   }
 
   public function vcal_string($id, $start_date, $end_date, $title, $city, $country, $url) {
+    //not used?? (replaced by helper/view)
+    return false;
     $start_string = str_replace('-','',$start_date);
     $end_string = date('Ymd',strtotime($end_date." +1 day"));
     $location = $city."; ".$country;
@@ -256,6 +365,8 @@ class ConferencesController extends AppController {
   public function add($tagstring = null) {
     $this->set('countries',$this->loadCountries());
     $this->set('view_title', 'Add');
+    $validCuratorcookie = $this->Cookie->read('curator_cookie') == Configure::read('site.curator_cookie'); // check for valid curator cookie
+    $this->set('validCuratorcookie', $validCuratorcookie); 
     if (isset($tagstring)) {
       //debug($tagstring);
       $this->set('tagstring',$tagstring);
@@ -282,16 +393,19 @@ class ConferencesController extends AppController {
 
       // check for invalid conference data
 
-      // if conference and tag data validates, check for valid captcha
+      // if conference and tag data validates, check for 
+      // valid captcha OR valid curatorcookie
       if ($validtag && $validconf &&
-	  $this->MathCaptcha->validates($this->data['Conference']['captcha'])) {
+	  ($validCuratorcookie || $this->Recaptcha->verify())) {
 	// all good !
 	$this->save_and_send();
       }
       // else: something invalid
       else {
-	$this->Conference->invalidate('captcha','Please perform the indicated arithmetic.');
-	$this->Session->setFlash('Please check for errors below.', 'FlashBad');
+	$this->Conference->invalidate('recaptcha');
+	//$this->Session->setFlash('Please complete captcha task.', 'FlashBad');
+	//$this->Session->setFlash($this->Recaptcha->error);
+	$this->Session->setFlash('Submission error.  Please check entries and verify captcha.', 'FlashBad');
       }
     }
 
@@ -304,7 +418,6 @@ class ConferencesController extends AppController {
 	$this->request->data['Conference'][$key] = $value;
       }
     }
-    $this->set('mathCaptcha', $this->MathCaptcha->generateEquation());
     $tags=$this->Conference->ConferencesTag->Tag->find('list');
     $this->set(compact('tags'));
   }
@@ -344,11 +457,12 @@ class ConferencesController extends AppController {
 
   public function _getEmailer() {
     // function to return emailer, so we can replace it during automated tests
-    return new CakeEmail();
+    return new CakeEmail(Configure::read('smtp.mmnet'));
   }
 
   public function prepEmail($id = null) {
     $Email = $this->_getEmailer();
+    //$Email->config(Configure::read('smtp.mmnet'));
     if (!is_null($id)) {
       $this->Conference->id = $id;
       if (!$this->Conference->exists($id)) {
@@ -359,7 +473,8 @@ class ConferencesController extends AppController {
     $Email->viewVars(array('conference' => $this->data));
     $Email->template('default','default')
       ->emailFormat('text');
-    $Email->from(array(Configure::read('site.host_email') => Configure::read('site.name')));
+    //from is set in config
+    //$Email->from(array(Configure::read('site.host_email') => Configure::read('site.name')));
     $to_array = preg_split("/[\s,]+/",$this->data['Conference']['contact_email']);
     $Email->to($to_array);
     $admin_email = Configure::read('site.admin_email');
@@ -479,7 +594,7 @@ class ConferencesController extends AppController {
       $data0 = fgetcsv($handle, 1000, ";");
       while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {
         $num = count($data);
-	$name = split(',',$data[0])[0];
+	$name = preg_split('/,/',$data[0])[0];
 	if (!array_key_exists($data[10],$tmpCountries)) {
 	  $tmpCountries[$data[10]] = array();
 	}
