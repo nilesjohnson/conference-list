@@ -109,10 +109,15 @@ If you don't already have it:
 ### Set up the app ###
 There are five basic configuration steps necessary to get the app running:
 
-1. Point to a copy of cakephp library:  Put a copy (or symbolic link) of 
-'cakephp/lib' at 'conference-list/Lib/cakephp-lib'
+1. Set up cakephp library and vendors.
+
+ - Point to a copy of cakephp library:  Put a copy (or symbolic link) of 'cakephp/lib' at 'conference-list/Lib/cakephp-lib'
 
     `ln -s /path/to/cakephp/lib /path/to/conference-list/Lib/cakephp-lib`
+
+ - Same for 'cakephp/vendors':
+
+    `ln -s /path/to/cakephp/vendors /path/to/conference-list/Lib/vendors`
 
 1. Create a private configuration file by copying the default one:
 
