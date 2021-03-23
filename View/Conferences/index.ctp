@@ -129,11 +129,11 @@ else {
     <?php echo $this->Html->link('New Announcement', array('action' => 'add',$tagstring), array('class' => 'button', 'id' => 'add-button'));?>
     </p>
   </div>
+<!--
   <h4>Updates 2019-07</h4>
   <ul>
     <li>We're now authenticating email; this should decrease the chance that confirmation emails land in Spam or Junk folders.</li>
   </ul>
-<!--
   <h4>Updates 2017-10</h4>
   <ul>
     <li>Secure connections (https) now activated and all traffic is automatically redirected to use https.  Thanks to <a href='https://letsencrypt.org/' target='le'>Let's Encrypt</a> for providing the certificate!</li>
