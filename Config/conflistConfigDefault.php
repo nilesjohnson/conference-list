@@ -17,6 +17,7 @@ $config = array(
       'login' => 'root',
       'password' => '',
       'database' => 'conflist',
+      'encoding' => 'utf8',
     ),
   ),
   'site' => array(
