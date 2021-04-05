@@ -576,10 +576,16 @@ class ConferencesController extends AppController {
     }
     $this->Conference->id = $id;
     $this->set('conference', $this->Conference->read());
+    if ($this->Cookie->read('curator_cookie') == Configure::read('site.curator_cookie')) {
+      $this->set('valid_admin',true);
+    }
     if (!empty($this->data)) {
       // set model data
       //debug($this->data);  //displays array info
-      if ($this->data['Admin']['admin_key'] == Configure::read('site.admin_key') || $this->data['Admin']['admin_key'] == $this->Conference->field('edit_key')) {
+      if ($this->data['Admin']['admin_key'] == Configure::read('site.admin_key') || 
+          $this->data['Admin']['admin_key'] == $this->Conference->field('edit_key') ||
+          $this->Cookie->read('curator_cookie') == Configure::read('site.curator_cookie')
+         ) {
 	  $this->set('valid_admin',true);
 	}
     }
