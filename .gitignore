@@ -26,3 +26,5 @@ tmp/logs/debug.log
 
 .ftpquota
 .well-known
+
+*.swp

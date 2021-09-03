@@ -457,12 +457,33 @@ class ConferencesController extends AppController {
 
   public function _getEmailer() {
     // function to return emailer, so we can replace it during automated tests
+    //return new CakeEmail(Configure::read('smtp.gmail'));
     return new CakeEmail(Configure::read('smtp.mmnet'));
   }
 
+  public function testEmailSend($addr,$msg) {
+    $validCuratorCookie = $this->Cookie->read('curator_cookie') == Configure::read('site.curator_cookie'); // check for valid curator cookie
+    if ($validCuratorCookie) {
+      $this->Session->setFlash('correct curator cookie','FlashGood');
+      $Email = $this->_getEmailer();
+      $Email->viewVars(array('conference' => $this->data));
+      $Email->template('test','test')
+        ->emailFormat('text');
+      $Email->to($addr);
+      $Email->cc(Configure::read('site.admin_email.site'));
+      debug($Email->to());
+      debug('message: '.$msg);
+      $Email->subject('testing email function: '.$msg);
+      $Email->send();
+    }
+    else {
+      $this->Session->setFlash('incorrect curator cookie','FlashBad');
+    }
+  }
+  
   public function prepEmail($id = null) {
     $Email = $this->_getEmailer();
-    //$Email->config(Configure::read('smtp.mmnet'));
+    //$Email->config(Configure::read('smtp.gmail'));
     if (!is_null($id)) {
       $this->Conference->id = $id;
       if (!$this->Conference->exists($id)) {
