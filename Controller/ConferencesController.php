@@ -466,11 +466,10 @@ class ConferencesController extends AppController {
     if ($validCuratorCookie) {
       $this->Session->setFlash('correct curator cookie','FlashGood');
       $Email = $this->_getEmailer();
-      $Email->viewVars(array('conference' => $this->data));
       $Email->template('test','test')
         ->emailFormat('text');
       $Email->to($addr);
-      $Email->cc(Configure::read('site.admin_email.site'));
+      $Email->cc(Configure::read('site.host_email'));
       debug($Email->to());
       debug('message: '.$msg);
       $Email->subject('testing email function: '.$msg);
@@ -495,7 +494,6 @@ class ConferencesController extends AppController {
     $Email->template('default','default')
       ->emailFormat('text');
     //from is set in config
-    //$Email->from(array(Configure::read('site.host_email') => Configure::read('site.name')));
     $to_array = preg_split("/[\s,]+/",$this->data['Conference']['contact_email']);
     $Email->to($to_array);
     $admin_email = Configure::read('site.admin_email');
@@ -515,6 +513,7 @@ class ConferencesController extends AppController {
       $this->render('../Emails/text/default','Emails/text/default');
       return null;
     }
+    //debug('email prepared');
     return $Email;
   }
 

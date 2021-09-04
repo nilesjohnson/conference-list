@@ -22,10 +22,11 @@ $config = array(
   ),
   'site' => array(
     'host' => 'http://www.example.com',
-    'host_email' => 'host@example.com',
+    'host_email' => 'host@example.com', // email for site admin
     'host_name' => 'Host',
     'host_contact_url' => 'http://www.example.com/contact.html',
     'home' => 'http://www.example.com/conf-list',
+    // curator emails (different from site admin)
     'admin_email' => array('site' => array('nilesj+CONFLISTTEST@gmail.com'),
                            'all' => array('nilesj+CONFLISTTEST@gmail.com',
                            'at' => array('conflist-admin-at@example.com',),
