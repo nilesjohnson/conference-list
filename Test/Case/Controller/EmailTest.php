@@ -42,6 +42,8 @@ class EmailTest extends ControllerTestCase {
 	  return $controller;
 	}
 
+// don't test private methods
+/* 
 	public function testPrepEmail() {
 	  echo "<h3>Testing email headers</h3>";
 	  $this->Conference->id = 4;
@@ -61,6 +63,10 @@ class EmailTest extends ControllerTestCase {
 	  $this->assertEqual(count($headers['cc'])>0,true);
 	  $this->assertEqual(count($headers['bcc'])>0,true);
 	}
+*/
+
+// don't test private methods
+/* 
 
 	public function testPrepEmailContent() {
 	  echo "<h3>Testing content of email</h3>";
@@ -69,20 +75,12 @@ class EmailTest extends ControllerTestCase {
 	  debug(substr($result,2,35));
 	  $this->assertEqual(substr($result,2,35),"Thanks for adding your announcement");
 	}
+*/
 
+// don't test private methods
+/* 
 	public function testSaveAndSend() {
 	  echo "<h3>Testing save_and_send</h3>";
-	  /*
-	    $Conferences = $this->generate('Conferences', 
-					 array(
-					       'components' => array(
-								     'Session',
-								     )
-					       ));
-	  $Conferences->Session
-	    ->expects($this->once())
-	    ->method('setFlash');
-	  */
 	  $controller = $this->stubEmail();
 	  $controller->Session
 	    ->expects($this->once())
@@ -100,7 +98,7 @@ class EmailTest extends ControllerTestCase {
 	  //test redirect
 	  $this->assertContains('/conferences/index/at-ac', $this->headers['Location']);
 	}
-
+*/
 
 /**
  * testAdd method

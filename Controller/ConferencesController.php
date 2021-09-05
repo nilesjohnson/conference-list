@@ -398,7 +398,7 @@ class ConferencesController extends AppController {
       if ($validtag && $validconf &&
 	  ($validCuratorcookie || $this->Recaptcha->verify())) {
 	// all good !
-	$this->save_and_send();
+	$this->_save_and_send();
       }
       // else: something invalid
       else {
@@ -422,7 +422,7 @@ class ConferencesController extends AppController {
     $this->set(compact('tags'));
   }
 
-  public function save_and_send() {
+  public function _save_and_send() {
     /*
      * helper function to save data and send email
      * ends with redirect
@@ -437,6 +437,7 @@ class ConferencesController extends AppController {
 	
     // verify that all data saves, and send email(s)
     if ($this->Conference->save($this->data)) {
+      $this->Session->setFlash('Your conference information has been saved.', 'FlashGood');
       $this->request->data = $this->Conference->read();
       $tagnames = array();
       foreach($this->request->data['Tag'] as $tag) {
@@ -445,9 +446,15 @@ class ConferencesController extends AppController {
       }
       $tagstring = implode('-',$tagnames);
       //debug($tagstring);
-      $Email = $this->prepEmail();
-      $Email->send();
-      $this->Session->setFlash('Your conference information has been saved.  An email with edit/delete links has been sent to the contact address.', 'FlashGood');
+      $Email = $this->_prepEmail();
+      try {
+        $Email->send();
+        $this->Session->setFlash('An email with edit/delete links has been sent to the contact address.', 'FlashGood');
+      }
+      catch(SocketException $e) {
+        //debug($e->getMessage());
+        $this->Session->setFlash('Error. Email not sent. Please contact site curators. '.$e->getMessage(),'FlashBad');
+      }
       return $this->redirect(array('action' => 'index',$tagstring));
     } 
     else {
@@ -469,20 +476,27 @@ class ConferencesController extends AppController {
       $Email->template('test','test')
         ->emailFormat('text');
       $Email->to($addr);
-      $Email->cc(Configure::read('site.host_email'));
       debug($Email->to());
+      //debug($Email->cc());
+      //debug($Email->bcc());
+      //debug($Email);
       debug('message: '.$msg);
       $Email->subject('testing email function: '.$msg);
-      $Email->send();
+      try {
+        $Email->send();
+      }
+      catch(SocketException $e) {
+        //debug($e->getMessage());
+        $this->Session->setFlash('Error. Email not sent. Please contact site curators. '.$e->getMessage(),'FlashBad');
+      }
     }
     else {
       $this->Session->setFlash('incorrect curator cookie','FlashBad');
     }
   }
   
-  public function prepEmail($id = null) {
+  public function _prepEmail($id = null) {
     $Email = $this->_getEmailer();
-    //$Email->config(Configure::read('smtp.gmail'));
     if (!is_null($id)) {
       $this->Conference->id = $id;
       if (!$this->Conference->exists($id)) {
@@ -511,7 +525,8 @@ class ConferencesController extends AppController {
     if (!is_null($id)) {
       $this->set('conference',$this->data);
       $this->render('../Emails/text/default','Emails/text/default');
-      return null;
+      // no idea why we set return null here!
+      //return null;
     }
     //debug('email prepared');
     return $Email;
@@ -552,7 +567,7 @@ class ConferencesController extends AppController {
       // test whether conference and tag data validates
       // check for invalid conference data
       if ($validtag && $validconf) {
-	$this->save_and_send();
+	$this->_save_and_send();
       }
       else {
 	$this->Session->setFlash('Please check for errors below.', 'FlashBad');
