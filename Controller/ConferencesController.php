@@ -468,22 +468,35 @@ class ConferencesController extends AppController {
     return new CakeEmail(Configure::read('smtp.mmnet'));
   }
 
-  public function testEmailSend($addr,$msg) {
+  public function testEmailSend($addr,$id) {
     $validCuratorCookie = $this->Cookie->read('curator_cookie') == Configure::read('site.curator_cookie'); // check for valid curator cookie
     if ($validCuratorCookie) {
       $this->Session->setFlash('correct curator cookie','FlashGood');
+      //$msg = $this->_prepEmail($id);
+      $msg = 'test';
       $Email = $this->_getEmailer();
-      $Email->template('test','test')
+      //$Email->template('test','test') // email with no conference data
+      //  ->emailFormat('text');
+      /*
+      * for testing email with conference data
+      */
+      $this->Conference->id = $id;
+      $this->set('conference', $this->Conference->read());
+      $Email->viewVars(array('conference' => $this->Conference->data));
+      $Email->template('default','default')
         ->emailFormat('text');
+      /*
+      * end
+      */
       $Email->to($addr);
-      debug($Email->to());
+      //print_r($Email->viewVars());
       //debug($Email->cc());
       //debug($Email->bcc());
       //debug($Email);
-      debug('message: '.$msg);
+      //echo('message: '.$msg);
       $Email->subject('testing email function: '.$msg);
       try {
-        $Email->send();
+        //$Email->send();
       }
       catch(SocketException $e) {
         //debug($e->getMessage());
@@ -494,7 +507,7 @@ class ConferencesController extends AppController {
       $this->Session->setFlash('incorrect curator cookie','FlashBad');
     }
   }
-  
+ 
   public function _prepEmail($id = null) {
     $Email = $this->_getEmailer();
     if (!is_null($id)) {
