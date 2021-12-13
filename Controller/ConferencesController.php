@@ -453,7 +453,7 @@ class ConferencesController extends AppController {
       }
       catch(SocketException $e) {
         //debug($e->getMessage());
-        $this->Session->setFlash('Error. Email not sent. Please contact site curators. '.$e->getMessage(),'FlashBad');
+        $this->Session->setFlash('Error. Announcement posted but email not sent. Please contact site curators. '.$e->getMessage(),'FlashBad');
       }
       return $this->redirect(array('action' => 'index',$tagstring));
     } 
@@ -500,7 +500,7 @@ class ConferencesController extends AppController {
       }
       catch(SocketException $e) {
         //debug($e->getMessage());
-        $this->Session->setFlash('Error. Email not sent. Please contact site curators. '.$e->getMessage(),'FlashBad');
+        $this->Session->setFlash('Error. Announcement posted but email not sent. Please contact site curators. '.$e->getMessage(),'FlashBad');
       }
     }
     else {
