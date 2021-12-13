@@ -472,8 +472,7 @@ class ConferencesController extends AppController {
     $validCuratorCookie = $this->Cookie->read('curator_cookie') == Configure::read('site.curator_cookie'); // check for valid curator cookie
     if ($validCuratorCookie) {
       $this->Session->setFlash('correct curator cookie','FlashGood');
-      //$msg = $this->_prepEmail($id);
-      $msg = 'test';
+      $msg = 'test '.$id;
       $Email = $this->_getEmailer();
       //$Email->template('test','test') // email with no conference data
       //  ->emailFormat('text');
@@ -489,12 +488,12 @@ class ConferencesController extends AppController {
       * end
       */
       $Email->to($addr);
+      $Email->subject('testing email function: '.$msg);
       //print_r($Email->viewVars());
       //debug($Email->cc());
       //debug($Email->bcc());
-      //debug($Email);
-      //echo('message: '.$msg);
-      $Email->subject('testing email function: '.$msg);
+      //debug('email subject: '.$Email->subject());
+      //debug('conference title: '.$this->Conference->data['Conference']['title']);
       try {
         //$Email->send();
       }
