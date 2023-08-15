@@ -3,11 +3,9 @@ Conference List Web App
 
 https://github.com/nilesjohnson/conference-list
 
-version 2.1.5
+version 2.2
 
-JULY 2019
-
-Copyright (C) 2009 Niles Johnson <https://nilesjohnson.net>
+AUGUST 2023
 
 Licensed under GNU GPL v.3 or later.  See LICENSE.txt for a copy of
 the license.
@@ -43,12 +41,12 @@ https://cakephp.org/
 CHANGELOG
 ---------
 
-### v. 2.2 ###
+### v. 2.2 (August 2023) ###
 
 * New location option: 'Online'
 * New database fields 'created' and 'modified'
 
-### v. 2.1.5 ###
+### v. 2.1.5 (July 2019) ###
 
 * Enable configuration for sending email through external servers 
 
