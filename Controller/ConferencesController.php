@@ -664,6 +664,9 @@ class ConferencesController extends AppController {
         //echo "<p> $num fields in line $row: <br /></p>\n";
       }
       fclose($handle);
+      // add 'Online'
+      $tmpCountries['']["Online"] = "Online";
+      //debug($tmpCountries);
       return $tmpCountries;
     }
   }

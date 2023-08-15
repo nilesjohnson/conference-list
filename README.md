@@ -43,6 +43,11 @@ https://cakephp.org/
 CHANGELOG
 ---------
 
+### v. 2.2 ###
+
+* New location option: 'Online'
+* New database fields 'created' and 'modified'
+
 ### v. 2.1.5 ###
 
 * Enable configuration for sending email through external servers 
