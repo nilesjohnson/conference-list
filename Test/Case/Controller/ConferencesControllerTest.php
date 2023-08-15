@@ -171,7 +171,7 @@ class ConferencesControllerTest extends ControllerTestCase {
 	public function testGcal() {
 	  echo "<h3>Testing gcal</h3>";
 	  $result = $this->testAction('/conferences/gcal/4');
-	  $expected = 'http://www.google.com/calendar/event?action=TEMPLATE&text=Phasellus+feugiat+conference+4&dates=20501223/20501226&details=';
+	  $expected = 'http://www.google.com/calendar/event?action=TEMPLATE&text=Phasellus+feugiat+conference+4&dates=20701223/20701226&details=';
 	  debug($result);
 	  $this->assertEqual(substr($result,0,121),$expected);
 	}
