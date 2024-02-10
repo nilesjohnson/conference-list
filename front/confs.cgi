@@ -3,6 +3,7 @@
 import urllib.request, urllib.error, json
 from datetime import date
 print("Content-type: text/html; charset=utf-8\n\n")
+
 # Include HTML header.
 with open("../confs-header.html") as f:
     print(f.read())
@@ -15,7 +16,7 @@ with open("../confs-topmatter.html") as f:
 # Insert conferences here, grouped by year.
 try:
     req  = urllib.request.Request(url='https://mathmeetings.net/ag-gm-nt.json', 
-                                  headers={'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:23.0) Gecko/20100101 Firefox/23.0'})
+                                  headers={'User-Agent': 'Mozilla/5.0 (Windows ;NT 6.1; WOW64; rv:23.0) Gecko/20100101 Firefox/23.0'})
     with urllib.request.urlopen(req) as f:
         l1 = f.read().decode()
     confs = json.loads(l1)['conferences']
@@ -33,33 +34,34 @@ try:
         y2, m2, d2 = dt2.timetuple()[:3]
         if m1 == m2:
             if d1 == d2:
-                daterange = dt1.strftime("%B") + ' ' + str(int(d1))
+                daterange = f'{dt1:%B} {d1}'
             else:
-                daterange = dt1.strftime("%B") + ' ' + str(int(d1)) + '-' + str(int(d2))
+                daterange = f'{dt1:%B} {d1}-{d2}'
         else:
-            daterange = dt1.strftime("%B") + ' ' + str(int(d1)) + '-' + dt2.strftime("%B") + ' ' + str(int(d2))
+            daterange = f'{dt1:%B} {d1}-{dt2:%B} {d2}'
         # Special processing for online events.
         if "Antarctica" in country or "Online" in country or "Online" in city:
             place = "<b>online</b>"
         else:
-            place = city + ', ' + country
-        s = '<li><a href="{}">{}</a>, {}, {} </li>'.format(li, ti, daterange, place)
-        if y1 not in list(entries.keys()):
+            place = f'{city}, {country}'
+        s = f'<li><a href="{li}">{ti}</a>, {daterange}, {place}</li>'
+        if y1 not in entries:
             entries[y1] = []
         entries[y1].append((s, int(m1)))
     l = list(entries.keys())
     l.sort()
     for y in l:
-        print('<h2>{}</h2>\n\n'.format(y))
+        print(f'<h2>{y}</h2>\n\n')
         print('<ul>\n')
         m0 = None
         for (s, m1) in entries[y]:
-    # Add an extra newline each time the month changes.
+            # Add an extra newline each time the month changes.
             if m0 is not None and m0 != m1:
                 print('<br />\n')
             m0 = m1
             print((s + '\n'))
         print('</ul>\n')
+
 except urllib.error.HTTPError as e:
     print("<p>Sorry, an error occurred when retrieving the data. Please try again later.</p>")
     print("<p>Error code: {}</p>".format(e.code))
