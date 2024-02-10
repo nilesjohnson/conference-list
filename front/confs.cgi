@@ -1,33 +1,36 @@
 #!/usr/bin/python3
 
-import cgi, sys, urllib.request, urllib.error, re
+import urllib.request, urllib.error, json
 from datetime import date
 print("Content-type: text/html; charset=utf-8\n\n")
 # Include HTML header.
-with open("confs-header.html") as f:
+with open("../confs-header.html") as f:
+    print(f.read())
+# Include navbar.
+with open("../navbar.html") as f:
     print(f.read())
 # Include topmatter.
-with open("confs-topmatter.html") as f:
+with open("../confs-topmatter.html") as f:
     print(f.read())
 # Insert conferences here, grouped by year.
 try:
-    req  = urllib.request.Request(url='https://mathmeetings.net/ag-nt.rss', 
+    req  = urllib.request.Request(url='https://mathmeetings.net/ag-gm-nt.json', 
                                   headers={'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:23.0) Gecko/20100101 Firefox/23.0'})
     with urllib.request.urlopen(req) as f:
-        l1 = str(f.read())
-    l2 = re.findall(r'<item>(.*?)</item>', l1)
-    prog1 = re.compile('<title>(.*)</title>.*<link>(.*)</link>.*<description>(.*) through (.*?), (.*); (.*)</description>')
-    prog2 = re.compile('(.*?)-(.+?)-(.*)')
+        l1 = f.read().decode()
+    confs = json.loads(l1)['conferences']
     entries = {}
-    for i in l2:
-        m = prog1.match(i)
-        ti, li, date1, date2, city, country = m.groups()
-        m = prog2.match(date1)
-        y1, m1, d1 = m.groups()
-        dt1 = date(int(y1), int(m1), int(d1))
-        m = prog2.match(date2)
-        y2, m2, d2 = m.groups()
-        dt2 = date(int(y2), int(m2), int(d2))
+    for i in confs:
+        ti = i['title']
+        li = i['homepage']
+        date1 = i['start_date']
+        date2 = i['end_date']
+        city = i['city']
+        country = i['country']
+        dt1 = date.fromisoformat(date1)
+        y1, m1, d1 = dt1.timetuple()[:3]
+        dt2 = date.fromisoformat(date2)
+        y2, m2, d2 = dt2.timetuple()[:3]
         if m1 == m2:
             if d1 == d2:
                 daterange = dt1.strftime("%B") + ' ' + str(int(d1))
@@ -36,19 +39,18 @@ try:
         else:
             daterange = dt1.strftime("%B") + ' ' + str(int(d1)) + '-' + dt2.strftime("%B") + ' ' + str(int(d2))
         # Special processing for online events.
-        if "Antarctica" in country:
+        if "Antarctica" in country or "Online" in country or "Online" in city:
             place = "<b>online</b>"
         else:
             place = city + ', ' + country
-        s = '<li><a href="' + li + '">' + ti + '</a>, ' + daterange + ', ' + place + '</li>'
-        if y1 in list(entries.keys()):
-            entries[y1].append((s, int(m1)))
-        else:
-            entries[y1] = [(s, int(m1))]
+        s = '<li><a href="{}">{}</a>, {}, {} </li>'.format(li, ti, daterange, place)
+        if y1 not in list(entries.keys()):
+            entries[y1] = []
+        entries[y1].append((s, int(m1)))
     l = list(entries.keys())
     l.sort()
     for y in l:
-        print(('<h2>' + y + '</h2>\n\n'))
+        print('<h2>{}</h2>\n\n'.format(y))
         print('<ul>\n')
         m0 = None
         for (s, m1) in entries[y]:
@@ -64,6 +66,6 @@ except urllib.error.HTTPError as e:
     pass
     
 # Include HTML footer.
-with open("confs-footer.html") as f:
+with open("../confs-footer.html") as f:
     print(f.read())
 
